@@ -11,3 +11,4 @@
 - Add partial classes for validation
 - Doc comments on methods / functions
 - GUI Design See Nicole
+- User Auth See John 
