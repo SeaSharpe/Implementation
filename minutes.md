@@ -13,7 +13,7 @@ Manny absent (unknown)
 - Items requiring updates for hand in this Friday:
   - Data Dictionairy - Dan
   - ERD - John.  Dan to review
-  - Deployment Diagram - Manny. John to message Manny to let him know necessary changes
+  - Deployment Diagram - Manny. John to message Manny to let him know necessary changes. John completed this.
   - Peter to put all documents together once these are complete
 
 ### Moving forward
