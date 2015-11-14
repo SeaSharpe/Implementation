@@ -1,9 +1,11 @@
 namespace SeaSharpe_CVGS.Migrations
 {
+    using CsvHelper.Configuration;
     using SeaSharpe_CVGS.Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.Data.Entity.Validation;
     using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<SeaSharpe_CVGS.Models.ApplicationDbContext>
@@ -20,72 +22,89 @@ namespace SeaSharpe_CVGS.Migrations
         public void Log(string value)
         {
             // Write the string to a file.
-            System.IO.StreamWriter file = new System.IO.StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\seedlog.txt", true);
+            System.IO.StreamWriter file = new System.IO.StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\seedlog.txt", true);
             file.WriteLine(value);
 
             file.Close();
+        }
+
+        private void Log(string p, params object[] args)
+        {
+            Log(string.Format(p, args));
         }
 
         protected override void Seed(SeaSharpe_CVGS.Models.ApplicationDbContext context)
         {
             var store = new Microsoft.AspNet.Identity.EntityFramework.UserStore<ApplicationUser>(context);
             var userManager = new ApplicationUserManager(store);
-            Member[] members = {new Member
-                {
-                    IsEmailMarketingAllowed = false,
-                    IsEmailVerified = true,
-                    User = new ApplicationUser
-                    {
-                        UserName = "Greg",
-                        FirstName = "Greg",
-                        LastName = "Greg",
-                        Email = "Greg@Greg.Greg",
-                        Gender = "G", // TODO: Fix gender constraints so this fails
-                        DateOfBirth = System.DateTime.Now,
-                        DateOfRegistration = System.DateTime.Now
-                    }
-                },new Member
-                {
-                    IsEmailMarketingAllowed = true,
-                    IsEmailVerified = false,
-                    User = new ApplicationUser
-                    {
-                        UserName = "Tim",
-                        FirstName = "Tim",
-                        LastName = "Tim",
-                        Email = "Tim@Tim.Tim",
-                        Gender = "T",
-                        DateOfBirth = System.DateTime.Now,
-                        DateOfRegistration = System.DateTime.Now 
-                    }
-                }};
 
-            foreach (var member in members)
-            {
-                userManager.CreateAsync(member.User, "thisP@ssw0rdIsAmazing").Wait();
-                context.Members.AddOrUpdate(member);
-            }
+            int i = 0;
 
             try
             {
+
+                foreach (var person in new MockData().People)
+                {
+                    i++;
+                    try
+                    {
+                        Member member = new Member
+                        {
+                            IsEmailMarketingAllowed = false,
+                            IsEmailVerified = false,
+                            User = new ApplicationUser
+                            {
+                                UserName = person.GivenName + person.Surname + person.Sin.Substring(3, 6),
+                                FirstName = person.GivenName,
+                                LastName = person.Surname,
+                                Email = person.Email,
+                                Gender = "O",
+                                DateOfBirth = System.DateTime.Now,
+                                DateOfRegistration = System.DateTime.Now
+                            }
+                        };
+                        userManager.CreateAsync(member.User, "thisP@ssw0rdIsAmazing").Wait();
+                        context.Members.AddOrUpdate(member);
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        Log("Inner Validation Exception");
+                        foreach (var a in e.EntityValidationErrors)
+                        {
+                            foreach (var b in a.ValidationErrors)
+                            {
+                                Log("{0} - {1}", b.ErrorMessage, a.Entry.Entity.GetType());
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Debugger.Launch();
+                        Log("Inner Exception");
+                        Log(e.Message);
+                    }
+                }
+
+                Log("Wrote {0} things", i);
+
                 context.SaveChanges();
             }
-            catch (System.Data.Entity.Validation.DbEntityValidationException e)
+            catch (DbEntityValidationException e)
             {
 
-                Log("DB Validation Exception");
+                Log("Outer Validation Exception");
                 foreach (var a in e.EntityValidationErrors)
                 {
                     foreach (var b in a.ValidationErrors)
                     {
-                        Log(String.Format("{0} - {1}", b.ErrorMessage, a.Entry.Entity.GetType()));
+                        Log("{0} - {1}", b.ErrorMessage, a.Entry.Entity.GetType());
                     }
                 }
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debugger.Launch();
-                Log("Exception");
+                Log("Outer Exception");
                 Log(e.Message);
             }
         }
