@@ -168,6 +168,10 @@
     <Compile Include="Migrations\201511140312453_Init.Designer.cs">
       <DependentUpon>201511140312453_Init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511140320299_CVGS_Classes.cs" />
+    <Compile Include="Migrations\201511140320299_CVGS_Classes.Designer.cs">
+      <DependentUpon>201511140320299_CVGS_Classes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -245,6 +249,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201511140312453_Init.resx">
       <DependentUpon>201511140312453_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511140320299_CVGS_Classes.resx">
+      <DependentUpon>201511140320299_CVGS_Classes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

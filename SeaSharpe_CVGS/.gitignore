@@ -22,6 +22,7 @@ _UpgradeReport_Files/
 ###############
 # Directories #
 ###############
+App_Data/
 bin/
 obj/
 TestResults/
