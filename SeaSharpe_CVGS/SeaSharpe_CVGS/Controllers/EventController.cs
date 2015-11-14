@@ -1,0 +1,143 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
+using SeaSharpe_CVGS.Models;
+
+namespace SeaSharpe_CVGS.Controllers
+{
+    public class EventController : Controller
+    {
+        private ApplicationDbContext db = new ApplicationDbContext();
+        
+        #region Employee Side
+        /// <summary>
+        /// Employee Side - list all events
+        /// CRUD options
+        /// </summary>
+        /// <returns>EventManagement view</returns>
+        public ActionResult EventManagement()
+        {
+            return View(db.Events.ToList());
+        }
+
+        /// <summary>
+        /// Employee side - add events
+        /// </summary>
+        /// <returns>Add/Edit Event view</returns>
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Employee side - post back for add event
+        /// </summary>
+        /// <param name="event">event object</param>
+        /// <returns>Event Management view</returns>
+       [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,Location,StartDate,EndDate,Description,Capacity")] Event @event)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Events.Add(@event);
+                db.SaveChanges();
+                return RedirectToAction("EventManagement");
+            }
+
+            return View(@event);
+        }
+
+       /// <summary>
+       /// Employee side - edit event
+       /// </summary>
+       /// <param name="id">event id</param>
+       /// <returns>Add/Edit Event view</returns>
+       public ActionResult Edit(int? id)
+       {
+           if (id == null)
+           {
+               return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+           }
+           Event @event = db.Events.Find(id);
+           if (@event == null)
+           {
+               return HttpNotFound();
+           }
+           return View(@event);
+       }
+
+        /// <summary>
+        /// post back for edit event
+        /// </summary>
+        /// <param name="event">event object</param>
+        /// <returns>Event Management view</returns>
+       [HttpPost]
+       [ValidateAntiForgeryToken]
+       public ActionResult Edit([Bind(Include = "Id,Location,StartDate,EndDate,Description,Capacity")] Event @event)
+       {
+           if (ModelState.IsValid)
+           {
+               db.Entry(@event).State = EntityState.Modified;
+               db.SaveChanges();
+               return RedirectToAction("EventManagement");
+           }
+           return View(@event);
+       }
+
+       /// <summary>
+       /// post back for delete event
+       /// </summary>
+       /// <param name="id">event id</param>
+       /// <returns>Event Management view</returns>
+       [HttpPost, ActionName("Delete")]
+       [ValidateAntiForgeryToken]
+       public ActionResult DeleteConfirmed(int id)
+       {
+           Event @event = db.Events.Find(id);
+           db.Events.Remove(@event);
+           db.SaveChanges();
+           return RedirectToAction("EventManagement");
+       }
+        #endregion
+
+        #region Member Side
+        /// <summary>
+        /// Member Side - list all events
+        /// </summary>
+        /// <returns>ViewEvents view</returns>
+        public ActionResult ViewEvents()
+        {
+            return View(db.Events.ToList());
+        }
+
+        /// <summary>
+        /// Member Side - register for event
+        /// **** No View Required ****
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Register(int eventId, int memberId)
+        {
+            return RedirectToAction("ViewEvents");
+        }
+        #endregion
+
+        /// <summary>
+        /// Garbage collection
+        /// </summary>
+        /// <param name="disposing">garbage</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+    }
+}
