@@ -20,15 +20,6 @@ namespace SeaSharpe_CVGS.Models
             return userIdentity;
         }
 
-        public ApplicationUser()
-        {
-            this.Gender = "M"; // TODO: Set Gender on Sign up, Constraints to only allow M, F & O
-            this.DateOfBirth = System.DateTime.Now; // TODO: Set DoB on signup
-            this.DateOfRegistration = System.DateTime.Now; // TODO: The database should timestamp this
-            this.FirstName = "John"; // Set first name on signup
-            this.LastName = "Smith"; // Set last name on signup
-        }
-
         [NotMapped]
         public override bool PhoneNumberConfirmed { get; set; }
         [Required] // NOT NULL
