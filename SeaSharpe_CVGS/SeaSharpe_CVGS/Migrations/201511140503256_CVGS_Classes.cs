@@ -44,16 +44,12 @@ namespace SeaSharpe_CVGS.Migrations
                         Friendee_Id = c.Int(nullable: false),
                         Friender_Id = c.Int(nullable: false),
                         IsFamilyMember = c.Boolean(nullable: false),
-                        IsAccepted = c.Boolean(nullable: false),
-                        Member_Id = c.Int(),
                     })
                 .PrimaryKey(t => new { t.Friendee_Id, t.Friender_Id })
-                .ForeignKey("dbo.Members", t => t.Friendee_Id, cascadeDelete: false) // I changed this to false manually --John
-                .ForeignKey("dbo.Members", t => t.Friender_Id, cascadeDelete: false) // I changed this to false manually --John
-                .ForeignKey("dbo.Members", t => t.Member_Id)
+                .ForeignKey("dbo.Members", t => t.Friender_Id, cascadeDelete: true)
+                .ForeignKey("dbo.Members", t => t.Friendee_Id)
                 .Index(t => t.Friendee_Id)
-                .Index(t => t.Friender_Id)
-                .Index(t => t.Member_Id);
+                .Index(t => t.Friender_Id);
             
             CreateTable(
                 "dbo.Categories",
@@ -226,9 +222,8 @@ namespace SeaSharpe_CVGS.Migrations
             DropForeignKey("dbo.GameCategories", "Game_Id", "dbo.Games");
             DropForeignKey("dbo.Addresses", "Member_Id", "dbo.Members");
             DropForeignKey("dbo.Members", "User_Id", "dbo.AspNetUsers");
-            DropForeignKey("dbo.Friendships", "Member_Id", "dbo.Members");
-            DropForeignKey("dbo.Friendships", "Friender_Id", "dbo.Members");
             DropForeignKey("dbo.Friendships", "Friendee_Id", "dbo.Members");
+            DropForeignKey("dbo.Friendships", "Friender_Id", "dbo.Members");
             DropIndex("dbo.GameCategories", new[] { "Category_Id" });
             DropIndex("dbo.GameCategories", new[] { "Game_Id" });
             DropIndex("dbo.WishLists", new[] { "Game_Id" });
@@ -245,7 +240,6 @@ namespace SeaSharpe_CVGS.Migrations
             DropIndex("dbo.Reviews", new[] { "Author_Id" });
             DropIndex("dbo.Reviews", new[] { "Aprover_Id" });
             DropIndex("dbo.Games", new[] { "Platform_Id" });
-            DropIndex("dbo.Friendships", new[] { "Member_Id" });
             DropIndex("dbo.Friendships", new[] { "Friender_Id" });
             DropIndex("dbo.Friendships", new[] { "Friendee_Id" });
             DropIndex("dbo.Members", new[] { "User_Id" });

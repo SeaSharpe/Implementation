@@ -52,7 +52,7 @@ namespace SeaSharpe_CVGS.Models
         public bool IsEmailVerified { get; set; }
         public bool IsEmailMarketingAllowed { get; set; }
         public int StripeID { get; set; }
-        public virtual List<Friendship> Friends { get; set; }
+        public virtual ICollection<Friendship> Friendships { get; set; }
     }
 
     public class Employee
@@ -120,11 +120,10 @@ namespace SeaSharpe_CVGS.Models
         public string Name { get; set; }
         public DateTime ReleaseDate { get; set; }
         public decimal SuggestedRetailPrice { get; set; }
-        public virtual List<Category> Categories { get; set; }
-        public virtual List<Review> Reviews { get; set; }
+        public virtual ICollection<Category> Categories { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
         [Required]
         public virtual Platform Platform { get; set; }
-        //public virtual List<WishList> WishList { get; set; }
     }
 
     public class Review
@@ -143,28 +142,26 @@ namespace SeaSharpe_CVGS.Models
         public string Body { get; set; }
     }
 
-public class Friendship
-{
-    [Key, Column("Friendee_Id", Order = 0)]
-    public int FriendeeId { get; set; }
-    [Key, Column("Friender_Id", Order = 1)]
-    public int FrienderId { get; set; }
-    [Required]
-    public virtual Member Friendee { get; set; }
-    [Required]
-    public virtual Member Friender { get; set; }
-    [Required]
-    public bool IsFamilyMember { get; set; }
-    [Required]
-    public bool IsAccepted { get; set; }
-}
+    public class Friendship
+    {
+        [Key, Column("Friendee_Id", Order = 0)]
+        [ForeignKey("Friendee")]
+        public int FriendeeId { get; set; }
+        [Key, Column("Friender_Id", Order = 1)]
+        [ForeignKey("Friender")]
+        public int FrienderId { get; set; }
+        public virtual Member Friendee { get; set; }
+        public virtual Member Friender { get; set; }
+        [Required]
+        public bool IsFamilyMember { get; set; }
+    }
 
     public class Platform
     {
         public int Id { get; set; }
         [Required, MaxLength(50), MinLength(1)]
         public string Name { get; set; }
-        public virtual List<Game> Games { get; set; }
+        public virtual ICollection<Game> Games { get; set; }
     }
 
     public class Category
@@ -172,12 +169,11 @@ public class Friendship
         public int Id { get; set; }
         [Required, MaxLength(50), MinLength(1)]
         public string Name { get; set; }
-        public virtual List<Game> Games { get; set; }
+        public virtual ICollection<Game> Games { get; set; }
     }
 
     public class Event
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity), Range(4000000, 4999999)]
         public int Id { get; set; }
         [Required]
         public virtual Employee Employee { get; set; }
@@ -207,10 +203,10 @@ public class Friendship
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<Member>().
-            //    HasMany(member => member.Friends).
-            //    WithRequired(friendship => friendship.Friendee).
-            //    WillCascadeOnDelete(false);
+            modelBuilder.Entity<Member>().
+                HasMany(member => member.Friendships).
+                WithRequired(friendship => friendship.Friendee).
+                WillCascadeOnDelete(false);
             base.OnModelCreating(modelBuilder);
         }
 
