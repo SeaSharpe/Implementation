@@ -20,6 +20,15 @@ namespace SeaSharpe_CVGS.Models
             return userIdentity;
         }
 
+        public ApplicationUser()
+        {
+            this.Gender = "M"; // TODO: Set Gender on Sign up, Constraints to only allow M, F & O
+            this.DateOfBirth = System.DateTime.Now; // TODO: Set DoB on signup
+            this.DateOfRegistration = System.DateTime.Now; // TODO: The database should timestamp this
+            this.FirstName = "John"; // Set first name on signup
+            this.LastName = "Smith"; // Set last name on signup
+        }
+
         [NotMapped]
         public override bool PhoneNumberConfirmed { get; set; }
         [Required] // NOT NULL
@@ -43,6 +52,7 @@ namespace SeaSharpe_CVGS.Models
         public bool IsEmailVerified { get; set; }
         public bool IsEmailMarketingAllowed { get; set; }
         public int StripeID { get; set; }
+        public virtual List<Friendship> Friends { get; set; }
     }
 
     public class Employee
@@ -133,19 +143,21 @@ namespace SeaSharpe_CVGS.Models
         public string Body { get; set; }
     }
 
-    public class Friendship
-    {
-        [Key, Column("Friendee_Id", Order = 0)]
-        public int FriendeeId { get; set; }
-        [Key, Column("Friender_Id", Order = 1)]
-        public int FrienderId { get; set; }
-        public virtual Member Friendee { get; set; }
-        public virtual Member Friender { get; set; }
-        [Required]
-        public bool IsFamilyMember { get; set; }
-        [Required]
-        public bool IsAccepted { get; set; }
-    }
+public class Friendship
+{
+    [Key, Column("Friendee_Id", Order = 0)]
+    public int FriendeeId { get; set; }
+    [Key, Column("Friender_Id", Order = 1)]
+    public int FrienderId { get; set; }
+    [Required]
+    public virtual Member Friendee { get; set; }
+    [Required]
+    public virtual Member Friender { get; set; }
+    [Required]
+    public bool IsFamilyMember { get; set; }
+    [Required]
+    public bool IsAccepted { get; set; }
+}
 
     public class Platform
     {
@@ -191,6 +203,15 @@ namespace SeaSharpe_CVGS.Models
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            //modelBuilder.Entity<Member>().
+            //    HasMany(member => member.Friends).
+            //    WithRequired(friendship => friendship.Friendee).
+            //    WillCascadeOnDelete(false);
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Member> Members { get; set; }

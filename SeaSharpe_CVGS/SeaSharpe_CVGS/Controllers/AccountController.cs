@@ -151,9 +151,17 @@ namespace SeaSharpe_CVGS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email }; IdentityResult result = null;
+                try
+                {
+                    result = await UserManager.CreateAsync(user, model.Password);
+
+                }
+                catch (Exception e)
+                {
+                    
+                    throw e;
+                } if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
