@@ -151,16 +151,7 @@ namespace SeaSharpe_CVGS.Controllers
         {
             return RedirectToAction("Details");
         }
-        /// <summary>
-        /// Member side - Add a specific game to cart
-        /// ****No view required****
-        /// </summary>
-        /// <param name="id">game id</param>
-        /// <returns>game details view</returns>
-        public ActionResult AddToCart(int? id)
-        {
-            return RedirectToAction("Details");
-        }
+        
         #endregion
 
         /// <summary>

@@ -24,101 +24,152 @@ namespace SeaSharpe_CVGS.Controllers
         {
             return View(db.Orders.ToList());
         }
-        #endregion
-        #region Member Side
 
         /// <summary>
-        /// Member Side - list all order items for specified user
+        /// post back order updated to processed
+        /// *** No view required ***
         /// </summary>
-        /// <returns>Cart view</returns>
-        public ActionResult Cart()
-        {
-            return View(db.Orders.ToList());
-        }
-
-        #endregion
-       
-
-        // GET: /Order/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: /Order/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <param name="order">order object</param>
+        /// <returns>Order Management view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,OrderPlacementDate,ShipDate,IsProcessed")] Order order)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Orders.Add(order);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(order);
-        }
-
-        // GET: /Order/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Order order = db.Orders.Find(id);
-            if (order == null)
-            {
-                return HttpNotFound();
-            }
-            return View(order);
-        }
-
-        // POST: /Order/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,OrderPlacementDate,ShipDate,IsProcessed")] Order order)
+        public ActionResult Update([Bind(Include = "Id,OrderPlacementDate,ShipDate,IsProcessed")] Order order)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(order).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("OrderManagement");
             }
             return View(order);
         }
+        #endregion
+        #region Member Side
 
-        // GET: /Order/Delete/5
-        public ActionResult Delete(int? id)
+        /// <summary>
+        /// Member Side - list all completed orders
+        /// </summary>
+        /// <returns>Order History view</returns>
+        public ActionResult OrderHistory(int? id)
+        {
+            return View(db.Orders.ToList());
+        }
+
+        /// <summary>
+        /// Show order items in cart order
+        /// </summary>
+        /// <param name="id">member id</param>
+        /// <returns>Cart view</returns>
+        public ActionResult Cart(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.Orders.Find(id);
-            if (order == null)
+            Game game = db.Games.Find(id);
+            if (game == null)
             {
                 return HttpNotFound();
+            }
+            return View(game);
+        }
+
+        /// <summary>
+        /// Member Side - Order Created when first item is added to cart
+        /// **** No view required ****
+        /// </summary>
+        /// <returns>Cart view</returns>
+        public ActionResult Create()
+        {
+            return RedirectToAction("Cart");
+        }
+
+        /// <summary>
+        /// Post back for order creation
+        /// </summary>
+        /// <param name="order">order object</param>
+        /// <returns>Cart view</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,OrderPlacementDate,ShipDate,IsProcessed")] Order order)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Orders.Add(order);
+                db.SaveChanges();
+                return RedirectToAction("Cart");
+            }
+
+            return View(order);
+        }
+
+        /// <summary>
+        /// Member side - Add a specific game to cart
+        /// ****No view required****
+        /// </summary>
+        /// <param name="id">game id</param>
+        /// <returns>game details view</returns>
+        public ActionResult AddToCart(int? id)
+        {
+            return RedirectToAction("Cart");
+        }
+
+        /// <summary>
+        /// post back order updated when items added to cart
+        /// *** No view required ***
+        /// </summary>
+        /// <param name="order">order object</param>
+        /// <returns>Cart view</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Update([Bind(Include = "Id,OrderPlacementDate,ShipDate,IsProcessed")] Order order)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(order).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Cart");
             }
             return View(order);
         }
 
-        // POST: /Order/Delete/5
+        /// <summary>
+        /// post back for deletion of cart item
+        /// </summary>
+        /// <param name="id">orderItem id</param>
+        /// <returns>Cart view</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int itemId)
         {
-            Order order = db.Orders.Find(id);
+            Order order = db.Orders.Find(itemId);
             db.Orders.Remove(order);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Cart");
         }
 
+        /// <summary>
+        /// post back for deletion of entire cart
+        /// </summary>
+        /// <param name="id">order id</param>
+        /// <returns>Cart view</returns>
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int orderId)
+        {
+            Order order = db.Orders.Find(orderId);
+            db.Orders.Remove(order);
+            db.SaveChanges();
+            return RedirectToAction("Cart");
+        }
+        
+        #endregion
+       
+
+        /// <summary>
+        /// garbage collection
+        /// </summary>
+        /// <param name="disposing">garbage</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
