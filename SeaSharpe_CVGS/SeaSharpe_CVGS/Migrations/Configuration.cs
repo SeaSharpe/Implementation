@@ -1,14 +1,14 @@
 namespace SeaSharpe_CVGS.Migrations
 {
-    using CsvHelper.Configuration;
-    using SeaSharpe_CVGS.Models;
+    using Models;
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Data.Entity.Validation;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<SeaSharpe_CVGS.Models.ApplicationDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
     {
         public Configuration()
         {
@@ -16,7 +16,7 @@ namespace SeaSharpe_CVGS.Migrations
         }
 
         /// <summary>
-        /// Log some text to %USERPROFILE%\seedlog.txt
+        /// Log some text to %USERPROFILE%\Desktop\seedlog.txt
         /// </summary>
         /// <param name="value">The text to log.</param>
         public void Log(string value)
@@ -33,19 +33,16 @@ namespace SeaSharpe_CVGS.Migrations
             Log(string.Format(p, args));
         }
 
-        protected override void Seed(SeaSharpe_CVGS.Models.ApplicationDbContext context)
+        protected override void Seed(ApplicationDbContext context)
         {
             var store = new Microsoft.AspNet.Identity.EntityFramework.UserStore<ApplicationUser>(context);
             var userManager = new ApplicationUserManager(store);
 
-            int i = 0;
-
             try
             {
-
-                foreach (var person in new MockData().People)
+                List<Member> members = new List<Member>(5000);
+                foreach (var person in new MockData().People.Take(50))
                 {
-                    i++;
                     try
                     {
                         Member member = new Member
@@ -59,12 +56,15 @@ namespace SeaSharpe_CVGS.Migrations
                                 LastName = person.Surname,
                                 Email = person.Email,
                                 Gender = "O",
-                                DateOfBirth = System.DateTime.Now,
-                                DateOfRegistration = System.DateTime.Now
+                                DateOfBirth = DateTime.Now,
+                                DateOfRegistration = DateTime.Now
                             }
                         };
-                        userManager.CreateAsync(member.User, "thisP@ssw0rdIsAmazing").Wait();
-                        context.Members.AddOrUpdate(member);
+                        if (!context.Members.Any(m => m.User.UserName == member.User.UserName))
+                        {
+                            userManager.CreateAsync(member.User, "thisP@ssw0rdIsAmazing").Wait();
+                            members.Add(member);
+                        }
                     }
                     catch (DbEntityValidationException e)
                     {
@@ -79,14 +79,13 @@ namespace SeaSharpe_CVGS.Migrations
                     }
                     catch (Exception e)
                     {
-                        System.Diagnostics.Debugger.Launch();
                         Log("Inner Exception");
                         Log(e.Message);
                     }
                 }
 
-                Log("Wrote {0} things", i);
-
+                Log("Wrote {0} things", members.Count());
+                context.Members.AddRange(members.ToArray());
                 context.SaveChanges();
             }
             catch (DbEntityValidationException e)
@@ -103,7 +102,6 @@ namespace SeaSharpe_CVGS.Migrations
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debugger.Launch();
                 Log("Outer Exception");
                 Log(e.Message);
             }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 
 namespace SeaSharpe_CVGS.Models
@@ -13,8 +14,7 @@ namespace SeaSharpe_CVGS.Models
 
         public MockData(string path = null)
         {
-            if (path == null) path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var csv = new CsvReader(File.OpenText(path + "\\population.csv"));
+            var csv = new CsvReader(GetStream(Population.Metadata));
             csv.Configuration.TrimFields = true;
             People = csv.GetRecords<Population>();
         }
@@ -45,6 +45,26 @@ namespace SeaSharpe_CVGS.Models
             public string MasterCard { get; set; }
             public string Amex { get; set; }
             public bool Allocated { get; set; }
+            public static MockedData Metadata = new MockedData { FileName = "population.csv", FileURL = @"http://pastebin.com/raw.php?i=H47btLfP" };
+        }
+
+        public struct MockedData
+        {
+            public string FileName;
+            public string FileURL;
+        }
+
+        private TextReader GetStream(MockedData data)
+        {
+            string localpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + data.FileName;
+            if (!File.Exists(localpath))
+            {
+                using (var client = new WebClient())
+                {
+                    client.DownloadFile(data.FileURL, localpath);
+                }
+            }
+            return File.OpenText(localpath);
         }
     }
 }
