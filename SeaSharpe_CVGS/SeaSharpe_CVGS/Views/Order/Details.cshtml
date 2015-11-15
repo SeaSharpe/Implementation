@@ -1,0 +1,42 @@
+﻿@model SeaSharpe_CVGS.Models.Order
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Order</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderPlacementDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderPlacementDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ShipDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ShipDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsProcessed)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsProcessed)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
