@@ -122,7 +122,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Cart view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Update([Bind(Include = "Id,OrderPlacementDate,ShipDate,IsProcessed")] Order order)
+        public ActionResult UpdateCartWithItem([Bind(Include = "Id,OrderPlacementDate,ShipDate,IsProcessed")] Order order)
         {
             if (ModelState.IsValid)
             {
@@ -155,7 +155,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Cart view</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int orderId)
+        public ActionResult DeleteCartConfirmed(int orderId)
         {
             Order order = db.Orders.Find(orderId);
             db.Orders.Remove(order);
