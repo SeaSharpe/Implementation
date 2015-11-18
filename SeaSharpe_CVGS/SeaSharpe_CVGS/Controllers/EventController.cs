@@ -13,17 +13,35 @@ namespace SeaSharpe_CVGS.Controllers
     public class EventController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        
-        #region Employee Side
+
+        #region Multiple Roles
         /// <summary>
         /// Employee Side - list all events
+        /// Member Side - list all events
         /// CRUD options
         /// </summary>
         /// <returns>EventManagement view</returns>
         public ActionResult EventManagement()
         {
-            return View(db.Events.ToList());
+            //if (Roles.IsUserInRole(@"employee"))
+            //{
+            //    return View(db.Events.ToList());
+            return RedirectToAction("EventManagement");
+            //}
+            //else if (Roles.IsUserInRole(@"member"))
+            //{
+            //    //return ViewEvents view
+            //      return RedirectToAction("ViewEvents");
+            //}
+            //else
+            //{
+            //    //return ViewEvents view
+            //      return RedirectToAction("ViewEvents");
+            //}
+
         }
+        #endregion
+        #region Employee Side
 
         /// <summary>
         /// Employee side - add events
@@ -107,14 +125,7 @@ namespace SeaSharpe_CVGS.Controllers
         #endregion
 
         #region Member Side
-        /// <summary>
-        /// Member Side - list all events
-        /// </summary>
-        /// <returns>ViewEvents view</returns>
-        public ActionResult ViewEvents()
-        {
-            return View(db.Events.ToList());
-        }
+        
 
         /// <summary>
         /// Member Side - register for event

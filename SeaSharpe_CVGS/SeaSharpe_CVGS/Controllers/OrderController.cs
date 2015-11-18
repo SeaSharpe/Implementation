@@ -14,17 +14,33 @@ namespace SeaSharpe_CVGS.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        #region Employee Side
-
+        #region Multiple Roles
         /// <summary>
         /// Employee Side - list all orders waiting to be processed
+        /// Member Side - list all completed orders
         /// </summary>
         /// <returns>Order Management view</returns>
         public ActionResult OrderManagement()
         {
-            return View(db.Orders.ToList());
+            //if (Roles.IsUserInRole(@"employee"))
+            //{
+            //    return View(db.Orders.ToList());
+            return RedirectToAction("OrderManagement");
+            //}
+            //else if (Roles.IsUserInRole(@"member"))
+            //{
+            //    //return ViewEvents view
+            //      return RedirectToAction("OrderHistory");
+            //}
+            //else
+            //{
+            //    //return ViewEvents view
+            //      return RedirectToAction("OrderHistory");
+            //}
         }
-
+        #endregion
+        #region Employee Side
+        
         /// <summary>
         /// post back order updated to processed
         /// *** No view required ***
@@ -45,16 +61,7 @@ namespace SeaSharpe_CVGS.Controllers
         }
         #endregion
         #region Member Side
-
-        /// <summary>
-        /// Member Side - list all completed orders
-        /// </summary>
-        /// <returns>Order History view</returns>
-        public ActionResult OrderHistory(int? id)
-        {
-            return View(db.Orders.ToList());
-        }
-
+        
         /// <summary>
         /// Show order items in cart order
         /// </summary>

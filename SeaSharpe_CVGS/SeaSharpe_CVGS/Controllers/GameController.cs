@@ -12,15 +12,34 @@ namespace SeaSharpe_CVGS.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        #region Employee Side
+        #region Multiple Roles
         /// <summary>
-        /// Employee Side - List all games
+        /// Employee side - list all games
+        /// Member side - search feature, list matching games
         /// </summary>
         /// <returns>list of games view</returns>
-        public ActionResult GameManagement()
+        public ActionResult Index()
         {
-            return View(db.Games.ToList());
+            //if (Roles.IsUserInRole(@"employee"))
+            //{
+            //    return View(db.Games.ToList());
+            return RedirectToAction("GameManagement");
+            //}
+            //else if (Roles.IsUserInRole(@"member"))
+            //{
+            //    //return SearchGames view
+            //      return RedirectToAction("SearchGames");
+            //}
+            //else
+            //{
+            //    //return SearchGames view
+            //      return RedirectToAction("SearchGames");
+            //}
+
         }
+        #endregion
+        #region Employee Side
+
 
         /// <summary>
         /// Employee Side - Add a game
@@ -102,17 +121,7 @@ namespace SeaSharpe_CVGS.Controllers
             db.SaveChanges();
             return RedirectToAction("GameManagement");
         }
-        #endregion
-        #region Member side
-        /// <summary>
-        /// Member Side - List games
-        /// </summary>
-        /// <returns>list of games view</returns>
-        public ActionResult SearchGames()
-        {
-            return View(db.Games.ToList());
-        }
-
+        
         /// <summary>
         /// Get Single Game
         /// </summary>
