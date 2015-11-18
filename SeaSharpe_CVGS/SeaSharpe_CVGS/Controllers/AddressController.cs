@@ -27,7 +27,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// post back for create address
         /// </summary>
         /// <param name="address">Address object</param>
-        /// <returns></returns>
+        /// <returns>****Unknown for partial views at this time****</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="Id,StreetAddress,City,Region,Country,PostalCode")] Address address)
@@ -42,8 +42,12 @@ namespace SeaSharpe_CVGS.Controllers
             return View(address);
         }
 
-        // GET: /Address/Edit/5
-        public ActionResult Edit(int? id)
+        /// <summary>
+        /// Partial view in member profile
+        /// </summary>
+        /// <param name="id">member id</param>
+        /// <returns>Partial view on profile page</returns>
+        public ActionResult PartialEdit(int? id)
         {
             if (id == null)
             {
@@ -57,9 +61,11 @@ namespace SeaSharpe_CVGS.Controllers
             return View(address);
         }
 
-        // POST: /Address/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// postback for address update
+        /// </summary>
+        /// <param name="address">address object</param>
+        /// <returns>**unknown for partial views at this time***</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include="Id,StreetAddress,City,Region,Country,PostalCode")] Address address)
@@ -73,22 +79,12 @@ namespace SeaSharpe_CVGS.Controllers
             return View(address);
         }
 
-        // GET: /Address/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Address address = db.Addresses.Find(id);
-            if (address == null)
-            {
-                return HttpNotFound();
-            }
-            return View(address);
-        }
-
-        // POST: /Address/Delete/5
+        
+        /// <summary>
+        /// Delete an address by clearing all fields
+        /// </summary>
+        /// <param name="id">member id</param>
+        /// <returns>***unknown for partial views at this time***</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -99,6 +95,10 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// garbage collection
+        /// </summary>
+        /// <param name="disposing">garbage</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
