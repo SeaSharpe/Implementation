@@ -109,6 +109,11 @@ namespace SeaSharpe_CVGS.Models
         public int Id { get; set; }
         [Required, MinLength(1), MaxLength(50)]
         public string Name { get; set; }
+        public string ImagePath { get; set; }
+        [MinLength(0), MaxLength(50)]
+        public string Publisher { get; set; }
+        [MinLength(0), MaxLength(4)]
+        public string ESRB { get; set; }
         public DateTime ReleaseDate { get; set; }
         public decimal SuggestedRetailPrice { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
@@ -180,6 +185,16 @@ namespace SeaSharpe_CVGS.Models
         public int Capacity { get; set; }
     }
 
+    public class EventMembers
+    {
+        [Key, Column("Member_Id", Order = 0)]
+        public int MemberId { get; set; }
+        [Key, Column("Event_Id", Order = 1)]
+        public int EventId { get; set; }
+        public virtual Member Member { get; set; }
+        public virtual Event Event { get; set; }
+    }
+
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
@@ -213,6 +228,7 @@ namespace SeaSharpe_CVGS.Models
         public DbSet<Category> Catagories { get; set; }
         public DbSet<WishList> WishLists { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<EventMembers> EventMembers { get; set; }
 
     }
 }
