@@ -13,15 +13,33 @@ namespace SeaSharpe_CVGS.Controllers
     public class ReviewController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        #region Employee Side
+        #region Multiple Roles
         /// <summary>
         /// Employee Side - List all reviews awaiting review
+        /// Member Side - List all reviews for a game and show average rating
         /// </summary>
         /// <returns>Review Management view</returns>
-        public ActionResult ReviewManagement()
+        public ActionResult Index()
         {
-            return View(db.Reviews.ToList());
+            //if (Roles.IsUserInRole(@"employee"))
+            //{
+            //   return View(db.Reviews.ToList());
+            return RedirectToAction("ReviewManagement");
+            //}
+            //else if (Roles.IsUserInRole(@"member"))
+            //{
+            //    //return SearchGames view
+            //      return RedirectToAction("ReviewsRating");
+            //}
+            //else
+            //{
+            //    //return SearchGames view
+            //      return RedirectToAction("ReviewsRating");
+            //}
+            
         }
+        #endregion
+        #region Employee Side       
 
         /// <summary>
         /// post back for updating review to Accepted
@@ -62,25 +80,6 @@ namespace SeaSharpe_CVGS.Controllers
 
         #region Member Side
         
-        /// <summary>
-        /// Member Side - List all reviews for a game and show average rating
-        /// </summary>
-        /// <param name="id">review id</param>
-        /// <returns>Reviews/Ratings view for specified game</returns>
-        public ActionResult ReviewsRating(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Review review = db.Reviews.Find(id);
-            if (review == null)
-            {
-                return HttpNotFound();
-            }
-            return View(review);
-        }
-
        /// <summary>
         /// post back for review creation
         /// **** review must be validated by employee before appears in Reviews/Rating list ****
