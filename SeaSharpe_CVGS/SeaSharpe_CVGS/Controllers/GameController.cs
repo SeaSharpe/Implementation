@@ -5,6 +5,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SeaSharpe_CVGS.Models;
+using System.Web.Security;
+using System.Collections.Generic;
 
 namespace SeaSharpe_CVGS.Controllers
 {
@@ -13,6 +15,7 @@ namespace SeaSharpe_CVGS.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         #region Multiple Roles
+
         /// <summary>
         /// Employee side - list all games
         /// Member side - search feature, list matching games
@@ -20,26 +23,62 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         public ActionResult Index()
         {
-            //if (Roles.IsUserInRole(@"employee"))
-            //{
-            //    return View(db.Games.ToList());
-            return RedirectToAction("GameManagement");
-            //}
-            //else if (Roles.IsUserInRole(@"member"))
-            //{
-            //    //return SearchGames view
-            //      return RedirectToAction("SearchGames");
-            //}
-            //else
-            //{
-            //    //return SearchGames view
-            //      return RedirectToAction("SearchGames");
-            //}
+            return RedirectToAction("SearchGames");
+            //User is employee, redirect to GameManagement
+            if (Roles.IsUserInRole(@"employee"))
+            {
+                return RedirectToAction("GameManagement");
+            }
 
+            //User is visitor or member, redirect to SearchGames
+            else
+            {
+                return RedirectToAction("SearchGames");
+            }       
+            
         }
-        #endregion
-        #region Employee Side
 
+        /// <summary>
+        /// Displays game list page for members/visitors
+        /// </summary>
+        /// <returns>List of games view</returns>
+        public ActionResult SearchGames()
+        {
+            List<Game> gameList = db.Games.ToList();
+            return View(gameList);
+        }
+
+        /// <summary>
+        /// Get Single Game
+        /// </summary>
+        /// <param name="id">game id</param>
+        /// <returns>game details view</returns>
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Game game = db.Games.Find(id);
+            if (game == null)
+            {
+                return HttpNotFound();
+            }
+            return View(game);
+        }
+
+        /// <summary>
+        /// Displays game list page for employees
+        /// </summary>
+        /// <returns>List of games view</returns>
+        public ActionResult GameManagement()
+        {
+            return View();
+        }
+
+        #endregion
+
+        #region Employee Side
 
         /// <summary>
         /// Employee Side - Add a game
@@ -120,26 +159,8 @@ namespace SeaSharpe_CVGS.Controllers
             db.Games.Remove(game);
             db.SaveChanges();
             return RedirectToAction("GameManagement");
-        }
+        }        
         
-        /// <summary>
-        /// Get Single Game
-        /// </summary>
-        /// <param name="id">game id</param>
-        /// <returns>game details view</returns>
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Game game = db.Games.Find(id);
-            if (game == null)
-            {
-                return HttpNotFound();
-            }
-            return View(game);
-        }
         /// <summary>
         /// Member side - Add a specific game to wish list
         /// ****No view required****
