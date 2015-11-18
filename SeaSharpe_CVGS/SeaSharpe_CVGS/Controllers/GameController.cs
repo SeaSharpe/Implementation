@@ -86,6 +86,12 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>return add/edit game view</returns>
         public ActionResult Create()
         {
+            //Send platform selectlist to view for dropdown
+            ViewBag.platformList = new SelectList(db.Platforms, "Id", "Name");
+
+            //Send category selectlist to view for dropdown
+            ViewBag.categoryList = new SelectList(db.Catagories, "Id", "Name");
+
             return View();
         }
 

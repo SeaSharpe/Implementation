@@ -26,10 +26,22 @@
         </div>
 
         <!-- Categories  -->
-        <!-- join table, tbd-->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Categories, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.ListBoxFor(m => m.Categories, (SelectList)ViewBag.categoryList)
+                @Html.ValidationMessageFor(model => model.Categories)
+            </div>
+        </div>
 
-        <!-- Platform -->        
-        <!-- dropdown, tbd-->
+        <!-- Platform -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Platform, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m=> m.Platform, (SelectList)ViewBag.platformList)
+                @Html.ValidationMessageFor(model => model.Platform)
+            </div>
+        </div>
 
         <!-- Retail Price -->
         <div class="form-group">
@@ -44,8 +56,35 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ReleaseDate, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ReleaseDate)
+                @Html.TextBoxFor(model => model.ReleaseDate, new { @class = "datefield"})
                 @Html.ValidationMessageFor(model => model.ReleaseDate)
+            </div>
+        </div>        
+
+        <!-- Publisher -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Publisher, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Publisher)
+                @Html.ValidationMessageFor(model => model.Publisher)
+            </div>
+        </div>
+
+        <!-- ESRB (make a drop down with hard coded values?) -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.ESRB, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ESRB)
+                @Html.ValidationMessageFor(model => model.ESRB)
+            </div>
+        </div>
+
+        <!-- Image Path-->
+        <div class="form-group">
+            @Html.LabelFor(model => model.ImagePath, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ImagePath)
+                @Html.ValidationMessageFor(model => model.ImagePath)
             </div>
         </div>
 
