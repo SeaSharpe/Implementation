@@ -201,6 +201,7 @@ namespace SeaSharpe_CVGS.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Conventions.Remove<System.Data.Entity.ModelConfiguration.Conventions.ManyToManyCascadeDeleteConvention>();
             modelBuilder.Entity<Member>().
                 HasMany(member => member.Friendships).
                 WithRequired(friendship => friendship.Friendee).
