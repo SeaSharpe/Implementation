@@ -44,6 +44,7 @@ namespace SeaSharpe_CVGS.Models
         public bool IsEmailMarketingAllowed { get; set; }
         public int StripeID { get; set; }
         public virtual ICollection<Friendship> Friendships { get; set; }
+        public virtual ICollection<Event> Events { get; set; }
     }
 
     public class Employee
@@ -183,16 +184,7 @@ namespace SeaSharpe_CVGS.Models
         public string Description { get; set; }
         [Required, Range(0, int.MaxValue)]
         public int Capacity { get; set; }
-    }
-
-    public class EventMembers
-    {
-        [Key, Column("Member_Id", Order = 0)]
-        public int MemberId { get; set; }
-        [Key, Column("Event_Id", Order = 1)]
-        public int EventId { get; set; }
-        public virtual Member Member { get; set; }
-        public virtual Event Event { get; set; }
+        public virtual ICollection<Member> Attendies { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -228,7 +220,5 @@ namespace SeaSharpe_CVGS.Models
         public DbSet<Category> Catagories { get; set; }
         public DbSet<WishList> WishLists { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<EventMembers> EventMembers { get; set; }
-
     }
 }
