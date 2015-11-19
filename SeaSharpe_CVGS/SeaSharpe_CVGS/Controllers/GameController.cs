@@ -112,6 +112,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <param name="game">game object</param>
         /// <returns>view of games' list</returns>
+        //ADD EMPLOYY AUTH
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,ReleaseDate,SuggestedRetailPrice, ImagePath, Publisher, ESRB")] Game game, int? Platform, int[] Categories)
