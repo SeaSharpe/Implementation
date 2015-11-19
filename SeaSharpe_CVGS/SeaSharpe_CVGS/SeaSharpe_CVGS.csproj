@@ -185,7 +185,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MockData.cs" />
-    <Compile Include="Models\ValidateAction.cs" />
+    <Compile Include="Models\ValidateAttributes.cs" />
     <Compile Include="Models\Validation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

@@ -37,7 +37,6 @@ namespace SeaSharpe_CVGS.Models
 
     public partial class Member
     {
-        [Required]
         public virtual ApplicationUser User { get; set; }
         public int Id { get; set; }
         public bool IsEmailVerified { get; set; }
@@ -48,7 +47,6 @@ namespace SeaSharpe_CVGS.Models
 
     public partial class Employee
     {
-        [Required]
         public virtual ApplicationUser User { get; set; }
         public int Id { get; set; }
     }
@@ -56,17 +54,11 @@ namespace SeaSharpe_CVGS.Models
     public partial class Address
     {
         public int Id { get; set; }
-        [Required]
         public virtual Member Member { get; set; }
-        [Required, MinLength(1), MaxLength(255)]
         public string StreetAddress { get; set; }
-        [Required, MinLength(2), MaxLength(50)]
         public string City { get; set; }
-        [Required, MinLength(2), MaxLength(50)]
         public string Region { get; set; }
-        [Required, MinLength(2), MaxLength(50)]
         public string Country { get; set; }
-        [Required, StringLength(5), Column(TypeName = "char")]
         public string PostalCode { get; set; }
     }
 
@@ -90,7 +82,6 @@ namespace SeaSharpe_CVGS.Models
         public int OrderId { get; set; }
         public virtual Game Game { get; set; }
         public virtual Order Order { get; set; }
-        [Required, Range(0, (double)decimal.MaxValue)]
         public decimal SalePrice { get; set; }
     }
 
@@ -107,13 +98,11 @@ namespace SeaSharpe_CVGS.Models
     public partial class Game
     {
         public int Id { get; set; }
-        [Required, MinLength(1), MaxLength(50)]
         public string Name { get; set; }
         public DateTime ReleaseDate { get; set; }
         public decimal SuggestedRetailPrice { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
-        [Required]
         public virtual Platform Platform { get; set; }
     }
 
@@ -138,7 +127,6 @@ namespace SeaSharpe_CVGS.Models
         public int FrienderId { get; set; }
         public virtual Member Friendee { get; set; }
         public virtual Member Friender { get; set; }
-        [Required]
         public bool IsFamilyMember { get; set; }
     }
 
@@ -200,6 +188,5 @@ namespace SeaSharpe_CVGS.Models
         public DbSet<Category> Catagories { get; set; }
         public DbSet<WishList> WishLists { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-
     }
 }

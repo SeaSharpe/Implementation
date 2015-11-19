@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace SeaSharpe_CVGS.Models
 {
-    public class ValidateAction
+    public class ValidateAttributes
     {
         //will hold the temporary value of startDate for an event. 
         //Use it to compare it with end date of an event
@@ -34,7 +35,7 @@ namespace SeaSharpe_CVGS.Models
                 return false;
             }
 
-            ValidateAction.EventStartDate = dt;
+            ValidateAttributes.EventStartDate = dt;
             return true;
         }
     }
@@ -55,7 +56,7 @@ namespace SeaSharpe_CVGS.Models
                 return false;
             }
 
-            if (dt < ValidateAction.EventStartDate)
+            if (dt < ValidateAttributes.EventStartDate)
             {
                 return false;
             }
@@ -65,4 +66,38 @@ namespace SeaSharpe_CVGS.Models
     }
 
     #endregion
+
+    public class PostalCodeValidation : ValidationAttribute
+    {
+        /// <summary>
+        /// Evaluates if object passed match the regular expresion
+        /// </summary>
+        /// <param name="value">Object to be evaluated</param>
+        /// <returns>True if the postal code is null or whitespaces, 
+        /// True if the regular expression match the object value, false otherwise</returns>
+        public override bool IsValid(object value)
+        {
+            string postalCode = "";
+            if (value != null)
+            {
+                postalCode = value as string;
+                postalCode = postalCode.Trim();
+
+                if (string.IsNullOrWhiteSpace(postalCode))
+                {
+                    return true;
+                }
+                else
+                {
+                    return Regex.IsMatch
+                        (postalCode, @"^(?i)[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] ?[0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]$");
+                }
+            }
+            //so will let if be optional
+            else
+            {
+                return true;
+            }
+        }
+    }
 }

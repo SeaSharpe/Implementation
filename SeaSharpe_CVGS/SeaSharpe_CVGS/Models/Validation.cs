@@ -11,6 +11,121 @@ namespace SeaSharpe_CVGS.Models
     {
     }
 
+    /// <summary>
+    /// MetaData Validation for Member
+    /// </summary>
+    [MetadataType(typeof(MemberMetadata))]
+    public partial class Member
+    {
+        class MemberMetadata
+        {
+            //StripeID ?
+
+            [Required(ErrorMessage = "Required")]
+            public virtual ApplicationUser User { get; set; }
+        }
+    }
+
+    /// <summary>
+    /// MetaData Validation for Employee
+    /// </summary>
+    [MetadataType(typeof(EmployeeMetadata))]
+    public partial class Employee
+    {
+        class EmployeeMetadata
+        {
+            [Required(ErrorMessage = "Required")]
+            public virtual ApplicationUser User { get; set; }
+        }
+    }
+
+    /// <summary>
+    /// MetaData Validation for Address
+    /// </summary>
+    [MetadataType(typeof(AddressMetadata))]
+    public partial class Address
+    {
+        class AddressMetadata
+        {
+            [Required(ErrorMessage = "Required")]
+            public virtual Member Member { get; set; }
+
+            [Required(ErrorMessage = "Required")]
+            [StringLength(255, MinimumLength = 1, ErrorMessage = "Maximun lenght is 255 characters and must have at least 1 character")]
+            public string StreetAddress { get; set; }
+
+            [Required(ErrorMessage = "Required")]
+            [StringLength(50, MinimumLength = 2, ErrorMessage = "Maximun lenght is 50 characters and must have at least 2 character")]
+            public string City { get; set; }
+
+            [Required(ErrorMessage = "Required")]
+            [StringLength(50, MinimumLength = 2, ErrorMessage = "Maximun lenght is 50 characters and must have at least 2 character")]
+            public string Region { get; set; }
+
+            [Required(ErrorMessage = "Required")]
+            [StringLength(50, MinimumLength = 2, ErrorMessage = "Maximun lenght is 50 characters and must have at least 2 character")]
+            public string Country { get; set; }
+
+            [Required, StringLength(5), Column(TypeName = "char")]
+            [PostalCodeValidation(ErrorMessage = "Postal Code must be valid 'N2H 5C1'")]
+            public string PostalCode { get; set; }
+        }
+    }
+
+
+    //Order spot
+
+    /// <summary>
+    /// MetaData Validation for OrderItem
+    /// </summary>
+    [MetadataType(typeof(OrderItemMetadata))]
+    public partial class OrderItem
+    {
+        class OrderItemMetadata
+        {
+            [Required(ErrorMessage = "Required")]
+            [Range(typeof(decimal), "0.0000000001", "79228162514264337593543950335", ErrorMessage = "Price must be positive")]
+            public decimal SalePrice { get; set; }
+        }
+    }
+
+
+    /// <summary>
+    /// MetaData Validation for WishList
+    /// </summary>
+    [MetadataType(typeof(WishListMetadata))]
+    public partial class WishList
+    {
+        class WishListMetadata
+        {
+            //so far empty
+        }
+    }
+
+
+    /// <summary>
+    /// MetaData Validation for Game
+    /// </summary>
+    [MetadataType(typeof(GameMetadata))]
+    public partial class Game
+    {
+        class GameMetadata
+        {
+            [Required(ErrorMessage = "Required")]
+            [StringLength(50, MinimumLength = 1, ErrorMessage = "Maximun lenght is 50 characters and must have at least 1 character")]
+            public string Name { get; set; }
+
+            [Required(ErrorMessage = "Required")]
+            public DateTime ReleaseDate { get; set; }
+
+            [Required(ErrorMessage = "Required")]
+            [Range(typeof(decimal), "0.0000000001", "79228162514264337593543950335", ErrorMessage = "Price must be positive")]
+            public decimal SuggestedRetailPrice { get; set; }
+
+            [Required(ErrorMessage = "Required")]
+            public virtual Platform Platform { get; set; }
+        }
+    }
 
     /// <summary>
     /// MetaData Validation for Review
@@ -109,8 +224,4 @@ namespace SeaSharpe_CVGS.Models
             public int Capacity { get; set; }
         }
     }
-
-
-
-
 }
