@@ -164,11 +164,14 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AddressController.cs" />
     <Compile Include="Controllers\EventController.cs" />
+    <Compile Include="Controllers\FriendshipController.cs" />
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -271,12 +274,22 @@
     <Content Include="Views\Order\OrderManagement.cshtml" />
     <Content Include="Views\Order\OrderHistory.cshtml" />
     <Content Include="Views\Order\Cart.cshtml" />
-    <Content Include="Views\Address\Create.cshtml" />
-    <Content Include="Views\Address\Delete.cshtml" />
-    <Content Include="Views\Address\Details.cshtml" />
-    <Content Include="Views\Address\Edit.cshtml" />
-    <Content Include="Views\Address\Index.cshtml" />
     <Content Include="Views\Address\PartialCreate.cshtml" />
+    <Content Include="Views\Address\PartialEdit.cshtml" />
+    <Content Include="Views\Friendship\Create.cshtml" />
+    <Content Include="Views\Friendship\Delete.cshtml" />
+    <Content Include="Views\Friendship\Details.cshtml" />
+    <Content Include="Views\Friendship\Edit.cshtml" />
+    <Content Include="Views\Friendship\Index.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Report\SalesReport.cshtml" />
+    <Content Include="Views\Report\WishListsReport.cshtml" />
+    <Content Include="Views\Report\MemberDetailsReport.cshtml" />
+    <Content Include="Views\Report\ListMembersReport.cshtml" />
+    <Content Include="Views\Report\ListGamesReport.cshtml" />
+    <Content Include="Views\Report\GameDetailsReport.cshtml" />
+    <Content Include="Views\User\Create.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
