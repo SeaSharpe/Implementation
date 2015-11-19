@@ -28,8 +28,6 @@ namespace SeaSharpe_CVGS.Models
     {
         class MemberMetadata
         {
-            //StripeID ?
-
             [Required(ErrorMessage = "Required")]
             public virtual ApplicationUser User { get; set; }
         }
@@ -81,9 +79,6 @@ namespace SeaSharpe_CVGS.Models
         }
     }
 
-
-    //Order spot
-
     /// <summary>
     /// MetaData Validation for OrderItem
     /// </summary>
@@ -98,7 +93,6 @@ namespace SeaSharpe_CVGS.Models
         }
     }
 
-
     /// <summary>
     /// MetaData Validation for WishList
     /// </summary>
@@ -110,7 +104,6 @@ namespace SeaSharpe_CVGS.Models
             //so far empty
         }
     }
-
 
     /// <summary>
     /// MetaData Validation for Game

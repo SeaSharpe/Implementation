@@ -22,10 +22,10 @@ namespace SeaSharpe_CVGS.Models
         public static DateTime EventStartDate;
     }
 
-    #region Event Entity
-
     /// <summary>
-    /// Will make sure the value pass is not in the past
+    /// Will make sure the value pass is not in the past 
+    /// 
+    /// Use it by: Event Entity
     /// </summary>
     public class DateNotInThePast : ValidationAttribute
     {
@@ -50,6 +50,8 @@ namespace SeaSharpe_CVGS.Models
 
     /// <summary>
     /// Will make sure End Date of an event is later than the Start Date (ValidateAction.EventStartDate)
+    /// 
+    /// Use it by: Event Entity
     /// </summary>
     public class DateNotBeforeStartDate : ValidationAttribute
     {
@@ -73,8 +75,11 @@ namespace SeaSharpe_CVGS.Models
         }
     }
 
-    #endregion
-
+    /// <summary>
+    /// Evaluates if object passed match the regular expresion
+    /// 
+    /// Use it by: Address Entity
+    /// </summary>
     public class PostalCodeValidation : ValidationAttribute
     {
         /// <summary>
@@ -101,10 +106,9 @@ namespace SeaSharpe_CVGS.Models
                         (postalCode, @"^(?i)[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] ?[0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]$");
                 }
             }
-            //so will let if be optional
             else
             {
-                return true;
+                return false;
             }
         }
     }
