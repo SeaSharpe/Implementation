@@ -35,7 +35,7 @@ namespace SeaSharpe_CVGS.Models
         public DateTime DateOfRegistration { get; set; }
     }
 
-    public class Member
+    public partial class Member
     {
         [Required]
         public virtual ApplicationUser User { get; set; }
@@ -46,14 +46,14 @@ namespace SeaSharpe_CVGS.Models
         public virtual ICollection<Friendship> Friendships { get; set; }
     }
 
-    public class Employee
+    public partial class Employee
     {
         [Required]
         public virtual ApplicationUser User { get; set; }
         public int Id { get; set; }
     }
 
-    public class Address
+    public partial class Address
     {
         public int Id { get; set; }
         [Required]
@@ -70,7 +70,7 @@ namespace SeaSharpe_CVGS.Models
         public string PostalCode { get; set; }
     }
 
-    public class Order
+    public partial class Order
     {
         public int Id { get; set; }
         public virtual Address BillingAddress { get; set; }
@@ -82,7 +82,7 @@ namespace SeaSharpe_CVGS.Models
         public bool IsProcessed { get; set; }
     }
 
-    public class OrderItem
+    public partial class OrderItem
     {
         [Key, Column("Game_Id", Order = 0)]
         public int GameId { get; set; }
@@ -94,7 +94,7 @@ namespace SeaSharpe_CVGS.Models
         public decimal SalePrice { get; set; }
     }
 
-    public class WishList
+    public partial class WishList
     {
         [Key, Column("Member_Id", Order = 0)]
         public int MemberId { get; set; }
@@ -104,7 +104,7 @@ namespace SeaSharpe_CVGS.Models
         public virtual Member Member { get; set; }
     }
 
-    public class Game
+    public partial class Game
     {
         public int Id { get; set; }
         [Required, MinLength(1), MaxLength(50)]
@@ -117,23 +117,18 @@ namespace SeaSharpe_CVGS.Models
         public virtual Platform Platform { get; set; }
     }
 
-    public class Review
+    public partial class Review
     {
         public int Id { get; set; }
-        [Required]
         public virtual Game Game { get; set; }
-        [Required]
         public virtual Member Author { get; set; }
         public virtual Employee Aprover { get; set; }
-        [Required]
         public float Rating { get; set; }
-        [MinLength(1), MaxLength(500)]
         public string Subject { get; set; }
-        [MinLength(0), MaxLength(4000)]
         public string Body { get; set; }
     }
 
-    public class Friendship
+    public partial class Friendship
     {
         [Key, Column("Friendee_Id", Order = 0)]
         [ForeignKey("Friendee")]
@@ -147,18 +142,16 @@ namespace SeaSharpe_CVGS.Models
         public bool IsFamilyMember { get; set; }
     }
 
-    public class Platform
+    public partial class Platform
     {
         public int Id { get; set; }
-        [Required, MaxLength(50), MinLength(1)]
         public string Name { get; set; }
         public virtual ICollection<Game> Games { get; set; }
     }
 
-    public class Category
+    public partial class Category
     {
         public int Id { get; set; }
-        [Required, MaxLength(50), MinLength(1)]
         public string Name { get; set; }
         public virtual ICollection<Game> Games { get; set; }
     }
@@ -166,17 +159,11 @@ namespace SeaSharpe_CVGS.Models
     public partial class Event
     {
         public int Id { get; set; }
-        [Required]
         public virtual Employee Employee { get; set; }
-        [MinLength(0), MaxLength(2000)]
         public string Location { get; set; }
-        [Required]
         public DateTime StartDate { get; set; }
-        [Required]
         public DateTime EndDate { get; set; }
-        [MinLength(0), MaxLength(4000)]
         public string Description { get; set; }
-        [Required, Range(0, int.MaxValue)]
         public int Capacity { get; set; }
     }
 
