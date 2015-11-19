@@ -19,7 +19,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// checks authorization and redirects to appropriate page
         /// </summary>
         /// <returns>redirect to OrderManagement or OrderHistory methods</returns>
-        public ActionResult OrderManagement()
+        public ActionResult Index()
         {
             //if (Roles.IsUserInRole(@"employee"))
             //{
