@@ -134,14 +134,21 @@ namespace SeaSharpe_CVGS.Controllers
 
         #region Member Side
        /// <summary>
-       /// list all events
+       /// list all current events
        /// </summary>
        /// <returns>ViewEvents view</returns>
        public ActionResult ViewEvents()
        {
            return View(db.Events.ToList());
        }
-
+        /// <summary>
+        /// display details of currently selected event
+        /// </summary>
+        /// <returns>PartialSelectedEvent view</returns>
+        public ActionResult PartialSelectedEvent()
+       {
+           return View();
+       }
         /// <summary>
         /// Member Side - register for event
         /// **** No View Required ****

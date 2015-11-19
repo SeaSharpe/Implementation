@@ -124,6 +124,7 @@ namespace SeaSharpe_CVGS.Controllers
         
         /// <summary>
         /// Get Single Game
+        /// **view shared with PartialCreateReview***
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>game details view</returns>
@@ -140,6 +141,7 @@ namespace SeaSharpe_CVGS.Controllers
             }
             return View(game);
         }
+
         /// <summary>
         /// Member side - Add a specific game to wish list
         /// ****No view required****
