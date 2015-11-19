@@ -44,6 +44,7 @@ namespace SeaSharpe_CVGS.Models
         public bool IsEmailMarketingAllowed { get; set; }
         public int StripeID { get; set; }
         public virtual ICollection<Friendship> Friendships { get; set; }
+        public virtual ICollection<Event> Events { get; set; }
     }
 
     public class Employee
@@ -109,6 +110,11 @@ namespace SeaSharpe_CVGS.Models
         public int Id { get; set; }
         [Required, MinLength(1), MaxLength(50)]
         public string Name { get; set; }
+        public string ImagePath { get; set; }
+        [MinLength(0), MaxLength(50)]
+        public string Publisher { get; set; }
+        [MinLength(0), MaxLength(4)]
+        public string ESRB { get; set; }
         public DateTime ReleaseDate { get; set; }
         public decimal SuggestedRetailPrice { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
@@ -178,6 +184,7 @@ namespace SeaSharpe_CVGS.Models
         public string Description { get; set; }
         [Required, Range(0, int.MaxValue)]
         public int Capacity { get; set; }
+        public virtual ICollection<Member> Attendies { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -194,6 +201,7 @@ namespace SeaSharpe_CVGS.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Conventions.Remove<System.Data.Entity.ModelConfiguration.Conventions.ManyToManyCascadeDeleteConvention>();
             modelBuilder.Entity<Member>().
                 HasMany(member => member.Friendships).
                 WithRequired(friendship => friendship.Friendee).
@@ -213,6 +221,5 @@ namespace SeaSharpe_CVGS.Models
         public DbSet<Category> Catagories { get; set; }
         public DbSet<WishList> WishLists { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-
     }
 }
