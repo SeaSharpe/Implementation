@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * File Name: Validation.cs
+ * This class contains the validation for the entities 
+ *  
+ * Revision History:
+ *      19-Nov-2015: Created the class, Wrote code, Commented
+ *      
+ * 
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

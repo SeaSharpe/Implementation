@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+ * File Name: ValidateAttributes.cs
+ * This class contains the validation attributes used for specific fields on the entities
+ *  
+ * Revision History:
+ *      19-Nov-2015: Created the class, Wrote code, Commented
+ * 
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
