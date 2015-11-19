@@ -163,7 +163,7 @@ namespace SeaSharpe_CVGS.Models
         public virtual ICollection<Game> Games { get; set; }
     }
 
-    public class Event
+    public partial class Event
     {
         public int Id { get; set; }
         [Required]
