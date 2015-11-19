@@ -5,7 +5,7 @@
 */
 
 //applies the datepicker ui to the datefield class
-$(function () {
-    $(".datefield").datepicker();
-    
+$(function ()
+{
+    $(".datefield").datepicker({ dateFormat: 'dd-mm-yy' });
 });

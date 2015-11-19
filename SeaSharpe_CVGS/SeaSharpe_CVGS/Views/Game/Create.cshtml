@@ -16,6 +16,7 @@
         <hr />
         @Html.ValidationSummary(true)
 
+
         <!-- Game Name -->
         <div class="form-group">
             @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
@@ -29,8 +30,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Categories, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.ListBoxFor(m => m.Categories, (SelectList)ViewBag.categoryList)
-                @Html.ValidationMessageFor(model => model.Categories)
+                @Html.ListBoxFor(model => model.Categories, (SelectList)ViewData["categoryList"])
             </div>
         </div>
 
@@ -38,8 +38,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Platform, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(m=> m.Platform, (SelectList)ViewBag.platformList)
-                @Html.ValidationMessageFor(model => model.Platform)
+                @Html.DropDownListFor(model=> model.Platform, (SelectList)ViewData["platformList"])
             </div>
         </div>
 
@@ -70,11 +69,11 @@
             </div>
         </div>
 
-        <!-- ESRB (make a drop down with hard coded values?) -->
+        <!-- ESRB  -->
         <div class="form-group">
             @Html.LabelFor(model => model.ESRB, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ESRB)
+                @Html.DropDownListFor(model => model.ESRB,(SelectList)ViewData["esrbList"])
                 @Html.ValidationMessageFor(model => model.ESRB)
             </div>
         </div>

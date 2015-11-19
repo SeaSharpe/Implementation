@@ -7,12 +7,20 @@ using System.Web.Mvc;
 using SeaSharpe_CVGS.Models;
 using System.Web.Security;
 using System.Collections.Generic;
+using System;
 
 namespace SeaSharpe_CVGS.Controllers
 {
     public class GameController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
+        //Dictionary containing ESRB ratings
+        public static List<string> esrbList = new List<string>
+            {
+                {"EC"},{"E"},{"E10"},{"T"},{"M"},{"AO"}
+            };
+        
 
         #region Multiple Roles
 
@@ -84,13 +92,17 @@ namespace SeaSharpe_CVGS.Controllers
         /// Employee Side - Add a game
         /// </summary>
         /// <returns>return add/edit game view</returns>
+       
         public ActionResult Create()
         {
             //Send platform selectlist to view for dropdown
-            ViewBag.platformList = new SelectList(db.Platforms, "Id", "Name");
+            ViewData["platformList"] = new SelectList(db.Platforms, "Id", "Name");
 
-            //Send category selectlist to view for dropdown
-            ViewBag.categoryList = new SelectList(db.Catagories, "Id", "Name");
+            //Send category selectlist to view for listbox
+            ViewData["categoryList"] = new SelectList(db.Catagories, "Id", "Name");
+
+            //Send esrb seletlist to view for dropdown
+            ViewData["esrbList"] = new SelectList(esrbList);
 
             return View();
         }
@@ -102,16 +114,46 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>view of games' list</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,Name,ReleaseDate,SuggestedRetailPrice")] Game game)
-        {
-            if (ModelState.IsValid)
+        public ActionResult Create([Bind(Include = "Id,Name,ReleaseDate,SuggestedRetailPrice, ImagePath, Publisher, ESRB")] Game game, int? Platform, int[] Categories)
+        {            
+            try
             {
-                db.Games.Add(game);
-                db.SaveChanges();
-                return RedirectToAction("GameManagement");
+                //TODO: ensure that datetime for releasedate is being validated properly
+
+                //Add game platform if value not null
+                if(Platform != null)
+                {
+                    Platform gamePlatform = db.Platforms.Find(Platform);
+                    game.Platform = gamePlatform;
+                }
+                
+                //Add game categories if value not null
+                if(Categories != null)
+                {
+                    ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
+                    game.Categories = gameCategories;
+                }     
+
+                //Update the model state to reflect manual addition of platforms and categories
+                ModelState.Clear();
+                TryValidateModel(game);
+                if (ModelState.IsValid)
+                {
+                    db.Games.Add(game);
+                    db.SaveChanges();
+                    return RedirectToAction("GameManagement");
+                }
+
             }
 
-            return View(game);
+            //Return message to employee if exception
+            catch(Exception e)
+            {
+                TempData["error"] = "Error creating game: " + e.GetBaseException().Message;                
+            }
+
+            Create();
+            return View(game);                        
         }
 
         /// <summary>
@@ -140,8 +182,9 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name,ReleaseDate,SuggestedRetailPrice")] Game game)
+        public ActionResult Edit([Bind(Include="Id,Name,ReleaseDate,SuggestedRetailPrice")] Game game, int Platform)
         {
+
             if (ModelState.IsValid)
             {
                 db.Entry(game).State = EntityState.Modified;
