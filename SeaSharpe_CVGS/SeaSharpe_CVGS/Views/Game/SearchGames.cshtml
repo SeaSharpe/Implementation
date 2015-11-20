@@ -9,8 +9,6 @@
  <!-- Search form-->
 @using (Html.BeginForm("SearchGames","Game",FormMethod.Get))
 {
-    @Html.AntiForgeryToken()
-
     <div class="form-horizontal">
         @Html.ValidationSummary(true)
 
@@ -26,9 +24,7 @@
         <!-- Platform Search Listbox -->
         <div class="col-md-4">            
             <div class="form-group">
-
                 @Html.DisplayNameFor(model => model.Platform)
-
                 @Html.ListBox("platformSearch", (SelectList)ViewData["platformList"])
             </div>
         </div>        
@@ -37,8 +33,9 @@
         <div class="col-md-4">            
             <div class="form-group">
                 @Html.DisplayNameFor(model => model.Categories)
-
                 @Html.ListBox("categorySearch", (SelectList)ViewData["categoryList"])
+                @Html.Label("is inclusive?")
+                @Html.CheckBox("isInclusive")
             </div>
         </div>
 

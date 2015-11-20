@@ -31,9 +31,6 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         public ActionResult Index()
         {
-            //Incomplete: temporary code for testing purposes until roles are working
-            return RedirectToAction("SearchGames");
-
             //User is employee, redirect to GameManagement
             if (Roles.IsUserInRole(@"employee"))
             {
@@ -44,17 +41,16 @@ namespace SeaSharpe_CVGS.Controllers
             else
             {
                 return RedirectToAction("SearchGames");
-            }       
-            
+            }        
         }
 
         /// <summary>
         /// Displays game list page for members/visitors
         /// </summary>
         /// <returns>List of games view</returns>
-        public ActionResult SearchGames(string nameSearch, int[] platformSearch, int[] categorySearch, string[] esrbSearch)
+        public ActionResult SearchGames(string nameSearch, int[] platformSearch, int[] categorySearch, string[] esrbSearch, bool isInclusive = false)
         {           
-            IEnumerable<Game> gameList = db.Games;
+            IEnumerable<Game> gameList = db.Games.Include(g => g.Platform).Include(g => g.Categories);
             //Name search query
             if(nameSearch != null)
             {
@@ -70,17 +66,27 @@ namespace SeaSharpe_CVGS.Controllers
             //Category search query
             if (categorySearch != null)
             {
-                IEnumerable<Category> selectedCategories = db.Catagories.Where(c => categorySearch.Contains(c.Id));
-                gameList = gameList.Where(g => selectedCategories.Intersect(g.Categories).Any());
+                ICollection<Category> selectedCategories = db.Catagories.Where(c => categorySearch.Contains(c.Id)).ToList();
+                //Only returns rows if game has all selected categories 
+                if(isInclusive)
+                {
+                    gameList = gameList.Where(g => g.Categories.Intersect(selectedCategories).Count() == selectedCategories.Count);
+                }
+
+                //returns row if game has any of the selected categories
+                else
+                {
+                    gameList = gameList = gameList.Where(g => g.Categories.Intersect(selectedCategories).Any());
+                }
+                
             }
 
             //Esrb search query
             if (esrbSearch != null)
-            {
-                
+            {                
                 gameList = gameList.Where(g => esrbSearch.Contains(g.ESRB));
             }
-            populateDropdownData();
+            PopulateDropdownData();
             return View(gameList.ToList());
         }
 
@@ -123,7 +129,7 @@ namespace SeaSharpe_CVGS.Controllers
        
         public ActionResult Create()
         {
-            populateDropdownData();
+            PopulateDropdownData();
             return View();
         }
 
@@ -258,7 +264,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <summary>
         /// Helper method to populate dropdown data for various game views
         /// </summary>
-        private void populateDropdownData()
+        private void PopulateDropdownData()
         {
             //Send platform selectlist to view for dropdown
             ViewData["platformList"] = new SelectList(db.Platforms, "Id", "Name");
