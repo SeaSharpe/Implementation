@@ -16,4 +16,4 @@
 - Revisit Events Table (Update ERD?)
 - Add String to games table for image path
 - ESRB Rating & Publisher
-- Add layout views (header, footer) for each role (employee, member, visitor) Rob & Steve are going to try tackle this
+- Add layout views (header, footer) for each role (employee, member, visitor)
