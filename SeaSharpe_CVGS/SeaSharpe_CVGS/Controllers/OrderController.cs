@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SeaSharpe_CVGS.Models;
+using System.Web.Security;
 
 namespace SeaSharpe_CVGS.Controllers
 {
@@ -21,21 +22,20 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>redirect to OrderManagement or OrderHistory methods</returns>
         public ActionResult Index()
         {
-            //if (Roles.IsUserInRole(@"employee"))
-            //{
-            //    return View(db.Orders.ToList());
-            return RedirectToAction("OrderManagement");
-            //}
-            //else if (Roles.IsUserInRole(@"member"))
-            //{
-            //    //return ViewEvents view
-            //      return RedirectToAction("OrderHistory");
-            //}
-            //else
-            //{
-            //    //return ViewEvents view
-            //      return RedirectToAction("OrderHistory");
-            //}
+            if (Roles.IsUserInRole(@"employee"))
+            {
+                return RedirectToAction("OrderManagement");
+            }
+            else if (Roles.IsUserInRole(@"member"))
+            {
+                //return ViewEvents view
+                return RedirectToAction("OrderHistory");
+            }
+            else
+            {
+                //send to Account/Login
+                return RedirectToAction("LogIn", "Account");
+            }
         }
         
         #endregion
@@ -69,6 +69,7 @@ namespace SeaSharpe_CVGS.Controllers
             return View(order);
         }
         #endregion
+
         #region Member Side
         /// <summary>
         /// list all orders waiting to be processed
