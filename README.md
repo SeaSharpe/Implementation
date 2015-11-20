@@ -13,7 +13,7 @@
 - GUI Design See Nicole
 - User Auth See John 
 - Roles See John 
-- Revisit Events Table (Update ERD?)
+- Revisit Events Table (Update ERD?) - Started
 - Add String to games table for image path
 - ESRB Rating & Publisher
 - Add layout views (header, footer) for each role (employee, member, visitor)
