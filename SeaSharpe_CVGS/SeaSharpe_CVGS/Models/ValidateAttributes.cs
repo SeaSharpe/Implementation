@@ -102,8 +102,9 @@ namespace SeaSharpe_CVGS.Models
                 }
                 else
                 {
+                    //Will only allow PostalCode in this Format: N1N1N1
                     return Regex.IsMatch
-                        (postalCode, @"^(?i)[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] ?[0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]$");
+                        (postalCode, @"^(?i)[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ][0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]$");
                 }
             }
             else

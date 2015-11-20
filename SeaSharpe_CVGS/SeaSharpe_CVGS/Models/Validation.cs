@@ -57,24 +57,24 @@ namespace SeaSharpe_CVGS.Models
             [Required(ErrorMessage = "Required")]
             public virtual Member Member { get; set; }
 
-            [Required(ErrorMessage = "Required")]
-            [StringLength(255, MinimumLength = 1, ErrorMessage = "Maximun lenght is 255 characters and must have at least 1 character")]
+                        [Required(ErrorMessage = "Required")]
+            [StringLength(255, MinimumLength = 1, ErrorMessage = "{0} needs to be between {2} and {1} characters long")]
             public string StreetAddress { get; set; }
 
             [Required(ErrorMessage = "Required")]
-            [StringLength(50, MinimumLength = 2, ErrorMessage = "Maximun lenght is 50 characters and must have at least 2 character")]
+            [StringLength(50, MinimumLength = 2, ErrorMessage = "{0} needs to be between {2} and {1} characters long")]
             public string City { get; set; }
 
             [Required(ErrorMessage = "Required")]
-            [StringLength(50, MinimumLength = 2, ErrorMessage = "Maximun lenght is 50 characters and must have at least 2 character")]
+            [StringLength(50, MinimumLength = 2, ErrorMessage = "{0} needs to be between {2} and {1} characters long")]
             public string Region { get; set; }
 
             [Required(ErrorMessage = "Required")]
-            [StringLength(50, MinimumLength = 2, ErrorMessage = "Maximun lenght is 50 characters and must have at least 2 character")]
+            [StringLength(50, MinimumLength = 2, ErrorMessage = "{0} needs to be between {2} and {1} characters long")]
             public string Country { get; set; }
 
             [Required, StringLength(5), Column(TypeName = "char")]
-            [PostalCodeValidation(ErrorMessage = "Postal Code must be valid 'N2H 5C1'")]
+            [PostalCodeValidation(ErrorMessage = "Postal Code must be valid 'N2H5C1'")]
             public string PostalCode { get; set; }
         }
     }
@@ -88,7 +88,7 @@ namespace SeaSharpe_CVGS.Models
         class OrderItemMetadata
         {
             [Required(ErrorMessage = "Required")]
-            [Range(typeof(decimal), "0.0000000001", "79228162514264337593543950335", ErrorMessage = "Price must be positive")]
+            [Range(typeof(decimal), "0", "999999999.99", ErrorMessage = "Price must be positive")]
             public decimal SalePrice { get; set; }
         }
     }
@@ -114,14 +114,14 @@ namespace SeaSharpe_CVGS.Models
         class GameMetadata
         {
             [Required(ErrorMessage = "Required")]
-            [StringLength(50, MinimumLength = 1, ErrorMessage = "Maximun lenght is 50 characters and must have at least 1 character")]
+            [StringLength(50, MinimumLength = 1, ErrorMessage = "{0} needs to be between {2} and {1} characters long")]
             public string Name { get; set; }
 
             [Required(ErrorMessage = "Required")]
             public DateTime ReleaseDate { get; set; }
 
             [Required(ErrorMessage = "Required")]
-            [Range(typeof(decimal), "0.0000000001", "79228162514264337593543950335", ErrorMessage = "Price must be positive")]
+            [Range(typeof(decimal), "0", "999999999.99", ErrorMessage = "Price must be positive")]
             public decimal SuggestedRetailPrice { get; set; }
 
             [Required(ErrorMessage = "Required")]
@@ -146,10 +146,10 @@ namespace SeaSharpe_CVGS.Models
             [Required(ErrorMessage = "Required")]
             public float Rating { get; set; }
 
-            [StringLength(500, MinimumLength = 1, ErrorMessage = "Maximun lenght is 500 characters")]
+            [StringLength(500, MinimumLength = 1, ErrorMessage = "{0} maximun lenght is {1} characters")]
             public string Subject { get; set; }
 
-            [StringLength(4000, MinimumLength = 0, ErrorMessage = "Maximun lenght is 4000 characters")]
+            [StringLength(4000, MinimumLength = 0, ErrorMessage = "{0} maximun lenght is {1} characters")]
             public string Body { get; set; }
         }
     }
@@ -201,10 +201,6 @@ namespace SeaSharpe_CVGS.Models
     {
         class EventMetadata
         {
-            //[Required(ErrorMessage = "Event Id is required")]
-            //[Range(4000000, 4999999, ErrorMessage = "Event Id must be between 4,000,000 and 4,999,999")]
-            //public int Id { get; set; }
-
             [Required]
             public virtual Employee Employee { get; set; }
             
