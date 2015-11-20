@@ -31,7 +31,9 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         public ActionResult Index()
         {
+            //Incomplete: temporary code for testing purposes until roles are working
             return RedirectToAction("SearchGames");
+
             //User is employee, redirect to GameManagement
             if (Roles.IsUserInRole(@"employee"))
             {
@@ -50,10 +52,36 @@ namespace SeaSharpe_CVGS.Controllers
         /// Displays game list page for members/visitors
         /// </summary>
         /// <returns>List of games view</returns>
-        public ActionResult SearchGames()
-        {
-            List<Game> gameList = db.Games.ToList();
-            return View(gameList);
+        public ActionResult SearchGames(string nameSearch, int[] platformSearch, int[] categorySearch, string[] esrbSearch)
+        {           
+            IEnumerable<Game> gameList = db.Games;
+            //Name search query
+            if(nameSearch != null)
+            {
+                gameList = gameList.Where(g => g.Name.Contains(nameSearch));
+            }
+
+            //Platform search query
+            if(platformSearch != null)
+            {
+                gameList = gameList.Where(g => platformSearch.Contains(g.Platform.Id));
+            }
+
+            //Category search query
+            if (categorySearch != null)
+            {
+                IEnumerable<Category> selectedCategories = db.Catagories.Where(c => categorySearch.Contains(c.Id));
+                gameList = gameList.Where(g => selectedCategories.Intersect(g.Categories).Any());
+            }
+
+            //Esrb search query
+            if (esrbSearch != null)
+            {
+                
+                gameList = gameList.Where(g => esrbSearch.Contains(g.ESRB));
+            }
+            populateDropdownData();
+            return View(gameList.ToList());
         }
 
         /// <summary>
@@ -95,15 +123,7 @@ namespace SeaSharpe_CVGS.Controllers
        
         public ActionResult Create()
         {
-            //Send platform selectlist to view for dropdown
-            ViewData["platformList"] = new SelectList(db.Platforms, "Id", "Name");
-
-            //Send category selectlist to view for listbox
-            ViewData["categoryList"] = new SelectList(db.Catagories, "Id", "Name");
-
-            //Send esrb seletlist to view for dropdown
-            ViewData["esrbList"] = new SelectList(esrbList);
-
+            populateDropdownData();
             return View();
         }
 
@@ -233,6 +253,23 @@ namespace SeaSharpe_CVGS.Controllers
         }
         
         #endregion
+
+        #region Helper Methods
+        /// <summary>
+        /// Helper method to populate dropdown data for various game views
+        /// </summary>
+        private void populateDropdownData()
+        {
+            //Send platform selectlist to view for dropdown
+            ViewData["platformList"] = new SelectList(db.Platforms, "Id", "Name");
+
+            //Send category selectlist to view for listbox
+            ViewData["categoryList"] = new SelectList(db.Catagories, "Id", "Name");
+
+            //Send esrb seletlist to view for dropdown
+            ViewData["esrbList"] = new SelectList(esrbList);
+        }
+        #endregion  
 
         /// <summary>
         /// garbage disposal
