@@ -16,11 +16,10 @@ namespace SeaSharpe_CVGS.Controllers
 
         #region Multiple Roles
         /// <summary>
-        /// Employee Side - list all orders waiting to be processed
-        /// Member Side - list all completed orders
+        /// checks authorization and redirects to appropriate page
         /// </summary>
-        /// <returns>Order Management view</returns>
-        public ActionResult OrderManagement()
+        /// <returns>redirect to OrderManagement or OrderHistory methods</returns>
+        public ActionResult Index()
         {
             //if (Roles.IsUserInRole(@"employee"))
             //{
@@ -38,9 +37,19 @@ namespace SeaSharpe_CVGS.Controllers
             //      return RedirectToAction("OrderHistory");
             //}
         }
-        #endregion
-        #region Employee Side
         
+        #endregion
+
+        #region Employee Side
+        /// <summary>
+        /// list all completed orders
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult OrderManagement()
+        {
+            return View(db.Orders.ToList());
+        }
+
         /// <summary>
         /// post back order updated to processed
         /// *** No view required ***
@@ -61,7 +70,15 @@ namespace SeaSharpe_CVGS.Controllers
         }
         #endregion
         #region Member Side
-        
+        /// <summary>
+        /// list all orders waiting to be processed
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult OrderHistory()
+        {
+            return View(db.Orders.ToList());
+        }
+
         /// <summary>
         /// Show order items in cart order
         /// </summary>

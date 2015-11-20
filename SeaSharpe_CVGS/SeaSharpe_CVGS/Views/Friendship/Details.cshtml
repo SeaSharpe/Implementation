@@ -1,0 +1,42 @@
+﻿@model SeaSharpe_CVGS.Models.Friendship
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Friendship</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Friendee.Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Friendee.Id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Friender.Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Friender.Id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsFamilyMember)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsFamilyMember)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

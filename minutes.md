@@ -22,4 +22,35 @@ Manny absent (unknown)
 - John created ASP.NET solution and set up config and migration during meeting
 - John demo'd how to view Blame, to keep track of what people are working on and their commits
 
-**Next Meeting: November 18th**
+## November 18th, 2015
+All Members Present
+
+### Review
+#### Work Period from November 11th - November 18th
+|  Member | Worked On  | Hours This Week  |  Total Hours for Implementation |
+|---|---|---|---|
+| Dan | Nil  | 0  | 0  |
+| John | re-set up config, code first db creation, mock data, assisting members  | 6 | 6  |
+| Manny  | Nil  | 0  | 0  |
+| Nicole | controller creation, re-created solution  | 7 | 7  |
+| Peter | assisting members, game controller functionality, troubleshooting, testing  | 5  |  5 |
+| Rob | Nil  | 0  | 0  |
+| Steve | Nil  | 0  | 0  |
+
+### During the Meeting
+- Added to the list of implementation items that need to be tackled in the near future
+  - Indicated which items on the list were started and which were complete
+- John demo'd making branches in git hub as a refresher, and explained how git pull requests work
+ - branch names should include member name and brief description of what they are working on (eg. nicole_controllers)
+- John demo'd adding columns to database using Migration
+- Nicole let all members know that if anyone was unsure of where to start they could message her for suggestions
+
+### Moving forward
+- 3 weeks to complete implementation
+- Members asked to keep a broad-strokes log of what they worked on and how many hours they have put into the project
+  - This information will be added to our meeting minutes
+- Discussed that all members will be required to download the solution tonight and run it to make sure there are no issues
+  - Any members with issues running the solution are directed to contact John for assistance
+- Discussed that there will be a minimum of 4 hours of work each week expected from all members
+
+**Next Meeting: November 25th**

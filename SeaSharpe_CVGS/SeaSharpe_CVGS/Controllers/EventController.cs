@@ -16,12 +16,10 @@ namespace SeaSharpe_CVGS.Controllers
 
         #region Multiple Roles
         /// <summary>
-        /// Employee Side - list all events
-        /// Member Side - list all events
-        /// CRUD options
+        /// checks authorization and redirects to appropriate page
         /// </summary>
-        /// <returns>EventManagement view</returns>
-        public ActionResult EventManagement()
+        /// <returns>redirect to event management or view events methods</returns>
+        public ActionResult Index()
         {
             //if (Roles.IsUserInRole(@"employee"))
             //{
@@ -40,8 +38,18 @@ namespace SeaSharpe_CVGS.Controllers
             //}
 
         }
+        
+        
         #endregion
         #region Employee Side
+        /// <summary>
+        /// list all events 
+        /// </summary>
+        /// <returns>Event Management view</returns>
+        public ActionResult EventManagement()
+        {
+            return View(db.Events.ToList());
+        }
 
         /// <summary>
         /// Employee side - add events
@@ -125,7 +133,14 @@ namespace SeaSharpe_CVGS.Controllers
         #endregion
 
         #region Member Side
-        
+       /// <summary>
+       /// list all events
+       /// </summary>
+       /// <returns>ViewEvents view</returns>
+       public ActionResult ViewEvents()
+       {
+           return View(db.Events.ToList());
+       }
 
         /// <summary>
         /// Member Side - register for event

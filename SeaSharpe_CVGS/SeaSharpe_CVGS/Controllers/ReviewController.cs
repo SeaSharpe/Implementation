@@ -15,10 +15,9 @@ namespace SeaSharpe_CVGS.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         #region Multiple Roles
         /// <summary>
-        /// Employee Side - List all reviews awaiting review
-        /// Member Side - List all reviews for a game and show average rating
+        /// checks authorization and redirects to appropriate page
         /// </summary>
-        /// <returns>Review Management view</returns>
+        /// <returns>redirect to Review Management or ReviewsRating methods</returns>
         public ActionResult Index()
         {
             //if (Roles.IsUserInRole(@"employee"))
@@ -37,9 +36,18 @@ namespace SeaSharpe_CVGS.Controllers
             //      return RedirectToAction("ReviewsRating");
             //}
             
-        }
+        }        
         #endregion
+
         #region Employee Side       
+        /// <summary>
+        /// List all reviews awaiting review
+        /// </summary>
+        /// <returns>ReviewManagement view</returns>
+        public ActionResult ReviewManagement()
+        {
+            return View(db.Reviews.ToList());
+        }
 
         /// <summary>
         /// post back for updating review to Accepted
@@ -79,7 +87,15 @@ namespace SeaSharpe_CVGS.Controllers
         #endregion
 
         #region Member Side
-        
+        /// <summary>
+        /// List all reviews for a game and show average rating
+        /// </summary>
+        /// <returns>ReviewsRating view</returns>
+        public ActionResult ReviewsRating()
+        {
+            return View(db.Reviews.ToList());
+        }
+
        /// <summary>
         /// post back for review creation
         /// **** review must be validated by employee before appears in Reviews/Rating list ****
