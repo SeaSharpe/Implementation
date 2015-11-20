@@ -10,7 +10,6 @@ namespace SeaSharpe_CVGS.Migrations
 
     internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
     {
-        public static int MEMBER_ID_START = 30000000;
 
         public Configuration()
         {
@@ -19,6 +18,22 @@ namespace SeaSharpe_CVGS.Migrations
 
         protected override void Seed(ApplicationDbContext context)
         {
+            string[] mockDataArray;
+
+            mockDataArray = new string[] { "XBOX", "PC", "PS4", "Wii", "Mobile" };
+            Platform[] mockPlatforms = new Platform[mockDataArray.Length];
+            for (int i = 0; i < mockDataArray.Length; i++)
+            {
+                mockPlatforms[i] = new Platform { Name = mockDataArray[i] };
+            }
+
+            mockDataArray = new string[] { "Action", "Adventure", "RPG", "FPS", "RTS", "Puzzle" };
+            Category[] mockCategories = new Category[mockDataArray.Length];
+            for (int i = 0; i < mockDataArray.Length; i++)
+            {
+                mockCategories[i] = new Category { Name = mockDataArray[i] };
+            }
+
             var mockUsers = new ApplicationUser[] {
                 MakeUser(@"03ec4e30-6ba2-48b0-ae82-3d8e30d6307b", @"abaswell@arachnet.ca",  @"APXQhbnuJfhSBojKarJ0a9m6/imzNjs77rmVEoTZf7F8MqnMwiGU//EA9Y9GVOfw3A==",  @"f58e0ee9-75c5-4da8-aa6a-34be62860492",  @"AYSEBASWELL622782",  @"O",  @"AYSE",  @"BASWELL",  @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
                 MakeUser(@"0bc70e50-6ed5-49f1-a1f0-a8d262dea2fa", @"plalovic@cheapnfast.com",  @"AAxhW7ZHYubxVSiMREe+PDHyZMUU+2uhriBEVECzzeUBhWaHzR78dPL969/J9S5jCQ==",  @"8bc735d6-6b27-49b9-ac94-5bc216efdf14",  @"PAMELALALOVIC475670",  @"O",  @"PAMELA",  @"LALOVIC",  @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
@@ -75,21 +90,88 @@ namespace SeaSharpe_CVGS.Migrations
             var mockMembers = new Member[mockUsers.Count()];
             for (int i = 0; i < mockMembers.Length; i++)
             {
-                mockMembers[i] = new Member { User = mockUsers[i], Id = i + 1 + MEMBER_ID_START };
+                mockMembers[i] = new Member { User = mockUsers[i], Id = i };
             }
 
+            var mockGames = new Game[]
+            {
+                MakeGame("Fallout 4", "2015-11-11 00:00:00", "79.99", mockPlatforms[3], "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg", "test", "E"),
+                MakeGame("Footbal Manager 2016", "2015-09-11 00:00:00", "2.00", mockPlatforms[1], "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg", "test", "test"),
+                MakeGame("Skyrim", "2015-11-10 00:00:00", "20.00", mockPlatforms[2], "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg", "test", "test"),
+                MakeGame("Counter-Strike: Global Offensive", "2015-11-04 00:00:00", "1.00", mockPlatforms[1], "http://i.imgur.com/09Ytyye.jpg", "rwar", "rwar"),
+                MakeGame("rwar", "2015-11-10 00:00:00", "1.00", mockPlatforms[1], "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg", "rwar", "rwar"),
+                MakeGame("test", "2015-11-03 00:00:00", "2.00", mockPlatforms[1], "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg", "test", "E"),
+                MakeGame("test", "2015-11-03 00:00:00", "2.00", mockPlatforms[1], "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg", "test", "AO"),
+                MakeGame("test", "2015-11-26 00:00:00", "20.00", mockPlatforms[2], "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg", null, "EC"),
+                MakeGame("test", "2015-12-16 00:00:00", "20.00", mockPlatforms[2], "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg", null, "EC"),
+                MakeGame("test", "2015-11-02 00:00:00", "20.00", mockPlatforms[2], "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg", null, "EC")
+            };
+
+            // Add some catagories to the games
+            AddCategory(mockGames[0], mockCategories[0]);
+            AddCategory(mockGames[3], mockCategories[0]);
+            AddCategory(mockGames[0], mockCategories[1]);
+            AddCategory(mockGames[3], mockCategories[1]);
+            AddCategory(mockGames[7], mockCategories[1]);
+            AddCategory(mockGames[0], mockCategories[2]);
+            AddCategory(mockGames[4], mockCategories[2]);
+            AddCategory(mockGames[9], mockCategories[2]);
+            AddCategory(mockGames[8], mockCategories[2]);
+            AddCategory(mockGames[9], mockCategories[2]);
+            AddCategory(mockGames[9], mockCategories[3]);
+            AddCategory(mockGames[8], mockCategories[3]);
+            AddCategory(mockGames[9], mockCategories[3]);
+            AddCategory(mockGames[3], mockCategories[5]);
+            
+            // Fill the tables
             context.Users.AddOrUpdate(mockUsers);
-
+            context.Employees.AddOrUpdate(new Employee[] {});
             context.Members.AddOrUpdate(mockMembers);
+            context.Friendships.AddOrUpdate(new Friendship[] {});
+            context.Events.AddOrUpdate(new Event[] {});
+            context.Addresses.AddOrUpdate(new Address[] {});
+            context.Orders.AddOrUpdate(new Order[] {});
+            context.OrderItems.AddOrUpdate(new OrderItem[] {});
+            context.Games.AddOrUpdate(mockGames);
+            context.Platforms.AddOrUpdate(mockPlatforms);
+            context.Catagories.AddOrUpdate(mockCategories);
+            context.Reviews.AddOrUpdate(new Review[] {});
+        }
 
-            context.Platforms.AddOrUpdate(new Platform[] {});
-
-            context.Games.AddOrUpdate(new Game[] {});
+        private Game MakeGame(string name, string releaseDate, string price, Platform platform, string image, string publisher, string esrb)
+        {
+            return new Game
+            {
+                Name = name,
+                ReleaseDate = DateTime.Parse(releaseDate),
+                SuggestedRetailPrice = Decimal.Parse(price),
+                Platform = platform,
+                ImagePath = image,
+                Publisher = publisher,
+                ESRB = esrb
+            };
         }
 
         private ApplicationUser MakeUser(string id, string email, string passwordHash, string securityStamp, string userName, string gender, string firstName, string lastName, string birthdate, string dateRegistered)
         {
-            return new ApplicationUser { Id = id, Email = email, PasswordHash = passwordHash, SecurityStamp = securityStamp, UserName = userName, Gender = gender, FirstName = firstName, LastName = lastName, DateOfBirth = DateTime.Parse(birthdate), DateOfRegistration = DateTime.Parse(dateRegistered), LockoutEnabled = true };
+            return new ApplicationUser {
+                Id = id,
+                Email = email,
+                PasswordHash = passwordHash,
+                SecurityStamp = securityStamp,
+                UserName = userName,
+                Gender = gender,
+                FirstName = firstName,
+                LastName = lastName,
+                DateOfBirth = DateTime.Parse(birthdate),
+                DateOfRegistration = DateTime.Parse(dateRegistered),
+                LockoutEnabled = true };
+        }
+
+        private void AddCategory(Game game, Category category)
+        {
+            if (game.Categories == null) game.Categories = new List<Category>();
+            game.Categories.Add(category);
         }
     }
 }
