@@ -5,6 +5,9 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SeaSharpe_CVGS.Models;
+using System.Web.Security;
+using System.Collections.Generic;
+using System;
 
 namespace SeaSharpe_CVGS.Controllers
 {
@@ -12,7 +15,15 @@ namespace SeaSharpe_CVGS.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        //Dictionary containing ESRB ratings
+        public static List<string> esrbList = new List<string>
+            {
+                {"EC"},{"E"},{"E10"},{"T"},{"M"},{"AO"}
+            };
+        
+
         #region Multiple Roles
+
         /// <summary>
         /// Employee side - list all games
         /// Member side - search feature, list matching games
@@ -20,33 +31,105 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         public ActionResult Index()
         {
-            //if (Roles.IsUserInRole(@"employee"))
-            //{
-            //    return View(db.Games.ToList());
-            return RedirectToAction("GameManagement");
-            //}
-            //else if (Roles.IsUserInRole(@"member"))
-            //{
-            //    //return SearchGames view
-            //      return RedirectToAction("SearchGames");
-            //}
-            //else
-            //{
-            //    //return SearchGames view
-            //      return RedirectToAction("SearchGames");
-            //}
+            //User is employee, redirect to GameManagement
+            if (Roles.IsUserInRole(@"employee"))
+            {
+                return RedirectToAction("GameManagement");
+            }
 
+            //User is visitor or member, redirect to SearchGames
+            else
+            {
+                return RedirectToAction("SearchGames");
+            }        
         }
-        #endregion
-        #region Employee Side
 
+        /// <summary>
+        /// Displays game list page for members/visitors
+        /// </summary>
+        /// <returns>List of games view</returns>
+        public ActionResult SearchGames(string nameSearch, int[] platformSearch, int[] categorySearch, string[] esrbSearch, bool isInclusive = false)
+        {           
+            IEnumerable<Game> gameList = db.Games.Include(g => g.Platform).Include(g => g.Categories);
+            //Name search query
+            if(nameSearch != null)
+            {
+                gameList = gameList.Where(g => g.Name.Contains(nameSearch));
+            }
+
+            //Platform search query
+            if(platformSearch != null)
+            {
+                gameList = gameList.Where(g => platformSearch.Contains(g.Platform.Id));
+            }
+
+            //Category search query
+            if (categorySearch != null)
+            {
+                ICollection<Category> selectedCategories = db.Catagories.Where(c => categorySearch.Contains(c.Id)).ToList();
+                //Only returns rows if game has all selected categories 
+                if(isInclusive)
+                {
+                    gameList = gameList.Where(g => g.Categories.Intersect(selectedCategories).Count() == selectedCategories.Count);
+                }
+
+                //returns row if game has any of the selected categories
+                else
+                {
+                    gameList = gameList = gameList.Where(g => g.Categories.Intersect(selectedCategories).Any());
+                }
+                
+            }
+
+            //Esrb search query
+            if (esrbSearch != null)
+            {                
+                gameList = gameList.Where(g => esrbSearch.Contains(g.ESRB));
+            }
+            PopulateDropdownData();
+            return View(gameList.ToList());
+        }
+
+        /// <summary>
+        /// Get Single Game
+        /// </summary>
+        /// <param name="id">game id</param>
+        /// <returns>game details view</returns>
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Game game = db.Games.Find(id);
+            if (game == null)
+            {
+                return HttpNotFound();
+            }
+            return View(game);
+        }
+
+        /// <summary>
+        /// Displays game list page for employees
+        /// </summary>
+        /// <returns>List of games view</returns>
+        public ActionResult GameManagement()
+        {
+            return View();
+        }
+
+        #endregion
+
+        #region Employee Side
 
         /// <summary>
         /// Employee Side - Add a game
         /// </summary>
         /// <returns>return add/edit game view</returns>
+       
         public ActionResult Create()
         {
+            PopulateDropdownData();
             return View();
         }
 
@@ -55,18 +138,49 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <param name="game">game object</param>
         /// <returns>view of games' list</returns>
+        //ADD EMPLOYY AUTH
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,Name,ReleaseDate,SuggestedRetailPrice")] Game game)
-        {
-            if (ModelState.IsValid)
+        public ActionResult Create([Bind(Include = "Id,Name,ReleaseDate,SuggestedRetailPrice, ImagePath, Publisher, ESRB")] Game game, int? Platform, int[] Categories)
+        {            
+            try
             {
-                db.Games.Add(game);
-                db.SaveChanges();
-                return RedirectToAction("GameManagement");
+                //TODO: ensure that datetime for releasedate is being validated properly
+
+                //Add game platform if value not null
+                if(Platform != null)
+                {
+                    Platform gamePlatform = db.Platforms.Find(Platform);
+                    game.Platform = gamePlatform;
+                }
+                
+                //Add game categories if value not null
+                if(Categories != null)
+                {
+                    ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
+                    game.Categories = gameCategories;
+                }     
+
+                //Update the model state to reflect manual addition of platforms and categories
+                ModelState.Clear();
+                TryValidateModel(game);
+                if (ModelState.IsValid)
+                {
+                    db.Games.Add(game);
+                    db.SaveChanges();
+                    return RedirectToAction("GameManagement");
+                }
+
             }
 
-            return View(game);
+            //Return message to employee if exception
+            catch(Exception e)
+            {
+                TempData["error"] = "Error creating game: " + e.GetBaseException().Message;                
+            }
+
+            Create();
+            return View(game);                        
         }
 
         /// <summary>
@@ -95,8 +209,9 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name,ReleaseDate,SuggestedRetailPrice")] Game game)
+        public ActionResult Edit([Bind(Include="Id,Name,ReleaseDate,SuggestedRetailPrice")] Game game, int Platform)
         {
+
             if (ModelState.IsValid)
             {
                 db.Entry(game).State = EntityState.Modified;
@@ -120,26 +235,8 @@ namespace SeaSharpe_CVGS.Controllers
             db.Games.Remove(game);
             db.SaveChanges();
             return RedirectToAction("GameManagement");
-        }
+        }        
         
-        /// <summary>
-        /// Get Single Game
-        /// </summary>
-        /// <param name="id">game id</param>
-        /// <returns>game details view</returns>
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Game game = db.Games.Find(id);
-            if (game == null)
-            {
-                return HttpNotFound();
-            }
-            return View(game);
-        }
         /// <summary>
         /// Member side - Add a specific game to wish list
         /// ****No view required****
@@ -162,6 +259,23 @@ namespace SeaSharpe_CVGS.Controllers
         }
         
         #endregion
+
+        #region Helper Methods
+        /// <summary>
+        /// Helper method to populate dropdown data for various game views
+        /// </summary>
+        private void PopulateDropdownData()
+        {
+            //Send platform selectlist to view for dropdown
+            ViewData["platformList"] = new SelectList(db.Platforms, "Id", "Name");
+
+            //Send category selectlist to view for listbox
+            ViewData["categoryList"] = new SelectList(db.Catagories, "Id", "Name");
+
+            //Send esrb seletlist to view for dropdown
+            ViewData["esrbList"] = new SelectList(esrbList);
+        }
+        #endregion  
 
         /// <summary>
         /// garbage disposal

@@ -16,6 +16,7 @@
         <hr />
         @Html.ValidationSummary(true)
 
+        <!-- Game Name -->
         <div class="form-group">
             @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -24,19 +25,64 @@
             </div>
         </div>
 
+        <!-- Categories  -->
         <div class="form-group">
-            @Html.LabelFor(model => model.ReleaseDate, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Categories, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ReleaseDate)
-                @Html.ValidationMessageFor(model => model.ReleaseDate)
+                @Html.ListBoxFor(model => model.Categories, (SelectList)ViewData["categoryList"])
             </div>
         </div>
 
+        <!-- Platform -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Platform, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model=> model.Platform, (SelectList)ViewData["platformList"])
+            </div>
+        </div>
+
+        <!-- Retail Price -->
         <div class="form-group">
             @Html.LabelFor(model => model.SuggestedRetailPrice, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.SuggestedRetailPrice)
                 @Html.ValidationMessageFor(model => model.SuggestedRetailPrice)
+            </div>
+        </div>
+
+        <!-- Release Date-->
+        <div class="form-group">
+            @Html.LabelFor(model => model.ReleaseDate, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.ReleaseDate, new { @class = "datefield"})
+                @Html.ValidationMessageFor(model => model.ReleaseDate)
+            </div>
+        </div>        
+
+        <!-- Publisher -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Publisher, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Publisher)
+                @Html.ValidationMessageFor(model => model.Publisher)
+            </div>
+        </div>
+
+        <!-- ESRB  -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.ESRB, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ESRB,(SelectList)ViewData["esrbList"])
+                @Html.ValidationMessageFor(model => model.ESRB)
+            </div>
+        </div>
+
+        <!-- Image Path-->
+        <div class="form-group">
+            @Html.LabelFor(model => model.ImagePath, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ImagePath)
+                @Html.ValidationMessageFor(model => model.ImagePath)
             </div>
         </div>
 
