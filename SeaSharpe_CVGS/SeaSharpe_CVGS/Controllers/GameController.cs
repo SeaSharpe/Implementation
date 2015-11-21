@@ -16,9 +16,9 @@ namespace SeaSharpe_CVGS.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         //Dictionary containing ESRB ratings
-        public static List<string> esrbList = new List<string>
+        public static Dictionary<string, string> esrbDict = new Dictionary<string, string>
             {
-                {"EC"},{"E"},{"E10"},{"T"},{"M"},{"AO"}
+                {"EC", "Early Childhood"},{"E", "Everyone"},{"E10", "Everyone 10+"},{"T", "Teen"},{"M", "Mature"},{"AO", "Adult Only"}
             };
         
 
@@ -115,7 +115,8 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>List of games view</returns>
         public ActionResult GameManagement()
         {
-            return View();
+            IEnumerable<Game> gameList = db.Games.Include(g => g.Platform).Include(g => g.Categories);
+            return View(gameList.ToList());
         }
 
         #endregion
@@ -145,7 +146,6 @@ namespace SeaSharpe_CVGS.Controllers
         {            
             try
             {
-                //TODO: ensure that datetime for releasedate is being validated properly
 
                 //Add game platform if value not null
                 if(Platform != null)
@@ -190,15 +190,26 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>add/edit game view</returns>
         public ActionResult Edit(int? id)
         {
+            //Attempt to access edit page without game id
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Game game = db.Games.Find(id);
+
+            //Game with current id does not exist
             if (game == null)
             {
                 return HttpNotFound();
             }
+
+            //Selected values for game categories on edit view
+            ViewData["Categories"] = game.Categories.Select(c => c.Id);
+
+            //Select value for game platform on edit view
+            ViewData["Platform"] = game.Platform.Id;
+
+            PopulateDropdownData();
             return View(game);
         }
 
@@ -209,15 +220,34 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name,ReleaseDate,SuggestedRetailPrice")] Game game, int Platform)
+        public ActionResult Edit([Bind(Include = "Id,Name,ReleaseDate,SuggestedRetailPrice, ImagePath, Publisher, ESRB")] Game game, int? Platform, int[] Categories)
         {
+            //Add game platform if value not null
+            if (Platform != null)
+            {
+                Platform gamePlatform = db.Platforms.Find(Platform);
+                game.Platform = gamePlatform;
+            }
 
+            //Add game categories if value not null
+            if (Categories != null)
+            {
+                ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
+                game.Categories = gameCategories;
+            }
+
+            //Update the model state to reflect manual addition of platforms and categories
+            ModelState.Clear();
+            TryValidateModel(game);
             if (ModelState.IsValid)
             {
+                //db.Entry(game.Categories).State = EntityState.Modified;
+                db.Entry(game.Platform).State = EntityState.Modified;
                 db.Entry(game).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("GameManagement");
             }
+            Edit(game.Id);
             return View(game);
         }
 
@@ -272,8 +302,8 @@ namespace SeaSharpe_CVGS.Controllers
             //Send category selectlist to view for listbox
             ViewData["categoryList"] = new SelectList(db.Catagories, "Id", "Name");
 
-            //Send esrb seletlist to view for dropdown
-            ViewData["esrbList"] = new SelectList(esrbList);
+            //Send esrb selectlist to view for dropdown
+            ViewData["esrbList"] = new SelectList(esrbDict,"Key", "Value");
         }
         #endregion  
 
