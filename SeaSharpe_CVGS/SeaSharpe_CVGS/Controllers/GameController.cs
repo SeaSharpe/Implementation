@@ -16,9 +16,9 @@ namespace SeaSharpe_CVGS.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         //Dictionary containing ESRB ratings
-        public static List<string> esrbList = new List<string>
+        public static Dictionary<string, string> esrbDict = new Dictionary<string, string>
             {
-                {"EC"},{"E"},{"E10"},{"T"},{"M"},{"AO"}
+                {"EC", "Early Childhood"},{"E", "Everyone"},{"E10", "Everyone 10+"},{"T", "Teen"},{"M", "Mature"},{"AO", "Adult Only"}
             };
         
 
@@ -273,7 +273,7 @@ namespace SeaSharpe_CVGS.Controllers
             ViewData["categoryList"] = new SelectList(db.Catagories, "Id", "Name");
 
             //Send esrb seletlist to view for dropdown
-            ViewData["esrbList"] = new SelectList(esrbList);
+            ViewData["esrbList"] = new SelectList(esrbDict,"Key", "Value");
         }
         #endregion  
 
