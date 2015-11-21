@@ -36,14 +36,16 @@ namespace SeaSharpe_CVGS.Migrations
         {
             foreach (PlatformEnum platform in Enum.GetValues(typeof(PlatformEnum)))
             {
-                mockPlatforms[platform] = new Platform { Name = Enum.GetName(typeof(PlatformEnum), platform) };
+                string platformName = Enum.GetName(typeof(PlatformEnum), platform);
+                mockPlatforms[platform] = context.Platforms.FirstOrDefault(p => p.Name == platformName)
+                    ?? new Platform { Name = platformName }; // If the platform doesn't exist, make it
             }
 
             foreach (CategoryEnum category in Enum.GetValues(typeof(CategoryEnum)))
             {
                 string categoryName = Enum.GetName(typeof(CategoryEnum), category);
-                mockCategories[category] = context.Catagories.First(c => c.Name == categoryName) 
-                    ?? new Category { Name = categoryName }; // If the category doesn't exist, make it. 
+                mockCategories[category] = context.Catagories.First(c => c.Name == categoryName)
+                    ?? new Category { Name = categoryName }; // If the category doesn't exist, make it
             }
 
             var mockUsers = new ApplicationUser[] { // GUID             EMAIL                                       SALTED PASSWORD HASH                                        USERNAME            GENDER  FIRST NAME         LAST NAME       DATE OF BIRTH           DATE REGISTERED
