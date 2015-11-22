@@ -46,6 +46,7 @@ namespace SeaSharpe_CVGS.Controllers
 
         /// <summary>
         /// Displays member profile page
+        /// ** contains (2) partial address views**
         /// </summary>
         /// <param name="id">member id</param>
         /// <returns>Edit view</returns>

@@ -44,12 +44,29 @@ namespace SeaSharpe_CVGS.Controllers
         /// <summary>
         /// list all completed orders
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Order Management view</returns>
         public ActionResult OrderManagement()
         {
             return View(db.Orders.ToList());
         }
 
+        /// <summary>
+        /// list all orders waiting to be processed
+        /// </summary>
+        /// <returns>Outstanding orders partial view</returns>
+        public ActionResult PartialOutstandingOrders()
+        {
+            return View(db.Orders.ToList());
+        }
+
+        /// <summary>
+        /// list order items in selected order
+        /// </summary>
+        /// <returns>selected order partial view</returns>
+        public ActionResult PartialSelectedOrder()
+        {
+            return View();
+        }
         /// <summary>
         /// post back order updated to processed
         /// *** No view required ***

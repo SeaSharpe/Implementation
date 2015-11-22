@@ -50,6 +50,14 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
+        /// displays the currently selected review for approval/rejection
+        /// </summary>
+        /// <returns>PartialSelectedReview view</returns>
+        public ActionResult PartialSelectedReview()
+        {
+            return View();
+        }
+        /// <summary>
         /// post back for updating review to Accepted
         /// **** No view required ****
         /// </summary>
@@ -96,6 +104,15 @@ namespace SeaSharpe_CVGS.Controllers
             return View(db.Reviews.ToList());
         }
 
+        /// <summary>
+        /// Review/Rate a specific game form
+        /// **displayed on game details view***
+        /// </summary>
+        /// <returns>PartialCreateReview view</returns>
+        public ActionResult PartialCreateReview()
+        {
+            return View();
+        }
        /// <summary>
         /// post back for review creation
         /// **** review must be validated by employee before appears in Reviews/Rating list ****
