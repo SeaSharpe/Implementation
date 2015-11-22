@@ -222,31 +222,46 @@ namespace SeaSharpe_CVGS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,ReleaseDate,SuggestedRetailPrice, ImagePath, Publisher, ESRB")] Game game, int? Platform, int[] Categories)
         {
+            Game gameFromDatabase = db.Games.Find(game.Id);
+
             //Add game platform if value not null
             if (Platform != null)
             {
                 Platform gamePlatform = db.Platforms.Find(Platform);
-                game.Platform = gamePlatform;
+                //game.Platform = gamePlatform;
+                gameFromDatabase.Platform = gamePlatform;
             }
 
             //Add game categories if value not null
             if (Categories != null)
             {
                 ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
-                game.Categories = gameCategories;
+                gameFromDatabase.Categories.Clear();
+                //game.Categories = gameCategories;
+                foreach (Category c in gameCategories)
+                {                    
+                    gameFromDatabase.Categories.Add(c);
+                }
             }
+
+            //Manually set properties of old game to new values
+            //TO DO: Find a better way to do this
+            gameFromDatabase.Name = game.Name;
+            gameFromDatabase.ReleaseDate = game.ReleaseDate;
+            gameFromDatabase.SuggestedRetailPrice = game.SuggestedRetailPrice;
+            gameFromDatabase.ImagePath = game.ImagePath;
+            gameFromDatabase.Publisher = game.Publisher;
+            gameFromDatabase.ESRB = game.ESRB;
 
             //Update the model state to reflect manual addition of platforms and categories
             ModelState.Clear();
-            TryValidateModel(game);
+            TryValidateModel(gameFromDatabase);
             if (ModelState.IsValid)
-            {
-                //db.Entry(game.Categories).State = EntityState.Modified;
-                db.Entry(game.Platform).State = EntityState.Modified;
-                db.Entry(game).State = EntityState.Modified;
+            { 
                 db.SaveChanges();
                 return RedirectToAction("GameManagement");
             }
+
             Edit(game.Id);
             return View(game);
         }
