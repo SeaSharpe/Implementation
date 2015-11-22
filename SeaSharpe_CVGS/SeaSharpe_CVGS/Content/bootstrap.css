@@ -315,7 +315,7 @@ body {
   font-size: 14px;
   line-height: 1.428571429;
   color: #333333;
-  background-color: #ffffff;
+  background: linear-gradient(black, #05630C, #0FA00F, #05630C, black) center center fixed;
 }
 
 input,
@@ -384,7 +384,6 @@ img {
 
 hr {
   margin-top: 20px;
-  margin-bottom: 20px;
   border: 0;
   border-top: 1px solid #eeeeee;
 }
@@ -4384,7 +4383,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 }
 
 .navbar-default {
-  background-color: #f8f8f8;
+  background-color: black;
   border-color: #e7e7e7;
 }
 
