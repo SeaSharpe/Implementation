@@ -37,7 +37,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Platform, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Platform, (SelectList)ViewData["platformList"])
+                @Html.DropDownListFor(model => model.Platform_Id, (SelectList)ViewData["platformList"])
             </div>
         </div>
 

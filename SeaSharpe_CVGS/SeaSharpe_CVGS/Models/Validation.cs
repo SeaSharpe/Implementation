@@ -126,6 +126,7 @@ namespace SeaSharpe_CVGS.Models
 
             [Required(ErrorMessage = "Required")]
             public virtual Platform Platform { get; set; }
+
         }
     }
 

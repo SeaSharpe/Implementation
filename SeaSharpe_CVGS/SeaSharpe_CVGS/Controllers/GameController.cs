@@ -154,7 +154,6 @@ namespace SeaSharpe_CVGS.Controllers
         {            
             try
             {
-
                 //Add game platform if value not null
                 if(Platform != null)
                 {
@@ -164,7 +163,7 @@ namespace SeaSharpe_CVGS.Controllers
                 
                 //Add game categories if value not null
                 if(Categories != null)
-        {
+                {
                     ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
                     game.Categories = gameCategories;
                 }     
@@ -172,19 +171,19 @@ namespace SeaSharpe_CVGS.Controllers
                 //Update the model state to reflect manual addition of platforms and categories
                 ModelState.Clear();
                 TryValidateModel(game);
-            if (ModelState.IsValid)
-            {
-                db.Games.Add(game);
-                db.SaveChanges();
-                return RedirectToAction("GameManagement");
-            }
 
+                if (ModelState.IsValid)
+                {
+                    db.Games.Add(game);
+                    db.SaveChanges();
+                    return RedirectToAction("GameManagement");
+                }
             }
 
             //Return message to employee if exception
             catch(Exception e)
             {
-                TempData["error"] = "Error creating game: " + e.GetBaseException().Message;                
+                TempData["message"] = "Error creating game: " + e.GetBaseException().Message;                
             }
 
             Create();
@@ -203,6 +202,7 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Game game = db.Games.Find(id);
 
             //Game with current id does not exist
@@ -228,47 +228,41 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,ReleaseDate,SuggestedRetailPrice, ImagePath, Publisher, ESRB")] Game game, int? Platform, int[] Categories)
+        public ActionResult Edit([Bind(Include = "Id,Name,ReleaseDate,SuggestedRetailPrice, ImagePath, Publisher, ESRB, Categories, Platform_id")] Game game, int[] Categories)
         {
-            Game gameFromDatabase = db.Games.Find(game.Id);
-
-            //Add game platform if value not null
-            if (Platform != null)
+            try
             {
-                Platform gamePlatform = db.Platforms.Find(Platform);
-                //game.Platform = gamePlatform;
-                gameFromDatabase.Platform = gamePlatform;
-            }
+                //Add platform object for model state
+                game.Platform = db.Platforms.Find(game.Platform_Id);
 
-            //Add game categories if value not null
-            if (Categories != null)
-            {
+                //Update game categories
+                if(Categories == null) Categories = new int[] {};
                 ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
-                gameFromDatabase.Categories.Clear();
-                //game.Categories = gameCategories;
+                Game originalGame = db.Games.Find(game.Id);
+                originalGame.Categories.Clear();
                 foreach (Category c in gameCategories)
-                {                    
-                    gameFromDatabase.Categories.Add(c);
+                {
+                    originalGame.Categories.Add(c);
+                }
+                db.SaveChanges();
+                db.Entry(originalGame).State = EntityState.Detached;
+
+                //Update the model to include binded changes
+                ModelState.Clear();
+                TryValidateModel(game);
+                if (ModelState.IsValid)
+                {
+                    db.Entry(game).State = EntityState.Modified;
+                    db.SaveChanges();
+                    TempData["message"] = "Game with ID: " + game.Id + " updated.";
+                    return RedirectToAction("GameManagement");
                 }
             }
 
-            //Manually set properties of old game to new values
-            //TO DO: Find a better way to do this
-            gameFromDatabase.Name = game.Name;
-            gameFromDatabase.ReleaseDate = game.ReleaseDate;
-            gameFromDatabase.SuggestedRetailPrice = game.SuggestedRetailPrice;
-            gameFromDatabase.ImagePath = game.ImagePath;
-            gameFromDatabase.Publisher = game.Publisher;
-            gameFromDatabase.ESRB = game.ESRB;
-
-            //Update the model state to reflect manual addition of platforms and categories
-            ModelState.Clear();
-            TryValidateModel(gameFromDatabase);
-            if (ModelState.IsValid)
-            { 
-                db.SaveChanges();
-                return RedirectToAction("GameManagement");
-            }
+            catch (Exception e)
+            {
+                TempData["message"] = e.GetBaseException().Message;
+            }            
 
             Edit(game.Id);
             return View(game);
@@ -291,12 +285,12 @@ namespace SeaSharpe_CVGS.Controllers
                 //Remove game and save changes
                 db.Games.Remove(game);
                 db.SaveChanges();
-                TempData["error"] = game.Name + " and it's dependencies have been deleted.";
+                TempData["message"] = game.Name + " and it's dependencies have been deleted.";
             }
 
             catch (Exception e)
             {
-                TempData["error"] = "Error deleting game: " + e.GetBaseException().Message;
+                TempData["message"] = "Error deleting game: " + e.GetBaseException().Message;
             }
             
             return RedirectToAction("GameManagement");
