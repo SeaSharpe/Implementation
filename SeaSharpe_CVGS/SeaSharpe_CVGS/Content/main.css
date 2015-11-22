@@ -1,0 +1,23 @@
+﻿footer {
+    z-index:1111 !important;
+    background-color:black !important;
+    margin:0 !important;
+    margin-bottom:-5px !important;
+    clear:both !important;
+    padding-bottom:5px !important;
+    bottom:0 !important;
+}
+footer p {
+    color:white !important;
+    padding: 15px 0 5px 15px !important;
+}
+body {
+    padding-bottom: 70px !important;
+    color:black !important;
+}
+a {
+    color: white !important;
+}
+a:hover {
+    color: #05630C !important;
+}

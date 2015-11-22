@@ -32,17 +32,17 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult Index()
         {
             //User is employee, redirect to GameManagement
-<<<<<<< HEAD
+
             //if (Roles.IsUserInRole(@"employee"))
             //{
             //    return RedirectToAction("GameManagement");
             //}
-=======
+
             if (Roles.IsUserInRole(@"employee"))
             {
             return RedirectToAction("GameManagement");
             }
->>>>>>> refs/remotes/origin/master
+
 
             //User is visitor or member, redirect to SearchGames
             //else
