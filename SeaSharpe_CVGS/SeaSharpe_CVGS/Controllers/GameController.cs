@@ -280,11 +280,14 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>list of games view</returns>
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int id)
         {
             Game game = db.Games.Find(id);
+
+            //Remove the gameCategories associated with the game being deleted
+            game.Categories.Clear();
+
+            //Remove game and save changes
             db.Games.Remove(game);
             db.SaveChanges();
             return RedirectToAction("GameManagement");
