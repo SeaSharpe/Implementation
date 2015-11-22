@@ -22,3 +22,23 @@ a {
 a:hover {
     color: #05630C !important;
 }
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+  color: #05630C !important;
+  background-color: transparent !important;
+}
+.navbar-inverse .navbar-nav > li > a {
+  color: white !important;
+}
+.navbar-inverse .navbar-brand:hover,
+.navbar-inverse .navbar-brand:focus {
+  color: #05630C !important;
+  background-color: transparent !important;
+}
+.navbar-inverse .navbar-brand {
+  color: #0FA00F !important;
+}
+.navbar-inverse {
+  background-color: black;
+  border-color: #080808;
+}
