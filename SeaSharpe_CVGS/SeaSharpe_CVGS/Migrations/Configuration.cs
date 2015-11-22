@@ -112,17 +112,17 @@ namespace SeaSharpe_CVGS.Migrations
             
             // Mock Game Data
             var mockGames = new Game[]
-            {            // Game Name                          Release Date       Price                Platform                                                 Image                                             Publisher                Categories ( Can list none or many )
-                MakeGame("Fallout 4",                     "2015-11-11 00:00:00",    79.99m,   mockPlatforms[PlatformEnum.PS4],    "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",           "test",   RatingEnum.E,  CategoryEnum.Action, CategoryEnum.RPG ),
-                MakeGame("Footbal Manager 2016",          "2015-09-11 00:00:00",     2.00m,   mockPlatforms[PlatformEnum.PC],     "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",           "test",   RatingEnum.E,  CategoryEnum.Simulation ),
-                MakeGame("Skyrim",                        "2015-11-10 00:00:00",    20.00m,   mockPlatforms[PlatformEnum.PS4],    "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",           "test",   RatingEnum.E,  CategoryEnum.RPG ),
-                MakeGame("Counter-Strike",                "2015-11-04 00:00:00",     1.00m,   mockPlatforms[PlatformEnum.PC],     "http://i.imgur.com/09Ytyye.jpg",                                                     "rwar",   RatingEnum.E,  CategoryEnum.FPS, CategoryEnum.Action ),
-                MakeGame("rwar",                          "2015-11-10 00:00:00",     1.00m,   mockPlatforms[PlatformEnum.PC],     "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",           "rwar",   RatingEnum.E,  CategoryEnum.Puzzle ),
-                MakeGame("test",                          "2015-11-03 00:00:00",     2.00m,   mockPlatforms[PlatformEnum.PC],     "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",           "test",   RatingEnum.E,  CategoryEnum.FPS),
-                MakeGame("test",                          "2015-11-03 00:00:00",     2.00m,   mockPlatforms[PlatformEnum.PC],     "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",           "test",   RatingEnum.AO, CategoryEnum.FPS),
-                MakeGame("test",                          "2015-11-26 00:00:00",    20.00m,   mockPlatforms[PlatformEnum.PS4],    "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",             null,   RatingEnum.EC, CategoryEnum.FPS),
-                MakeGame("test",                          "2015-12-16 00:00:00",    20.00m,   mockPlatforms[PlatformEnum.PS4],    "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",             null,   RatingEnum.EC, CategoryEnum.FPS),
-                MakeGame("A Game with no categories",     "2015-11-02 00:00:00",    20.00m,   mockPlatforms[PlatformEnum.Mobile], "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",             null,   RatingEnum.EC)
+            {            // Game Name                          Release Date       Price                Platform                                        Image                                       Publisher       Categories ( Can list none or many )
+                MakeGame("Fallout 4",                     "2015-11-11 00:00:00",    79.99m,   PlatformEnum.PS4,    "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",           "test",   RatingEnum.E,  CategoryEnum.Action, CategoryEnum.RPG ),
+                MakeGame("Footbal Manager 2016",          "2015-09-11 00:00:00",     2.00m,   PlatformEnum.PC,     "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",           "test",   RatingEnum.E,  CategoryEnum.Simulation ),
+                MakeGame("Skyrim",                        "2015-11-10 00:00:00",    20.00m,   PlatformEnum.PS4,    "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",           "test",   RatingEnum.E,  CategoryEnum.RPG ),
+                MakeGame("Counter-Strike",                "2015-11-04 00:00:00",     1.00m,   PlatformEnum.PC,     "http://i.imgur.com/09Ytyye.jpg",                                                     "rwar",   RatingEnum.E,  CategoryEnum.FPS, CategoryEnum.Action ),
+                MakeGame("rwar",                          "2015-11-10 00:00:00",     1.00m,   PlatformEnum.PC,     "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",           "rwar",   RatingEnum.E,  CategoryEnum.Puzzle ),
+                MakeGame("test",                          "2015-11-03 00:00:00",     2.00m,   PlatformEnum.PC,     "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",           "test",   RatingEnum.E,  CategoryEnum.FPS),
+                MakeGame("test",                          "2015-11-03 00:00:00",     2.00m,   PlatformEnum.PC,     "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",           "test",   RatingEnum.AO, CategoryEnum.FPS),
+                MakeGame("test",                          "2015-11-26 00:00:00",    20.00m,   PlatformEnum.PS4,    "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",             null,   RatingEnum.EC, CategoryEnum.FPS),
+                MakeGame("test",                          "2015-12-16 00:00:00",    20.00m,   PlatformEnum.PS4,    "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",             null,   RatingEnum.EC, CategoryEnum.FPS),
+                MakeGame("A Game with no categories",     "2015-11-02 00:00:00",    20.00m,   PlatformEnum.Mobile, "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",             null,   RatingEnum.EC)
             };
             
             // Fill the tables
@@ -147,13 +147,13 @@ namespace SeaSharpe_CVGS.Migrations
         /// <param name="name">The name of the game</param>
         /// <param name="releaseDate">The date the game was released</param>
         /// <param name="price">The suggested retail price of the game</param>
-        /// <param name="platform">The platform this version was released on (one platform only)</param>
+        /// <param name="platform">The platform this version was released on, the mockPlatforms object must be populated</param>
         /// <param name="image">The URL to an image of the game</param>
         /// <param name="publisher">The game's publisher</param>
         /// <param name="esrb">The rating for this game</param>
         /// <param name="categories">The catagory(ies) that this game falls under. This method requires that the mockCategories object exist and is populated.</param>
         /// <returns>A game object with category relationships in place</returns>
-        private Game MakeGame(string name, string releaseDate, decimal price, Platform platform, string image, string publisher, RatingEnum esrb, params CategoryEnum[] categories)
+        private Game MakeGame(string name, string releaseDate, decimal price, PlatformEnum platform, string image, string publisher, RatingEnum esrb, params CategoryEnum[] categories)
         {
             // Create game object
             Game game = new Game
@@ -161,7 +161,7 @@ namespace SeaSharpe_CVGS.Migrations
                 Name                 = name,
                 ReleaseDate          = DateTime.Parse(releaseDate),
                 SuggestedRetailPrice = price,
-                Platform             = platform,
+                Platform             = mockPlatforms[platform],
                 ImagePath            = image,
                 Publisher            = publisher,
                 ESRB                 = Enum.GetName(typeof(RatingEnum), esrb)
