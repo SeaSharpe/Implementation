@@ -16,12 +16,7 @@ body {
     color:black !important;
     background: linear-gradient(black, #05630C, #0FA00F, #05630C, black) center center fixed !important;
 }
-a {
-    color: white !important;
-}
-a:hover {
-    color: #05630C !important;
-}
+
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
   color: #05630C !important;
