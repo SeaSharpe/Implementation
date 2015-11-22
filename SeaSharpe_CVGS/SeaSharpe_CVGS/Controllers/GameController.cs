@@ -283,13 +283,22 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult Delete(int id)
         {
             Game game = db.Games.Find(id);
+            try
+            {
+                //Remove the gameCategories associated with the game being deleted
+                game.Categories.Clear();
 
-            //Remove the gameCategories associated with the game being deleted
-            game.Categories.Clear();
+                //Remove game and save changes
+                db.Games.Remove(game);
+                db.SaveChanges();
+                TempData["error"] = game.Name + " and it's dependencies have been deleted.";
+            }
 
-            //Remove game and save changes
-            db.Games.Remove(game);
-            db.SaveChanges();
+            catch (Exception e)
+            {
+                TempData["error"] = "Error deleting game: " + e.GetBaseException().Message;
+            }
+            
             return RedirectToAction("GameManagement");
         }
         
