@@ -16,7 +16,8 @@ namespace SeaSharpe_CVGS.Controllers
 
         #region Members
         /// <summary>
-        /// list all friends and search functionality for finding new friends
+        /// search functionality for finding new friends
+        /// ** includes partial views for Friends and Family lists**
         /// </summary>
         /// <returns>Search/Show Friends view</returns>
         public ActionResult Index()
@@ -25,6 +26,23 @@ namespace SeaSharpe_CVGS.Controllers
             return View(friendships.ToList());
         }
 
+        /// <summary>
+        /// lists all the member's friends
+        /// </summary>
+        /// <returns>PartialFriendsList view</returns>
+        public ActionResult PartialFriendsList()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// lists all the member's family
+        /// </summary>
+        /// <returns>PartialFamilyList view</returns>
+        public ActionResult PartialFamilyList()
+        {
+            return View();
+        }
         /// <summary>
         /// display wishlist of selected friend
         /// </summary>

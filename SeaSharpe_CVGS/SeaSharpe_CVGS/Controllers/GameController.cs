@@ -34,7 +34,7 @@ namespace SeaSharpe_CVGS.Controllers
             //User is employee, redirect to GameManagement
             if (Roles.IsUserInRole(@"employee"))
             {
-                return RedirectToAction("GameManagement");
+            return RedirectToAction("GameManagement");
             }
 
             //User is visitor or member, redirect to SearchGames
@@ -92,6 +92,7 @@ namespace SeaSharpe_CVGS.Controllers
 
         /// <summary>
         /// Get Single Game
+        /// **view shared with PartialCreateReview***
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>game details view</returns>
@@ -156,7 +157,7 @@ namespace SeaSharpe_CVGS.Controllers
                 
                 //Add game categories if value not null
                 if(Categories != null)
-                {
+        {
                     ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
                     game.Categories = gameCategories;
                 }     
@@ -164,12 +165,12 @@ namespace SeaSharpe_CVGS.Controllers
                 //Update the model state to reflect manual addition of platforms and categories
                 ModelState.Clear();
                 TryValidateModel(game);
-                if (ModelState.IsValid)
-                {
-                    db.Games.Add(game);
-                    db.SaveChanges();
-                    return RedirectToAction("GameManagement");
-                }
+            if (ModelState.IsValid)
+            {
+                db.Games.Add(game);
+                db.SaveChanges();
+                return RedirectToAction("GameManagement");
+            }
 
             }
 
@@ -180,7 +181,7 @@ namespace SeaSharpe_CVGS.Controllers
             }
 
             Create();
-            return View(game);                        
+            return View(game);
         }
 
         /// <summary>
@@ -235,7 +236,7 @@ namespace SeaSharpe_CVGS.Controllers
             db.Games.Remove(game);
             db.SaveChanges();
             return RedirectToAction("GameManagement");
-        }        
+        }
         
         /// <summary>
         /// Member side - Add a specific game to wish list
@@ -275,7 +276,7 @@ namespace SeaSharpe_CVGS.Controllers
             //Send esrb seletlist to view for dropdown
             ViewData["esrbList"] = new SelectList(esrbList);
         }
-        #endregion  
+        #endregion
 
         /// <summary>
         /// garbage disposal
