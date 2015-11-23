@@ -31,6 +31,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         public ActionResult Index()
         {
+            // to be uncommented when roles are made
             //User is employee, redirect to GameManagement
 
             //if (Roles.IsUserInRole(@"employee"))
@@ -117,15 +118,7 @@ namespace SeaSharpe_CVGS.Controllers
             return View(game);
         }
 
-        /// <summary>
-        /// Displays game list page for employees
-        /// </summary>
-        /// <returns>List of games view</returns>
-        public ActionResult GameManagement()
-        {
-            return View();
-        }
-
+        
         #endregion
 
         #region Employee Side

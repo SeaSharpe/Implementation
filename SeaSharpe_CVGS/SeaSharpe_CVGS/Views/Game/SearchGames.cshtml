@@ -8,180 +8,114 @@
     <head>
         <title>@ViewBag.Title</title>
     </head>
-    <body>
-        
-        <div id="wrapper">
-
-            <!-- Sidebar -->
-            <div id="sidebar-wrapper">
-                <ul class="sidebar-nav">
-                    <li class="sidebar-brand">
-                            Navigation                        
-                    </li>
-                    <li>
-                        <a href="#">Contact Us</a>
-                    </li>
-                    <li>
-                        <a href="#">Events</a>
-                    </li>
-                    <li>
-                        <a href="#">Shop</a>
-                    </li>
-                    <li class="sidebar-brand">
-                            Browse By Platform
-                    </li>
-                    <li>
-                        <a href="#">PS4</a>
-                    </li>
-                    <li>
-                        <a href="#">XBOX One</a>
-                    </li>
-                    <li>
-                        <a href="#">Wii U</a>
-                    </li>
-                    <li>
-                        <a href="#">PC</a>
-                    </li>
-                    <li class="sidebar-brand">
-                            Browse By Category
-                    </li>
-                    <li>
-                        <a href="#">Action</a>
-                    </li>
-                    <li>
-                        <a href="#">Adventure</a>
-                    </li>
-                    <li>
-                        <a href="#">MMO</a>
-                    </li>
-                    <li>
-                        <a href="#">RPG</a>
-                    </li>
-                    <li>
-                        <a href="#">Strategy</a>
-                    </li>
-                    <li>
-                        <a href="#">Other</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /#sidebar-wrapper -->
-            <div id="page-content-wrapper">
-                <div class="container-fluid">
-                    <h2>@ViewBag.Title</h2>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <!-- Search form-->
-                            @using (Html.BeginForm("SearchGames", "Game", FormMethod.Get))
-                            {
-                                <div class="form-horizontal">
-                                    @Html.ValidationSummary(true)
+    <body>       
+        <h2>@ViewBag.Title</h2>
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Search form-->
+                @using (Html.BeginForm("SearchGames", "Game", FormMethod.Get))
+                {
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true)
 
 
-                                    <!-- Game Name Search Field -->
-                                    <div class="form-group">
-                                        @Html.Label("Search Criteria:", new { @class = "control-label col-md-2" })
-                                        <div class="col-md-10">
-                                            @Html.TextBox("nameSearch")
-                                        </div>
-                                    </div>
+                        <!-- Game Name Search Field -->
+                        <div class="form-group">
+                            @Html.Label("Search Criteria:", new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextBox("nameSearch")
+                            </div>
+                        </div>
 
-                                    <!-- Platform Search Listbox -->
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            @Html.DisplayNameFor(model => model.Platform)
-                                            @Html.ListBox("platformSearch", (SelectList)ViewData["platformList"])
-                                        </div>
-                                    </div>
+                        <!-- Platform Search Listbox -->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.DisplayNameFor(model => model.Platform)
+                                @Html.ListBox("platformSearch", (SelectList)ViewData["platformList"])
+                            </div>
+                        </div>
 
-                                    <!-- Category Search Listbox -->
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            @Html.DisplayNameFor(model => model.Categories)
-                                            @Html.ListBox("categorySearch", (SelectList)ViewData["categoryList"])
-                                            @Html.Label("is inclusive?")
-                                            @Html.CheckBox("isInclusive")
-                                        </div>
-                                    </div>
+                        <!-- Category Search Listbox -->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.DisplayNameFor(model => model.Categories)
+                                @Html.ListBox("categorySearch", (SelectList)ViewData["categoryList"])
+                                @Html.Label("is inclusive?")
+                                @Html.CheckBox("isInclusive")
+                            </div>
+                        </div>
 
-                                    <!-- ESRB Search Listbox -->
-                                    <div class="col-md-2">
+                        <!-- ESRB Search Listbox -->
+                        <div class="col-md-2">
 
-                                        <div class="form-group">
-                                            @Html.DisplayNameFor(model => model.ESRB)
+                            <div class="form-group">
+                                @Html.DisplayNameFor(model => model.ESRB)
 
-                                            @Html.ListBox("esrbSearch", (SelectList)ViewData["esrbList"])
-                                        </div>
-                                    </div>
+                                @Html.ListBox("esrbSearch", (SelectList)ViewData["esrbList"])
+                            </div>
+                        </div>
 
-                                    <div class="form-group">
-                                        <div class="col-md-10">
-                                            <input type="submit" value="Search" class="btn btn-default" />
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-
-
-
-                            <table class="table">
-
-                                <tr>
-                                    <!-- Game Name Header -->
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Name)
-                                    </th>
-
-                                    <!-- Game Platform Header -->
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Platform)
-                                    </th>
-
-                                    <!-- Game Cover Header-->
-                                    <th>
-                                        @Html.DisplayName("Cover Art")
-                                    </th>
-
-                                    <!-- Game Details Header -->
-                                    <th>
-                                        @Html.DisplayName("View Details")
-                                    </th>
-                                    <th></th>
-                                </tr>
-
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <!-- Game Name Display-->
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Name)
-                                        </td>
-
-                                        <!-- Game Platform Display-->
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Platform.Name)
-                                        </td>
-
-                                        <!-- Game Image Display -->
-                                        <td>
-                                            <img src="@item.ImagePath" class="img-thumbnail" width="100" height="175" />
-                                        </td>
-
-                                        <!-- Game Details Link-->
-                                        <td>
-                                            @Html.ActionLink("Details", "Details", new { id = item.Id })
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input type="submit" value="Search" class="btn btn-default" />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <!-- /#page-content-wrapper -->
-        </div>
-        <!-- /#wrapper -->
-       
+                }
 
+
+
+                <table class="table">
+
+                    <tr>
+                        <!-- Game Name Header -->
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+
+                        <!-- Game Platform Header -->
+                        <th>
+                            @Html.DisplayNameFor(model => model.Platform)
+                        </th>
+
+                        <!-- Game Cover Header-->
+                        <th>
+                            @Html.DisplayName("Cover Art")
+                        </th>
+
+                        <!-- Game Details Header -->
+                        <th>
+                            @Html.DisplayName("View Details")
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <!-- Game Name Display-->
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+
+                            <!-- Game Platform Display-->
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Platform.Name)
+                            </td>
+
+                            <!-- Game Image Display -->
+                            <td>
+                                <img src="@item.ImagePath" class="img-thumbnail" width="100" height="175" />
+                            </td>
+
+                            <!-- Game Details Link-->
+                            <td>
+                                @Html.ActionLink("Details", "Details", new { id = item.Id })
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
     </body>
 </html>
