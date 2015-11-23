@@ -6,7 +6,7 @@
 
 <!-- Left Hand Side-->
 <div class="col-md-6">
-    <img src="@Model.ImagePath"
+    <img src="@Model.ImagePath"/>
     <!-- Download Game-->
     <p>
         @Html.ActionLink("Download", "Download", new { id = Model.Id })
@@ -61,6 +61,7 @@
             @Html.DisplayFor(model => model.ESRB)
         </dd>
 
-        @Html.Partial("~/Views/Review/PartialCreateReview.cshtml")
+        @Html.Partial("~/Views/Review/PartialCreateReview.cshtml", ViewData["review"])
+    </dl>
 </div>
 <!-- End Right Hand Side-->

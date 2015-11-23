@@ -115,6 +115,11 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 return HttpNotFound();
             }
+
+            //Set review viewdata for partial view
+            //TODO: check if user has review for this game already
+            ViewData["review"] = new Review();
+
             return View(game);
         }
 
