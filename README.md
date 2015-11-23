@@ -12,8 +12,9 @@
 - Doc comments on methods / functions *started*
 - GUI Design See Nicole
 - User Auth See John 
-- Roles See John 
+- Roles See John
+ - Add layout views (header, footer) for each role (employee, member, visitor)
 - ~~Revisit Events Table (Update ERD?)~~
 - Add String to games table for image path
 - ESRB Rating & Publisher
-- Add layout views (header, footer) for each role (employee, member, visitor)
+
