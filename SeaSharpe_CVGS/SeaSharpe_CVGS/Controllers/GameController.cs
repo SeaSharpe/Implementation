@@ -93,6 +93,7 @@ namespace SeaSharpe_CVGS.Controllers
             {                
                 gameList = gameList.Where(g => esrbSearch.Contains(g.ESRB));
             }
+            
             PopulateDropdownData();
             return View(gameList.ToList());
         }
