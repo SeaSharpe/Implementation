@@ -23,6 +23,8 @@ namespace SeaSharpe_CVGS.Migrations
             AO,  // Adult Only"
         }
 
+        ApplicationDbContext db;
+
         Dictionary<PlatformEnum, Platform> mockPlatforms = new Dictionary<PlatformEnum, Platform>();
 
         Dictionary<CategoryEnum, Category> mockCategories = new Dictionary<CategoryEnum, Category>();
@@ -34,6 +36,8 @@ namespace SeaSharpe_CVGS.Migrations
 
         protected override void Seed(ApplicationDbContext context)
         {
+            db = context;
+
             foreach (PlatformEnum platform in Enum.GetValues(typeof(PlatformEnum)))
             {
                 string platformName = Enum.GetName(typeof(PlatformEnum), platform);
@@ -155,13 +159,16 @@ namespace SeaSharpe_CVGS.Migrations
         /// <returns>A game object with category relationships in place</returns>
         private Game MakeGame(string name, string releaseDate, decimal price, PlatformEnum platform, string image, string publisher, RatingEnum esrb, params CategoryEnum[] categories)
         {
+            Platform platformObj = mockPlatforms[platform];
+
             // Create game object
-            Game game = new Game
+            Game game = db.Games.FirstOrDefault(g => g.Name == name && g.Platform.Id == platformObj.Id) ??
+                new Game
             {
                 Name                 = name,
                 ReleaseDate          = DateTime.Parse(releaseDate),
                 SuggestedRetailPrice = price,
-                Platform             = mockPlatforms[platform],
+                Platform             = platformObj,
                 ImagePath            = image,
                 Publisher            = publisher,
                 ESRB                 = Enum.GetName(typeof(RatingEnum), esrb)
