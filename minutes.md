@@ -54,3 +54,13 @@ All Members Present
 - Discussed that there will be a minimum of 4 hours of work each week expected from all members
 
 **Next Meeting: November 25th**
+
+Person | Hours | Work Done
+------ | ----- | ----------
+Dan | 4 | Upgraded ERD, review MVC
+John | 13 | mock data, account controller, consulting
+Manny | 9 | validation, order controller, friendship controller
+Nicole | 9 | GUI, Headers (3), Partial Views 
+Peter | 18-20 | Game Controller, Consulting, Starting review controller
+Rob | 4 | review MVC
+Steve | nil | 
