@@ -6,13 +6,55 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using SeaSharpe_CVGS.Models;
 
 namespace SeaSharpe_CVGS.Controllers
 {
     public class FriendshipController : Controller
     {
+        /// <summary>
+        /// Prop and Fields
+        /// </summary>
         private ApplicationDbContext db = new ApplicationDbContext();
+        private UserManager<ApplicationUser> userManager;
+
+        private ApplicationUser CurrentUser
+        {
+            get
+            {
+                return userManager.FindById(User.Identity.GetUserId());
+            }
+        }
+
+        private bool IsEmployee
+        {
+            get
+            {
+                return db.Employees.Any(u => u.User == CurrentUser);
+            }
+        }
+
+        private Member CurrentMember
+        {
+            get
+            {
+                return db.Members.FirstOrDefault(m => m.User == CurrentUser);
+            }
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public FriendshipController()
+        {
+            db = new ApplicationDbContext();
+            userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(this.db));
+        }
+
+
+
 
         #region Members
         /// <summary>
@@ -26,20 +68,33 @@ namespace SeaSharpe_CVGS.Controllers
 
             var list = DummyFriends();
 
-            return View(list);
+            var listUser = DummyUsers(list);
+
+            return View(listUser);
         }
 
-        /// <summary>
+        List<ApplicationUser> DummyUsers(List<Friendship> li)
+        {
+            List<ApplicationUser> res = new List<ApplicationUser>();
+
+            for (int i = 0; i < li.Count; i++)
+            {
+                res.Add(li[i].Friendee.User);
+            }
+            return res;
+        }
+
+            /// <summary>
         /// Creates Dummy list of friends
         /// </summary>
         /// <returns></returns>
         List<Friendship> DummyFriends()
         {
-            var friendSh = new Friendship();
             List<Friendship> res = new List<Friendship>();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 1; i < 11; i++)
             {
+                var friendSh = new Friendship();
                 friendSh.Friendee = DummyMember(i);
                 res.Add(friendSh);
             }
@@ -55,11 +110,20 @@ namespace SeaSharpe_CVGS.Controllers
         Member DummyMember(int id)
         {
             Member res = new Member();
-            res.Id = 1;
-            res.User = new ApplicationUser();
+            
+            //res.User = new ApplicationUser();
+            res.User = CurrentUser;
+            res.Id = id;
 
             return res;
         }
+
+
+
+
+       
+
+
 
         /// <summary>
         /// lists all the member's friends
