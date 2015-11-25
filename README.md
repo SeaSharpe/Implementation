@@ -12,9 +12,45 @@
 - Doc comments on methods / functions *started*
 - GUI Design See Nicole *started*
 - User Auth See John 
+  - Sign up: require a uniqe display name, require strong passwords
+  - Log in: limit the number of consecutive login attempts
+  - Password: let members change their passwords; if a recognized member forgets their password; reset it and email the new password
 - Roles See John
  - Add layout views (header, footer) for each role (employee, member, visitor) *started*
 - ~~Revisit Events Table (Update ERD?)~~
 - ~~Add String to games table for image path~~
 - ~~ESRB Rating & Publisher add to DB~~
+- Game controller
+  - let members search for games
+  - let members select games from a list
+  - display details of the selected games
+  - add to wishlist
+  - rate game: let 1) members rate games; 2) summarize individual results and display the overall rating for each game
+  - review games: let members write reviews of games.  Reviews must be approved by a moderator before they are published on the website
+  - download: let members download free and shareware games
+- User controller
+  - Profile: let members enter their display name, actual name, email, gender and birth date; let the member decide whether to receive promotional emails from CVGS
+  - Preferences: let members indicate their: favourite platform(or platforms) and; favourite game category (or categories)
+  - Address: let the member enter, modify and delete their 1) address; 2) "ship to" address
+  - ~~Credit Cards: let the member register one or more valid credit card~~ **Using Stripe**
+- Friendship controller
+  - view wishlist (pass in id, either of friend or member's own id to view own wishlist).  Let only friends and relatives view the wish list with option
+  - Add member/members in the Friends and Family list
+- Event controller
+ - let employees add, edit and delete information about upcoming events.
+ - let members register for upcoming events
+- Order controller
+  - create a cart
+  - let members add games to cart
+  - let members check out with ~~any credit card registered~~ Stripe
+  - save the "check out" info to a db table (orders) so that an employee can post the games physically
+  - after posting, the employee should be able to mark that order as processed
+- Report controller
+  - game list report
+  - game detail report
+  - member list report
+  - member detail report
+  - wish list report
+  - sales report
+  - other reports as needed
 
