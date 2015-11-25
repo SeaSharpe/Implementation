@@ -55,12 +55,51 @@ All Members Present
 
 **Next Meeting: November 25th**
 
-Person | Hours | Work Done
------- | ----- | ----------
-Dan | 4 | Upgraded ERD, review MVC
-John | 13 | mock data, account controller, consulting
-Manny | 9 | validation, order controller, friendship controller
-Nicole | 9 | GUI, Headers (3), Partial Views 
-Peter | 18-20 | Game Controller, Consulting, Starting review controller
-Rob | 4 | review MVC
-Steve | nil | 
+## November 25th, 2015
+All Members Present
+
+### Review
+#### Work Period from November 11th - November 18th
+- on November 23rd, Nicole sent out a message indicating to all members that at the rate we were working the project would not get complete
+  - switching from *the honour system with a minimum number of hours put in* to *each person has an assigned task they must have complete by December 2nd*
+    - Nicole to continue working on GUI
+    - John to continue working on user functionality
+    - Peter to continue working on Game controller and potenially pick up Review controller
+    - Dan to take over Order Controller from Manny (unintentionally switched)
+    - Manny to be responsible for Friendship Controller
+    - Rob to be responsible for Report Controller
+    - Steve to be responsible for Events Controller
+
+|  Member | Worked On  | Hours This Week  |  Total Hours for Implementation |
+------ | ----- | -------- | ----------
+Dan | Upgraded ERD, review MVC | 4 | 4 |
+John | mock data, account controller, consulting | 13 | 18 |
+Manny | validation, order controller, friendship controller | 9 | 9 |
+Nicole | GUI, Headers (3), Partial Views | 9 | 16 |
+Peter | Game Controller, Consulting, Starting review controller | 19 | 24 |
+Rob | review MVC | 4 | 4 |
+Steve | nil | 0 | 0 | 
+
+### During the Meeting
+- Each member indicated the number of hours they worked and what they worked on, this is noted in the above table
+- Nicole asked members what they needed in order to start being involved in the project
+  - some members unfamiliar with or need a refresher in MVC
+  - Peter noted that the Game controller is mostly complete and that people can look at that code for examples 
+### Moving forward
+- Added a new channel in Discord for members to put a note of what they are blocked on, so that other members may respond with help
+- Members reminded that after their controller is complete that unit tests will be required to be written
+- Milestones added to the README file for day to day requirements of members. 
+  - Members required to add their initials to each milestone when complete so we can monitor how people are doing
+  
+| Date | Item | Signoffs
+| ---- | ---- | --------
+| November 25, 2015 | Discord Meeting | 
+| November 27, 2015 | Manditory Class Attendance | 
+| November 28, 2015 | Half of assigned controllers completed | 
+| December 2, 2015  | Assigned controllers completed (with views)  |
+| December 9, 2015  | Unit Tests for Assigned controllers completed |
+| December 9, 2015  | Technical & Client Documentation |
+| December 9, 2015  | Installer CD for server |
+| December 11, 2015 | Final Due Date |
+
+**Next Meeting: December 4th**
