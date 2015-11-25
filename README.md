@@ -23,6 +23,7 @@
 - Game controller
   - let members search for games
   - let members select games from a list
+  - let employees add, edit and delete games
   - display details of the selected games
   - add to wishlist
   - rate game: let 1) members rate games; 2) summarize individual results and display the overall rating for each game
@@ -46,6 +47,7 @@
   - save the "check out" info to a db table (orders) so that an employee can post the games physically
   - after posting, the employee should be able to mark that order as processed
 - Report controller
+  - let employees view and print reports
   - game list report
   - game detail report
   - member list report
