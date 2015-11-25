@@ -23,7 +23,42 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult Index()
         {
             var friendships = db.Friendships.Include(f => f.Friendee).Include(f => f.Friender);
-            return View(friendships.ToList());
+
+            var list = DummyFriends();
+
+            return View(list);
+        }
+
+        /// <summary>
+        /// Creates Dummy list of friends
+        /// </summary>
+        /// <returns></returns>
+        List<Friendship> DummyFriends()
+        {
+            var friendSh = new Friendship();
+            List<Friendship> res = new List<Friendship>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                friendSh.Friendee = DummyMember(i);
+                res.Add(friendSh);
+            }
+
+            return res;
+        }
+
+        /// <summary>
+        /// Creates dummy Member 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Member DummyMember(int id)
+        {
+            Member res = new Member();
+            res.Id = 1;
+            res.User = new ApplicationUser();
+
+            return res;
         }
 
         /// <summary>
