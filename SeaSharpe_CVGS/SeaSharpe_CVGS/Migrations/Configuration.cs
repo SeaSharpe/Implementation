@@ -44,7 +44,7 @@ namespace SeaSharpe_CVGS.Migrations
             foreach (CategoryEnum category in Enum.GetValues(typeof(CategoryEnum)))
             {
                 string categoryName = Enum.GetName(typeof(CategoryEnum), category);
-                mockCategories[category] = context.Catagories.First(c => c.Name == categoryName)
+                mockCategories[category] = context.Catagories.FirstOrDefault(c => c.Name == categoryName)
                     ?? new Category { Name = categoryName }; // If the category doesn't exist, make it
             }
 
