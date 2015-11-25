@@ -104,6 +104,7 @@ namespace SeaSharpe_CVGS.Migrations
                 MakeUser(@"fc9f53e7-7e24-42a6-9d06-ba9fe617f615", @"ckubicki@spider.com",      @"AA9TUtBQVS2mBeB4OoP5diXp9fKxg5L4iTPkQd7OuT609x7gJKt1No+c4U0Y9JW++g==",   @"CRITKUBICKI272730",      @"O",  @"CRIT",         @"KUBICKI",    @"2015-11-19 22:46:39",  @"2015-11-19 22:46:39")
             };
 
+            //MockEmployee Data
             var mockEmployees = new Employee[mockUsers.Count() / 2];
             for (int i = 0; i < mockEmployees.Length / 2; i++)
             {
@@ -127,15 +128,12 @@ namespace SeaSharpe_CVGS.Migrations
                 MakeAddress(@"AYSEBASWELL622782",   "123 Victory Road",     "Kitchener",    "Ontario",  "Canada",   "N1N1N1")
             };
 
-
             //Mock Order Data
             var mockOrders = new Order[]
             {
-                         //UserName             ApproverId                  orderPlacementDate      shipDate                billAddr    shippAddr   IsProcessed     Games
-                MakeOrder(@"CRITKUBICKI272730", @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-11-11 00:00:00",  1,          2,          true,           "Fallout 4" )
+                         //UserName                 ApproverId                  orderPlacementDate      shipDate                billAddr    shippAddr   IsProcessed     Games
+                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-11-11 00:00:00",  1,          2,          true,           "Fallout 4" )
             };
-
-
             
             // Mock Game Data
             var mockGames = new Game[]
@@ -154,12 +152,12 @@ namespace SeaSharpe_CVGS.Migrations
             
             // Fill the tables
             context.Users.AddOrUpdate(mockUsers);
-            context.Employees.AddOrUpdate(new Employee[] { });     // TODO: Update this placeholder
+            context.Employees.AddOrUpdate(mockEmployees);     
             context.Members.AddOrUpdate(mockMembers);
             context.Friendships.AddOrUpdate(new Friendship[] { }); // TODO: Update this placeholder
             context.Events.AddOrUpdate(new Event[] { });           // TODO: Update this placeholder
-            context.Addresses.AddOrUpdate(new Address[] { });      // TODO: Update this placeholder
-            context.Orders.AddOrUpdate(new Order[] { });           // TODO: Update this placeholder
+            context.Addresses.AddOrUpdate(mockAddress);      
+            context.Orders.AddOrUpdate(mockOrders);           
             context.OrderItems.AddOrUpdate(new OrderItem[] { });   // TODO: Update this placeholder
             context.Games.AddOrUpdate(mockGames);
             context.Platforms.AddOrUpdate(mockPlatforms.Values.ToArray());
@@ -168,15 +166,43 @@ namespace SeaSharpe_CVGS.Migrations
             context.SaveChanges();
         }
 
-        private Address MakeAddress(string member, string address, string city, string region, string country, string postalCode)
+        /// <summary>
+        /// Use this method to create a mock addresses
+        /// </summary>
+        /// <param name="member">Username of the ApplicationUser</param>
+        /// <param name="addressName">address</param>
+        /// <param name="city">city name</param>
+        /// <param name="region">region(/province)</param>
+        /// <param name="country">country name</param>
+        /// <param name="postalCode">postal code</param>
+        /// <returns>Address Object</returns>
+        private Address MakeAddress(string member, string addressName, string city, string region, string country, string postalCode)
         {
             Address address = new Address
             {
-                Member = db.Members.First(m => m.)
-            }
-            throw new NotImplementedException();
+                Member = db.Members.First(m => m.User.UserName == member),
+                StreetAddress = addressName,
+                City = city,
+                Region = region,
+                Country = country,
+                PostalCode = postalCode
+            };
+
+            return address;
         }
 
+        /// <summary>
+        /// Use this method to create a mock order
+        /// </summary>
+        /// <param name="member">memberId</param>
+        /// <param name="aprover">approverId (null if unprocessed)</param>
+        /// <param name="orderPlacementDate">order placement date (null for shopping cart)</param>
+        /// <param name="shipDate">date that it was shipped out (null if not yet shipped)</param>
+        /// <param name="billingAddressIndex">index of billing address</param>
+        /// <param name="shippingAddressIndex">index of shipping address</param>
+        /// <param name="isProcessed">true if it has been processed</param>
+        /// <param name="games">name of all games in the order</param>
+        /// <returns>Order Object</returns>
         private Order MakeOrder(string member, string aprover, string orderPlacementDate, string shipDate, int billingAddressIndex, int shippingAddressIndex, bool isProcessed, params string[] games)
         {
             Order order = new Order
@@ -187,7 +213,7 @@ namespace SeaSharpe_CVGS.Migrations
                 ShipDate = DateTime.Parse(shipDate),
                 BillingAddress = db.Addresses.First(b => b.Id == billingAddressIndex),
                 ShippingAddress = db.Addresses.First(b => b.Id == shippingAddressIndex),
-                IsProcessed = isProcessed,
+                IsProcessed = isProcessed
             };
 
             if (order.OrderItems == null)
