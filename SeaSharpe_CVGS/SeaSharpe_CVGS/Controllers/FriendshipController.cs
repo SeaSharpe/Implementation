@@ -40,7 +40,8 @@ namespace SeaSharpe_CVGS.Controllers
         {
             get
             {
-                return db.Members.FirstOrDefault(m => m.User == CurrentUser);
+                //at school wont let compare Objects
+                return db.Members.FirstOrDefault(m => m.User.UserName == CurrentUser.UserName);
             }
         }
 
@@ -70,7 +71,13 @@ namespace SeaSharpe_CVGS.Controllers
 
             var listUser = DummyUsers(list);
 
-            return View(listUser);
+            Member currentMem = CurrentMember;
+
+            var friends2 = db.Friendships.Where(a => a.FrienderId == currentMem.Id).ToList();
+
+            //var friend3Incl = db.Friendships.Include(f => f.Friendee).Include(f => f.Friender);
+
+            return View(friends2);
         }
 
         List<ApplicationUser> DummyUsers(List<Friendship> li)

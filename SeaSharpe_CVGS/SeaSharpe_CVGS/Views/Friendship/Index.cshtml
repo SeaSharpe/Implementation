@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SeaSharpe_CVGS.Models.ApplicationUser>
+﻿@model IEnumerable<SeaSharpe_CVGS.Models.Friendship>
 
 @{
     ViewBag.Title = "Index";
@@ -12,13 +12,13 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.DisplayNameFor(model => model.Friendee.User.FirstName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LastName)
+            @Html.DisplayNameFor(model => model.Friendee.User.LastName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
+            @Html.DisplayNameFor(model => model.Friendee.User.UserName)
         </th>
         <th></th>
     </tr>
@@ -26,13 +26,13 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.FirstName)
+            @Html.DisplayFor(modelItem => item.Friendee.User.FirstName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.LastName)
+            @Html.DisplayFor(modelItem => item.Friendee.User.LastName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.DateOfBirth)
+            @Html.DisplayFor(modelItem => item.Friendee.User.DateOfBirth)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
