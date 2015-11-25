@@ -23,6 +23,8 @@ namespace SeaSharpe_CVGS.Migrations
             AO,  // Adult Only"
         }
 
+        ApplicationDbContext db;
+
         Dictionary<PlatformEnum, Platform> mockPlatforms = new Dictionary<PlatformEnum, Platform>();
 
         Dictionary<CategoryEnum, Category> mockCategories = new Dictionary<CategoryEnum, Category>();
@@ -34,6 +36,7 @@ namespace SeaSharpe_CVGS.Migrations
 
         protected override void Seed(ApplicationDbContext context)
         {
+            db = context;
             foreach (PlatformEnum platform in Enum.GetValues(typeof(PlatformEnum)))
             {
                 string platformName = Enum.GetName(typeof(PlatformEnum), platform);
@@ -101,14 +104,38 @@ namespace SeaSharpe_CVGS.Migrations
                 MakeUser(@"fc9f53e7-7e24-42a6-9d06-ba9fe617f615", @"ckubicki@spider.com",      @"AA9TUtBQVS2mBeB4OoP5diXp9fKxg5L4iTPkQd7OuT609x7gJKt1No+c4U0Y9JW++g==",   @"CRITKUBICKI272730",      @"O",  @"CRIT",         @"KUBICKI",    @"2015-11-19 22:46:39",  @"2015-11-19 22:46:39")
             };
 
+            var mockEmployees = new Employee[mockUsers.Count() / 2];
+            for (int i = 0; i < mockEmployees.Length / 2; i++)
+            {
+                // If the user is already in the db, use that user. 
+                ApplicationUser existingUser = context.Users.Find(mockUsers[i].Id);
+                mockEmployees[i] = new Employee { User = existingUser ?? mockUsers[i], Id = i };
+            }
+
             // Mock Member Data
-            var mockMembers = new Member[mockUsers.Count()];
-            for (int i = 0; i < mockMembers.Length; i++)
+            var mockMembers = new Member[1 + mockUsers.Count()/2];
+            for (int i = mockMembers.Length / 2; i < mockMembers.Length; i++)
             {
                 // If the user is already in the db, use that user. 
                 ApplicationUser existingUser = context.Users.Find(mockUsers[i].Id); 
                 mockMembers[i] = new Member { User = existingUser ?? mockUsers[i], Id = i };
             }
+
+            //Mock Address Data
+            var mockAddress = new Address[]
+            {               //memberId              Address                 City            Region      Country     PostalCode
+                MakeAddress(@"AYSEBASWELL622782",   "123 Victory Road",     "Kitchener",    "Ontario",  "Canada",   "N1N1N1")
+            };
+
+
+            //Mock Order Data
+            var mockOrders = new Order[]
+            {
+                         //UserName             ApproverId                  orderPlacementDate      shipDate                billAddr    shippAddr   IsProcessed     Games
+                MakeOrder(@"CRITKUBICKI272730", @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-11-11 00:00:00",  1,          2,          true,           "Fallout 4" )
+            };
+
+
             
             // Mock Game Data
             var mockGames = new Game[]
@@ -139,6 +166,42 @@ namespace SeaSharpe_CVGS.Migrations
             context.Catagories.AddOrUpdate(mockCategories.Values.ToArray());
             context.Reviews.AddOrUpdate(new Review[] { });         // TODO: Update this placeholder
             context.SaveChanges();
+        }
+
+        private Address MakeAddress(string member, string address, string city, string region, string country, string postalCode)
+        {
+            Address address = new Address
+            {
+                Member = db.Members.First(m => m.)
+            }
+            throw new NotImplementedException();
+        }
+
+        private Order MakeOrder(string member, string aprover, string orderPlacementDate, string shipDate, int billingAddressIndex, int shippingAddressIndex, bool isProcessed, params string[] games)
+        {
+            Order order = new Order
+            {
+                Member = db.Members.First(m => m.User.UserName == member),
+                Aprover = db.Employees.First(e => e.User.UserName == aprover),
+                OrderPlacementDate = DateTime.Parse(orderPlacementDate),
+                ShipDate = DateTime.Parse(shipDate),
+                BillingAddress = db.Addresses.First(b => b.Id == billingAddressIndex),
+                ShippingAddress = db.Addresses.First(b => b.Id == shippingAddressIndex),
+                IsProcessed = isProcessed,
+            };
+
+            if (order.OrderItems == null)
+            {
+                order.OrderItems = new List<OrderItem>();
+            }
+
+            foreach (string game in games)
+            {
+                var currGame = db.Games.First(g => g.Name == game);
+                order.OrderItems.Add(new OrderItem { Order = order, Game = currGame, SalePrice = currGame.SuggestedRetailPrice });
+            }
+
+            return order;
         }
 
         /// <summary>

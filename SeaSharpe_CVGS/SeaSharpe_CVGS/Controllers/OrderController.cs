@@ -47,6 +47,10 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Order Management view</returns>
         public ActionResult OrderManagement()
         {
+            /*
+             * If employee
+             * all orders with employeeId != null
+             */ 
             return View(db.Orders.ToList());
         }
 
@@ -56,6 +60,10 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Outstanding orders partial view</returns>
         public ActionResult PartialOutstandingOrders()
         {
+            /*
+             * If employee
+             * all orders with employeeId == null
+             */ 
             return View(db.Orders.ToList());
         }
 
@@ -65,6 +73,11 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>selected order partial view</returns>
         public ActionResult PartialSelectedOrder()
         {
+            /*
+             * if employee
+             * all games where orderId == id 
+             * (add param)
+             */ 
             return View();
         }
         /// <summary>
@@ -93,6 +106,10 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns></returns>
         public ActionResult OrderHistory()
         {
+            /*
+             * if member
+             * all orders orderplacementdate != null and employeeId != null
+             */ 
             return View(db.Orders.ToList());
         }
 

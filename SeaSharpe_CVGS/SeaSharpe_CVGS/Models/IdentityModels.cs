@@ -74,6 +74,7 @@ namespace SeaSharpe_CVGS.Models
         public DateTime? OrderPlacementDate { get; set; }
         public DateTime? ShipDate { get; set; }
         public bool IsProcessed { get; set; }
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
 
     public partial class OrderItem
