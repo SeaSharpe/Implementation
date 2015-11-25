@@ -129,11 +129,22 @@ namespace SeaSharpe_CVGS.Migrations
                 MakeGame("A Game with no categories",     "2015-11-02 00:00:00",    20.00m,   PlatformEnum.Mobile, "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",             null,   RatingEnum.EC)
             };
             
+            var mockFriendships = new Friendship[]
+            {
+                MakeFriendShip("AYSEBASWELL622782", "PAMELALALOVIC475670"),
+                MakeFriendShip("AYSEBASWELL622782", "NELLIELEE361672"),
+                MakeFriendShip("AYSEBASWELL622782", "MELISSABROOKINS141879"),
+                MakeFriendShip("AYSEBASWELL622782", "GERTRUDEKHAN464278"),
+
+            };
+
+           
+
             // Fill the tables
             context.Users.AddOrUpdate(mockUsers);
             context.Employees.AddOrUpdate(new Employee[] { });     // TODO: Update this placeholder
             context.Members.AddOrUpdate(mockMembers);
-            context.Friendships.AddOrUpdate(new Friendship[] { }); // TODO: Update this placeholder
+            context.Friendships.AddOrUpdate(mockFriendships);
             context.Events.AddOrUpdate(new Event[] { });           // TODO: Update this placeholder
             context.Addresses.AddOrUpdate(new Address[] { });      // TODO: Update this placeholder
             context.Orders.AddOrUpdate(new Order[] { });           // TODO: Update this placeholder
@@ -144,6 +155,8 @@ namespace SeaSharpe_CVGS.Migrations
             context.Reviews.AddOrUpdate(new Review[] { });         // TODO: Update this placeholder
             context.SaveChanges();
         }
+
+
 
         /// <summary>
         /// Use this method to create a mock game
@@ -182,6 +195,27 @@ namespace SeaSharpe_CVGS.Migrations
             }
 
             return game;
+        }
+
+
+        private Friendship MakeFriendShip(string userNameFriender, string userNameFriendee)
+        {
+            var checkIfExist = db.Friendships.FirstOrDefault(a => a.Friender.User.UserName == userNameFriender && a.Friendee.User.UserName == userNameFriendee);
+
+            //if the Frienship exist will return the existing friendShip
+            if (checkIfExist != null)
+            {
+                return checkIfExist;
+            }
+
+            Member memberFriender = db.Members.FirstOrDefault(f => f.User.UserName == userNameFriender);
+            Member memberFriendee = db.Members.FirstOrDefault(f => f.User.UserName == userNameFriendee);
+
+            Friendship res = new Friendship();
+            res.Friender = memberFriender;
+            res.Friendee = memberFriendee;
+
+            return res;
         }
 
         /// <summary>
