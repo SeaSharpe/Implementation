@@ -3,8 +3,6 @@
 @{
     ViewBag.Title = "Review Management";
 }
-
-
 <!-- Left Hand Side-->
 <div class="col-md-6">
     <h2>@ViewBag.Title</h2>
@@ -22,7 +20,6 @@
             </th>
             <th></th>
         </tr>
-
         @foreach (var item in Model)
         {
             <tr>
@@ -34,10 +31,10 @@
                 </td>
 
                 <td>
-                    @Ajax.ActionLink("View", "PartialSelectedReview", "Review", null, new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "get", UpdateTargetId = "tableContent" })
+                    @Ajax.ActionLink("View", "PartialSelectedReview", "Review", null, new AjaxOptions { UpdateTargetId = "reviewPartialDiv" })
                 </td>
             </tr>
-        }
+        }        
 
     </table>
 </div>
@@ -45,7 +42,7 @@
 
 <!-- Right Hand Side-->
 <div id="reviewPartialDiv" class="col-md-6">
-
+    @{Html.RenderPartial("PartialSelectedReview");}
 </div>
 <!-- End Right Hand Side-->
 

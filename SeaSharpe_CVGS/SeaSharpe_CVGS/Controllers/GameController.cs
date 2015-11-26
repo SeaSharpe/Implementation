@@ -129,8 +129,7 @@ namespace SeaSharpe_CVGS.Controllers
                 gameReview = new Review();
             }
 
-            gameReview.Game_Id = game.Id;
-            
+            gameReview.Game_Id = game.Id;            
 
             //Push game review to view so it can be passed to the partial view for review
             ViewData["review"] = gameReview;          

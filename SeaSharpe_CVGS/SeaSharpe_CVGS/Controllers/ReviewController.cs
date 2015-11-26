@@ -53,9 +53,9 @@ namespace SeaSharpe_CVGS.Controllers
         /// displays the currently selected review for approval/rejection
         /// </summary>
         /// <returns>PartialSelectedReview view</returns>
-        public ActionResult PartialSelectedReview()
+        public PartialViewResult PartialSelectedReview()
         {
-            return View();
+            return PartialView();
         }
         /// <summary>
         /// post back for updating review to Accepted
@@ -162,7 +162,7 @@ namespace SeaSharpe_CVGS.Controllers
                 TempData["message"] = "Error creating review: " + e.GetBaseException().Message;
             }
 
-            TempData["review"] = review;
+            ViewData["review"] = review;
             return RedirectToAction("Details", "Game", new { id = review.Game_Id });
         }
 

@@ -2,7 +2,6 @@
 
 <!-- Add review form partial page -->
 <h2>Review Game</h2>
-@TempData["message"]
 @using (Ajax.BeginForm("PartialCreateReview", "Review", new AjaxOptions{HttpMethod = "Post"}))
 {
     @Html.AntiForgeryToken()
