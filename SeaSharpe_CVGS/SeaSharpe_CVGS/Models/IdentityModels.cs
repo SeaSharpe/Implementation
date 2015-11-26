@@ -111,6 +111,8 @@ namespace SeaSharpe_CVGS.Models
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
         public virtual Platform Platform { get; set; }
+        [ForeignKey("Platform")]
+        public int Platform_Id { get; set; }
     }
 
     public partial class Review
