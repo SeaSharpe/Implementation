@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<SeaSharpe_CVGS.Models.Friendship>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Search/Show Friends";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <h2>Friend's List</h2>
 </p>
 <table class="table">
     <tr>
@@ -23,23 +23,63 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Friendee.User.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Friendee.User.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Friendee.User.UserName)
+            </td>
+            <td>
+                @Html.ActionLink("View Wishlist", "Details", new {/* id=item.PrimaryKey */}) |
+                @Html.ActionLink("Remove", "Delete", new {/* id=item.PrimaryKey */})
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+
+<p>
+    <h2>Family List</h2>
+</p>
+<table class="table">
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Friendee.User.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Friendee.User.LastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Friendee.User.DateOfBirth)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
+        <th>
+            @Html.DisplayNameFor(model => model.Friendee.User.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Friendee.User.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Friendee.User.UserName)
+        </th>
+        <th></th>
     </tr>
-}
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Friendee.User.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Friendee.User.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Friendee.User.UserName)
+            </td>
+            <td>
+                @Html.ActionLink("View Wishlist", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Remove", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+    }
 
 </table>

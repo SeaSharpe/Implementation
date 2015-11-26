@@ -131,14 +131,11 @@ namespace SeaSharpe_CVGS.Migrations
             
             var mockFriendships = new Friendship[]
             {
-                MakeFriendShip("AYSEBASWELL622782", "PAMELALALOVIC475670"),
-                MakeFriendShip("AYSEBASWELL622782", "NELLIELEE361672"),
-                MakeFriendShip("AYSEBASWELL622782", "MELISSABROOKINS141879"),
-                MakeFriendShip("AYSEBASWELL622782", "GERTRUDEKHAN464278"),
-
+                MakeFriendShip("AYSEBASWELL622782", "PAMELALALOVIC475670", false),
+                MakeFriendShip("AYSEBASWELL622782", "NELLIELEE361672", false),
+                MakeFriendShip("AYSEBASWELL622782", "MELISSABROOKINS141879", true),
+                MakeFriendShip("AYSEBASWELL622782", "GERTRUDEKHAN464278", true),
             };
-
-           
 
             // Fill the tables
             context.Users.AddOrUpdate(mockUsers);
@@ -198,7 +195,7 @@ namespace SeaSharpe_CVGS.Migrations
         }
 
 
-        private Friendship MakeFriendShip(string userNameFriender, string userNameFriendee)
+        private Friendship MakeFriendShip(string userNameFriender, string userNameFriendee, bool isFamily)
         {
             var checkIfExist = db.Friendships.FirstOrDefault(a => a.Friender.User.UserName == userNameFriender && a.Friendee.User.UserName == userNameFriendee);
 
@@ -214,6 +211,7 @@ namespace SeaSharpe_CVGS.Migrations
             Friendship res = new Friendship();
             res.Friender = memberFriender;
             res.Friendee = memberFriendee;
+            res.IsFamilyMember = isFamily;
 
             return res;
         }
