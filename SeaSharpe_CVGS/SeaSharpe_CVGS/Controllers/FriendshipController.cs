@@ -12,8 +12,6 @@ namespace SeaSharpe_CVGS.Controllers
 {
     public class FriendshipController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
         #region Members
         /// <summary>
         /// search functionality for finding new friends

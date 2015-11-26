@@ -12,8 +12,6 @@ namespace SeaSharpe_CVGS.Controllers
 {
     public class AddressController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
         /// <summary>
         /// Partial view in member profile
         /// </summary>

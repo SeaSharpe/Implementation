@@ -12,9 +12,6 @@ namespace SeaSharpe_CVGS.Controllers
 {
     public class UserController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
-
         #region Member Side
         /// <summary>
         /// Displays sign up form for new members

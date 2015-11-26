@@ -12,7 +12,6 @@ namespace SeaSharpe_CVGS.Controllers
 {
     public class ReviewController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
         #region Multiple Roles
         /// <summary>
         /// checks authorization and redirects to appropriate page

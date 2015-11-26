@@ -13,8 +13,6 @@ namespace SeaSharpe_CVGS.Controllers
 {
     public class GameController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
         //Dictionary containing ESRB ratings
         public static List<string> esrbList = new List<string>
             {
