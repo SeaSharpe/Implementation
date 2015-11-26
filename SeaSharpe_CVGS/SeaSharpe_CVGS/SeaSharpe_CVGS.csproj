@@ -160,6 +160,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AddressController.cs" />
+    <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\FriendshipController.cs" />
     <Compile Include="Controllers\GameController.cs" />
