@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls.Expressions;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using SeaSharpe_CVGS.Models;
@@ -62,13 +63,11 @@ namespace SeaSharpe_CVGS.Controllers
         /// ** includes partial views for Friends and Family lists**
         /// </summary>
         /// <returns>Search/Show Friends view</returns>
-        public ActionResult Index()
+        public ActionResult Index(string nameSearch)
         {
-            var friendships = db.Friendships.Include(f => f.Friendee).Include(f => f.Friender);
-
-            var list = DummyFriends();
-
-            var listUser = DummyUsers(list);
+            //Friender: Requester
+            //Friendee: Is the one receiving the request 
+            var searchList = SearchPerson(nameSearch);
 
             Member currentMem = CurrentMember;
 
@@ -77,11 +76,53 @@ namespace SeaSharpe_CVGS.Controllers
 
             ViewData.Add("friends", friends);
             ViewData.Add("family", family);
+            ViewData.Add("search", searchList);
+            //use it to hide or not the Search Results
+            ViewBag.found = IsSearchFound(searchList, nameSearch);
 
             //var friend3Incl = db.Friendships.Include(f => f.Friendee).Include(f => f.Friender);
 
             return View(friends);
         }
+
+
+        /// <summary>
+        /// Will return true if 'list.Count' is greater than zero
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        string IsSearchFound(List<Member> list, string nameSearch)
+        {
+            //means no search was executed
+            if (nameSearch == null)
+            {
+                return "";
+            }
+
+            //at least one item was found
+            if (list.Count > 0)
+            {
+                return "found";
+            }
+
+            //not item found 
+            return "notFound";
+        }
+
+        /// <summary>
+        /// Will return a list of Members that either have a same or like first/last name
+        ///  
+        /// </summary>
+        /// <param name="searchName">Name to search</param>
+        /// <returns></returns>
+        List<Member> SearchPerson(string searchName)
+        {
+            return db.Members.Where(n => n.User.FirstName.Contains(searchName) 
+                || n.User.LastName.Contains(searchName)).ToList();
+        }
+
+        
+
 
         List<ApplicationUser> DummyUsers(List<Friendship> li)
         {
@@ -94,7 +135,7 @@ namespace SeaSharpe_CVGS.Controllers
             return res;
         }
 
-            /// <summary>
+        /// <summary>
         /// Creates Dummy list of friends
         /// </summary>
         /// <returns></returns>

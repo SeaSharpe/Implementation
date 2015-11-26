@@ -8,6 +8,82 @@
 
 <h2>@ViewBag.Title</h2>
 
+
+@using (Html.BeginForm("Index", "Friendship", FormMethod.Get))
+{
+    <!-- Name Search Field -->
+    <div class="form-group">
+        @Html.Label("Enter Name:", new {@class = "control-label col-md-2"})
+        <div class="col-md-10">
+            @Html.TextBox("nameSearch")
+        </div>
+    </div>
+
+
+    <!-- Submit Button -->
+    <div class="form-group">
+        <div class="col-md-10">
+            <input type="submit" value="Search" class="btn btn-default"/>
+        </div>
+    </div>
+}
+
+
+
+<br/><br /><br /><br />
+
+<!-- Will be shown only if a search was found-->
+@if (ViewBag.found == "found")
+{
+<p>
+    <h2>Search Results</h2>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Friendee.User.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Friendee.User.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Friendee.User.UserName)
+        </th>
+        <th></th>
+    </tr>
+
+    
+    @foreach (var item in (IEnumerable<Member>)ViewData["search"])
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.UserName)
+            </td>
+            <td>
+                @Html.ActionLink("Add Friend", "Details", new {/* id=item.PrimaryKey */}) |
+                @Html.ActionLink("Add Family", "Delete", new {/* id=item.PrimaryKey */})
+            </td>
+        </tr>
+    }
+
+</table>
+}
+@if (ViewBag.found == "notFound")
+{
+    <p>
+        <h2>Nothign found</h2>
+    </p>
+}
+
+
+
+
 <p>
     <h2>Friend's List</h2>
 </p>
