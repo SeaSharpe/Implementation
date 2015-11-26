@@ -31,7 +31,7 @@
                 </td>
 
                 <td>
-                    @Ajax.ActionLink("View", "PartialSelectedReview", "Review", null, new AjaxOptions { UpdateTargetId = "reviewPartialDiv" })
+                    <input type="button" id="test" reviewId="@item.Id" class="test" />
                 </td>
             </tr>
         }        
@@ -42,7 +42,19 @@
 
 <!-- Right Hand Side-->
 <div id="reviewPartialDiv" class="col-md-6">
-    @{Html.RenderPartial("PartialSelectedReview");}
+   
 </div>
 <!-- End Right Hand Side-->
 
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#test").click(function() 
+        {
+            var value = $(this).attr("reviewId");
+            alert(value);
+            $("#reviewPartialDiv").load('@(Url.Action("PartialSelectedReview","Review",null, Request.Url.Scheme))?Id=' + value);
+        })
+    });
+</script> 

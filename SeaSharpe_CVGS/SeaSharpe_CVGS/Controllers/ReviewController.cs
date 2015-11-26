@@ -53,9 +53,10 @@ namespace SeaSharpe_CVGS.Controllers
         /// displays the currently selected review for approval/rejection
         /// </summary>
         /// <returns>PartialSelectedReview view</returns>
-        public PartialViewResult PartialSelectedReview()
+        public PartialViewResult PartialSelectedReview(int id)
         {
-            return PartialView();
+            Review review = db.Reviews.Find(id);
+            return PartialView(review);
         }
         /// <summary>
         /// post back for updating review to Accepted

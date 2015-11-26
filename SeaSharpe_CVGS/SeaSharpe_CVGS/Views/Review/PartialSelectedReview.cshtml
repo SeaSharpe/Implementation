@@ -1,1 +1,27 @@
-﻿<p>Test</p>
+﻿@model SeaSharpe_CVGS.Models.Review
+ <!-- Game Name-->
+<dt>
+    @Html.DisplayNameFor(model => model.Subject)
+</dt>
+
+<dd>
+    @Html.DisplayFor(model => model.Subject)
+</dd>
+
+<!-- Game Publisher-->
+<dt>
+    @Html.DisplayNameFor(model => model.Body)
+</dt>
+
+<dd>
+    @Html.DisplayFor(model => model.Body)
+</dd>
+
+<!-- Game ESRB-->
+<dt>
+    @Html.DisplayNameFor(model => model.Rating)
+</dt>
+
+<dd>
+    @Html.DisplayFor(model => model.Rating)
+</dd>
