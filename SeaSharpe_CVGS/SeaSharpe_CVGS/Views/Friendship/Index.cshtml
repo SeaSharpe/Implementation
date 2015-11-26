@@ -66,8 +66,8 @@
                 @Html.DisplayFor(modelItem => item.User.UserName)
             </td>
             <td>
-                @Html.ActionLink("Add Friend", "Details", new {/* id=item.PrimaryKey */}) |
-                @Html.ActionLink("Add Family", "Delete", new {/* id=item.PrimaryKey */})
+                @Html.ActionLink("Add Friend", "AddFriend", new { userName = item.User.UserName }) |
+                @Html.ActionLink("Add Family", "AddFamily", new { userName = item.User.UserName })
             </td>
         </tr>
     }

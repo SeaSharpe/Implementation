@@ -67,12 +67,15 @@ namespace SeaSharpe_CVGS.Controllers
         {
             //Friender: Requester
             //Friendee: Is the one receiving the request 
-            var searchList = SearchPerson(nameSearch);
-
             Member currentMem = CurrentMember;
 
             var friends = db.Friendships.Where(a => a.FrienderId == currentMem.Id && a.IsFamilyMember == false).ToList();
             var family = db.Friendships.Where(a => a.FrienderId == currentMem.Id && a.IsFamilyMember == true).ToList();
+
+            var allFriends = db.Friendships.Where(a => a.FrienderId == currentMem.Id).ToList();
+
+            var searchList = SearchPerson(nameSearch);
+            searchList = RemoveCurrentFriendees(searchList, GiveMeFriendees(allFriends));
 
             ViewData.Add("friends", friends);
             ViewData.Add("family", family);
@@ -80,11 +83,43 @@ namespace SeaSharpe_CVGS.Controllers
             //use it to hide or not the Search Results
             ViewBag.found = IsSearchFound(searchList, nameSearch);
 
-            //var friend3Incl = db.Friendships.Include(f => f.Friendee).Include(f => f.Friender);
-
             return View(friends);
         }
 
+        /// <summary>
+        /// Will remove current friends on '
+        /// </summary>
+        /// <param name="searchList"></param>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        private List<Member> RemoveCurrentFriendees(List<Member> searchList, List<Member> currentFriendees)
+        {
+            if (searchList == null || currentFriendees == null)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < currentFriendees.Count; i++)
+            {
+                searchList.Remove(currentFriendees[i]);
+            }
+            return searchList;
+        }
+
+        /// <summary>
+        /// Will return the list friendees of a Friendship list 
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        List<Member> GiveMeFriendees(List<Friendship> list)
+        {
+            List<Member> res = new List<Member>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                res.Add(list[i].Friendee);
+            }
+            return res;
+        }
 
         /// <summary>
         /// Will return true if 'list.Count' is greater than zero
@@ -110,86 +145,60 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
+        /// Will break 'searchName' into words if are space separated and will passed it to SearchPersonByWord
+        /// </summary>
+        /// <param name="searchName"></param>
+        /// <returns></returns>
+        List<Member> SearchPerson(string searchName)
+        {
+            if (searchName == null || searchName.Trim() == "")
+            {
+                return null;
+            }
+
+            var words = searchName.Split(' ');
+            List<Member> res = new List<Member>();
+
+            for (int i = 0; i < words.Length; i++)
+            {
+                res.AddRange(SearchPersonByWord(words[i].Trim()));
+            }
+            return res.Distinct().ToList();
+        }
+
+
+        /// <summary>
         /// Will return a list of Members that either have a same or like first/last name
         ///  
         /// </summary>
         /// <param name="searchName">Name to search</param>
         /// <returns></returns>
-        List<Member> SearchPerson(string searchName)
+        List<Member> SearchPersonByWord(string searchName)
         {
             return db.Members.Where(n => n.User.FirstName.Contains(searchName) 
                 || n.User.LastName.Contains(searchName)).ToList();
         }
 
-        
-
-
-        List<ApplicationUser> DummyUsers(List<Friendship> li)
-        {
-            List<ApplicationUser> res = new List<ApplicationUser>();
-
-            for (int i = 0; i < li.Count; i++)
-            {
-                res.Add(li[i].Friendee.User);
-            }
-            return res;
-        }
-
-        /// <summary>
-        /// Creates Dummy list of friends
-        /// </summary>
-        /// <returns></returns>
-        List<Friendship> DummyFriends()
-        {
-            List<Friendship> res = new List<Friendship>();
-
-            for (int i = 1; i < 11; i++)
-            {
-                var friendSh = new Friendship();
-                friendSh.Friendee = DummyMember(i);
-                res.Add(friendSh);
-            }
-
-            return res;
-        }
-
-        /// <summary>
-        /// Creates dummy Member 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        Member DummyMember(int id)
-        {
-            Member res = new Member();
-            
-            //res.User = new ApplicationUser();
-            res.User = CurrentUser;
-            res.Id = id;
-
-            return res;
-        }
-
-
-
-
-       
-
-
-
         /// <summary>
         /// lists all the member's friends
         /// </summary>
         /// <returns>PartialFriendsList view</returns>
-        public ActionResult PartialFriendsList()
+        public ActionResult AddFriend(string userName)
         {
-            return View();
+            Friendship newFriendship = new Friendship();
+            newFriendship.Friender = CurrentMember;
+
+            var friendee = db.Members.FirstOrDefault(a => a.User.UserName == userName);
+            newFriendship.Friendee = friendee;
+
+            return View("Index");
         }
 
         /// <summary>
         /// lists all the member's family
         /// </summary>
         /// <returns>PartialFamilyList view</returns>
-        public ActionResult PartialFamilyList()
+        public ActionResult AddFamily(string userName)
         {
             return View();
         }
