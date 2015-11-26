@@ -124,6 +124,8 @@ namespace SeaSharpe_CVGS.Models
         public float Rating { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }
+        [ForeignKey("Game")]
+        public int Game_Id { get; set; }
     }
 
     public partial class Friendship

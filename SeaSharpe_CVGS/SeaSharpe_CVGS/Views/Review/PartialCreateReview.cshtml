@@ -2,16 +2,24 @@
 
 <!-- Add review form partial page -->
 <h2>Review Game</h2>
-
-
-@using (Html.BeginForm())
+@TempData["message"]
+@using (Ajax.BeginForm("PartialCreateReview", "Review", new AjaxOptions{HttpMethod = "Post"}))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Game</h4>
-        <hr />
         @Html.ValidationSummary(true)
+
+        <!-- Hidden Element for review id-->
+        <!-- note: not using HtmlHelper to prevent GameId from parent view being passed in-->
+        <input type="hidden" name="Id" value="@Model.Id" />
+
+        <!-- Hidden element for game Id-->
+        @Html.HiddenFor(model => model.Game_Id)
+
+        <!-- Hidden Element for user -->
+        @Html.HiddenFor(model => model.Author)
+
 
         <!-- Review Subject -->
         <div class="form-group">

@@ -116,10 +116,23 @@ namespace SeaSharpe_CVGS.Controllers
                 return HttpNotFound();
             }
 
-            //Set review viewdata for partial view
-            //TODO: check if user has review for this game already
-            ViewData["review"] = new Review();
+            //Check for review in tempdata from postback 
+            Review gameReview = (Review)ViewData["review"];
 
+            //Get tempData message from postback
+            TempData["message"] = TempData["message"];
+
+            //Get gameReview if it was not stored in tempdata
+            if(gameReview == null)
+            {
+                gameReview = new Review();
+            }
+
+            gameReview.Game_Id = game.Id;
+            
+
+            //Push game review to view so it can be passed to the partial view for review
+            ViewData["review"] = gameReview;          
             return View(game);
         }
 

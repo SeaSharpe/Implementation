@@ -147,10 +147,10 @@ namespace SeaSharpe_CVGS.Models
             [Required(ErrorMessage = "Required")]
             public float Rating { get; set; }
 
-            [StringLength(500, MinimumLength = 1, ErrorMessage = "{0} maximum lenght is {1} characters")]
+            [StringLength(500, MinimumLength = 1, ErrorMessage = "{0} maximum length is {1} characters")]
             public string Subject { get; set; }
 
-            [StringLength(4000, MinimumLength = 0, ErrorMessage = "{0} maximum lenght is {1} characters")]
+            [StringLength(4000, MinimumLength = 0, ErrorMessage = "{0} maximum length is {1} characters")]
             public string Body { get; set; }
         }
     }

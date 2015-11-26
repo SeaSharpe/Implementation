@@ -109,10 +109,57 @@ namespace SeaSharpe_CVGS.Controllers
         /// **displayed on game details view***
         /// </summary>
         /// <returns>PartialCreateReview view</returns>
+        /// PT: We may be able to remove this, I am not certain but I think it is unnecessary
         public ActionResult PartialCreateReview()
         {
             return View();
         }
+
+        /// <summary>
+        /// Postback for partialCreateReview, creates a new review or updates existing one if it is just a rating
+        /// </summary>
+        /// <returns>GameDetails view</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PartialCreateReview([Bind(Include = "Id,Rating,Subject,Body,Game_Id")] Review review)
+        {
+            try
+            {
+                //Update the model to include binded changes
+                ModelState.Clear();
+                TryValidateModel(review);
+
+                if(ModelState.IsValid)
+                {
+                    Review originalReview = db.Reviews.FirstOrDefault(r => r.Id == review.Id);
+                    
+                    //Add new review if one does not already exist
+                    if (originalReview == null)
+                    {
+                        db.Reviews.Add(review);
+                    }
+
+                    //Update if review already exists
+                    else
+                    {
+                        db.Entry(review).State = EntityState.Modified;                        
+                    }
+                    db.SaveChanges();
+                    TempData["message"] = "Review added.";
+                }
+            }                
+
+               //Return message to employee if exception
+            catch (Exception e)
+            {
+                TempData["message"] = "Error creating review: " + e.GetBaseException().Message;
+            }
+
+            TempData["review"] = review;
+            return RedirectToAction("Details", "Game", new { id = review.Game_Id });
+        }
+
+
        /// <summary>
         /// post back for review creation
         /// **** review must be validated by employee before appears in Reviews/Rating list ****
