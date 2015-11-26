@@ -1,12 +1,13 @@
-﻿using System;
+﻿/*
+ * File Name: Friendship Controller.cs
+ *  
+ * Revision History:
+ *      25-Nov-2015: Created the class, Wrote code, Commented
+ */
+
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls.Expressions;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using SeaSharpe_CVGS.Models;
@@ -53,8 +54,6 @@ namespace SeaSharpe_CVGS.Controllers
             db = new ApplicationDbContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(this.db));
         }
-
-
 
 
         #region Members
@@ -218,23 +217,44 @@ namespace SeaSharpe_CVGS.Controllers
         /// <summary>
         /// display wishlist of selected friend
         /// </summary>
-        /// <param name="id">member id</param>
+        /// <param name="id">friendee id</param>
         /// <returns>wishlist view</returns>
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Friendship friendship = db.Friendships.Find(id);
-            if (friendship == null)
-            {
-                return HttpNotFound();
-            }
-            return View(friendship);
+            var friendeeMember = db.Members.FirstOrDefault(a => a.Id == id);
+
+            ViewBag.FullName = friendeeMember.User.FirstName + " " + friendeeMember.User.LastName;
+
+            var wishListGames = db.WishLists.Where(w => w.MemberId == id).ToList();
+            var games = PullGamesWithId(wishListGames);
+
+            return View(games);
         }
 
-        /// <summary>
+        List<Game> PullGamesWithId(List<WishList> wishListGames)
+        {
+            List<Game> res = new List<Game>();
+            var allGames = db.Games.ToList();
+
+            for (int i = 0; i < wishListGames.Count; i++)
+            {
+                var currentGame = FindAGameWithId(wishListGames[i].GameId);
+
+                if (allGames.Contains(currentGame))
+                {
+                    res.Add(currentGame);
+                }
+            }
+
+            return res;
+        }
+
+        Game FindAGameWithId(int id)
+        {
+            return db.Games.FirstOrDefault(g => g.Id == id);
+        }
+
+            /// <summary>
         /// post back for creating friendship (add to friends or add to family)
         /// </summary>
         /// <param name="friendship">friend object</param>
@@ -268,6 +288,13 @@ namespace SeaSharpe_CVGS.Controllers
                 (f => f.FriendeeId == id && f.FrienderId == CurrentMember.Id);
             db.Friendships.Remove(friendship);
             db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        //TODO move to cart
+        //id is the game id wanted to move to the cart
+        public ActionResult MoveToCart(int id)
+        {
             return RedirectToAction("Index");
         }
 
