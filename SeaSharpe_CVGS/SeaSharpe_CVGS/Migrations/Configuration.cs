@@ -132,8 +132,12 @@ namespace SeaSharpe_CVGS.Migrations
             
             //Mock Address Data
             var mockAddress = new Address[]
-            {               //memberId              Address                 City            Region      Country     PostalCode
-                MakeAddress(@"CRITKUBICKI272730",   "123 Victory Road",     "Kitchener",    "Ontario",  "Canada",   "N2M5B5")
+            {               //memberId                  Address                 City            Region      Country     PostalCode
+                MakeAddress(@"CRITKUBICKI272730",       "123 Victory Road",     "Kitchener",    "Ontario",  "Canada",   "N2M5B5"),
+                MakeAddress(@"HEATHERLUNTERKOFLER5",    "789 Blue Ave",         "Kitchener",    "Ontario",  "Canada",   "N6M7B8"),
+                MakeAddress(@"HEATHERLUNTERKOFLER5",    "456 Fake Road",        "Kitchener",    "Ontario",  "Canada",   "N3M4B5"),
+                MakeAddress(@"JOHNESTIS244358",         "15 Weber St.",         "Waterloo",     "Ontario",  "Canada",   "N9M8B1"),
+                MakeAddress(@"JAMES P.FAIRWTHR39",      "815 Brybeck St.",      "Kitchener",    "Ontario",  "Canada",   "N3M4B7"),
             };
 
             context.Addresses.AddOrUpdate(mockAddress);
@@ -162,7 +166,9 @@ namespace SeaSharpe_CVGS.Migrations
             var mockOrders = new Order[]
             {
                          //UserName                 ApproverId                  orderPlacementDate      shipDate                billAddr    shippAddr   IsProcessed     Games
-                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-11-11 00:00:00",  1,          1,          true,           "Fallout 4" )
+                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-11-11 00:00:00",  1,          1,          true,           "Fallout 4" ),
+                MakeOrder(@"JOHNESTIS244358",       null,                       null,                   null,                   4,          4,          false,          "Footbal Manager 2016", "Counter-Strike"),
+                MakeOrder(@"JOHNESTIS244358",       null,                       null,                   null,                   4,          4,          false,          "Skyrim", "rwar")
             };
             
             // Fill the tables
@@ -219,13 +225,39 @@ namespace SeaSharpe_CVGS.Migrations
             Order order = new Order
             {
                 Member = db.Members.First(m => m.User.UserName == member),
-                Aprover = db.Employees.First(e => e.User.UserName == aprover),
-                OrderPlacementDate = DateTime.Parse(orderPlacementDate),
-                ShipDate = DateTime.Parse(shipDate),
+                Aprover = db.Employees.FirstOrDefault(e => e.User.UserName == aprover),
                 BillingAddress = db.Addresses.First(b => b.Id == billingAddressIndex),
                 ShippingAddress = db.Addresses.First(b => b.Id == shippingAddressIndex),
                 IsProcessed = isProcessed
             };
+
+            if (shipDate == null)
+            {
+                order.ShipDate = null;
+            }
+            else
+            {
+                order.ShipDate = DateTime.Parse(shipDate);
+            }
+
+            if (orderPlacementDate == null)
+            {
+                order.OrderPlacementDate = null;
+            }
+            else
+            {
+                order.OrderPlacementDate = DateTime.Parse(orderPlacementDate);
+            }
+
+            /*
+            if (aprover == null)
+            {
+                order.Aprover = null;
+            }
+            else
+            {
+                order.Aprover = 
+            }*/
 
             if (order.OrderItems == null)
             {
