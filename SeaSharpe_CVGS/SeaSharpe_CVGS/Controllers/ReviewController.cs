@@ -109,7 +109,6 @@ namespace SeaSharpe_CVGS.Controllers
         /// **displayed on game details view***
         /// </summary>
         /// <returns>PartialCreateReview view</returns>
-        /// PT: We may be able to remove this, I am not certain but I think it is unnecessary
         public ActionResult PartialCreateReview()
         {
             return View();
@@ -162,7 +161,7 @@ namespace SeaSharpe_CVGS.Controllers
                 TempData["message"] = "Error creating review: " + e.GetBaseException().Message;
             }
 
-            ViewData["review"] = review;
+            TempData["review"] = review;
             return RedirectToAction("Details", "Game", new { id = review.Game_Id });
         }
 

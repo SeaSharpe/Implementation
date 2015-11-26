@@ -117,7 +117,7 @@ namespace SeaSharpe_CVGS.Controllers
             }
 
             //Check for review in tempdata from postback 
-            Review gameReview = (Review)ViewData["review"];
+            Review gameReview = (Review)TempData["review"];
 
             //Get tempData message from postback
             TempData["message"] = TempData["message"];
