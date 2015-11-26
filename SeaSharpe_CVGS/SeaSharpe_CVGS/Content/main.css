@@ -43,3 +43,26 @@ footer p {
         float: right !important;
     }
 }
+/* Button button who's got the button? */
+ .greenButton {
+	border-radius: 5px;
+	background-color: #0FA00F;
+	color: black;
+	border-left: black solid 1px;
+	border-right: black solid 1px;
+	border-top: black solid .1px;
+	border-bottom: black solid 1px;
+	font-weight: bold;	
+	font-size: 16px;
+	box-shadow: inset 0 0 2px 0 black;
+}
+.greenButton:hover {
+	box-shadow: inset 0 1px 0 0 black, inset 0 1px 1px 0 black;
+	background: linear-gradient(-45deg, black, #0FA00F, #0FA00F, black);
+	color: black;
+}
+.greenButton:active {
+	background: linear-gradient(-45deg, #0FA00F, black, #0FA00F);
+	color: #0FA00F;
+	box-shadow: inset 0 2px 0 0 black, inset 0 2px 2px 0 black;
+}
