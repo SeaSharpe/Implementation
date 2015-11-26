@@ -109,9 +109,9 @@ namespace SeaSharpe_CVGS.Controllers
         /// **displayed on game details view***
         /// </summary>
         /// <returns>PartialCreateReview view</returns>
-        public ActionResult PartialCreateReview()
+        public PartialViewResult PartialCreateReview()
         {
-            return View();
+            return PartialView();
         }
 
         /// <summary>
