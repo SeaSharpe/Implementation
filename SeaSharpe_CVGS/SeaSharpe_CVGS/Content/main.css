@@ -1,4 +1,10 @@
-﻿footer {
+﻿body {
+    padding-bottom: 70px !important;
+    color: black !important;
+    background: linear-gradient(black, #05630C, #0FA00F, #05630C, black) center center fixed !important;
+}
+/* Footer */
+footer {
     z-index:1111 !important;
     background-color:black !important;
     margin:0 !important;
@@ -8,15 +14,10 @@
     bottom:0 !important;
 }
 footer p {
-    color:white !important;
+    color: white !important;
     padding: 15px 0 5px 15px !important;
 }
-body {
-    padding-bottom: 70px !important;
-    color:black !important;
-    background: linear-gradient(black, #05630C, #0FA00F, #05630C, black) center center fixed !important;
-}
-
+/* Header */
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
   color: #05630C !important;
@@ -34,6 +35,11 @@ body {
   color: #0FA00F !important;
 }
 .navbar-inverse {
-  background-color: black;
-  border-color: #080808;
+  background-color: black !important;
+  border-color: #080808 !important;
+}
+@media (min-width: 768px) {
+    .navbar-nav {
+        float: right !important;
+    }
 }
