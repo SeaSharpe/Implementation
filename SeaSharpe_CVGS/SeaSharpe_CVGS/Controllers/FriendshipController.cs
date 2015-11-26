@@ -191,7 +191,10 @@ namespace SeaSharpe_CVGS.Controllers
             var friendee = db.Members.FirstOrDefault(a => a.User.UserName == userName);
             newFriendship.Friendee = friendee;
 
-            return View("Index");
+            db.Friendships.Add(newFriendship);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
         /// <summary>
@@ -200,7 +203,17 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>PartialFamilyList view</returns>
         public ActionResult AddFamily(string userName)
         {
-            return View();
+            Friendship newFriendship = new Friendship();
+            newFriendship.Friender = CurrentMember;
+
+            var friendee = db.Members.FirstOrDefault(a => a.User.UserName == userName);
+            newFriendship.Friendee = friendee;
+            newFriendship.IsFamilyMember = true;
+
+            db.Friendships.Add(newFriendship);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
         }
         /// <summary>
         /// display wishlist of selected friend
@@ -245,13 +258,14 @@ namespace SeaSharpe_CVGS.Controllers
        /// <summary>
        /// post back for delete friendship
        /// </summary>
-       /// <param name="id">friendship id</param>
+       /// <param name="id">FrienderId</param>
        /// <returns>Search/Show Friends view</returns>
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
         {
-            Friendship friendship = db.Friendships.Find(id);
+            Friendship friendship = db.Friendships.FirstOrDefault
+                (f => f.FriendeeId == id && f.FrienderId == CurrentMember.Id);
             db.Friendships.Remove(friendship);
             db.SaveChanges();
             return RedirectToAction("Index");

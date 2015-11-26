@@ -114,8 +114,8 @@
                 @Html.DisplayFor(modelItem => item.Friendee.User.UserName)
             </td>
             <td>
-                @Html.ActionLink("View Wishlist", "Details", new {/* id=item.PrimaryKey */}) |
-                @Html.ActionLink("Remove", "Delete", new {/* id=item.PrimaryKey */})
+                @Html.ActionLink("View Wishlist", "Details", new { id=item.FriendeeId }) |
+                @Html.ActionLink("Remove", "Delete", new { id = item.FriendeeId })
             </td>
         </tr>
     }
@@ -154,8 +154,8 @@
                 @Html.DisplayFor(modelItem => item.Friendee.User.UserName)
             </td>
             <td>
-                @Html.ActionLink("View Wishlist", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Remove", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("View Wishlist", "Details", new { id = item.FriendeeId }) |
+                @Html.ActionLink("Remove", "Delete", new { id = item.FriendeeId })
             </td>
         </tr>
     }
