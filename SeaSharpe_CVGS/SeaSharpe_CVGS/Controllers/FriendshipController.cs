@@ -40,7 +40,6 @@ namespace SeaSharpe_CVGS.Controllers
         {
             get
             {
-                //at school wont let compare Objects
                 return db.Members.FirstOrDefault(m => m.User.UserName == CurrentUser.UserName);
             }
         }
@@ -73,11 +72,15 @@ namespace SeaSharpe_CVGS.Controllers
 
             Member currentMem = CurrentMember;
 
-            var friends2 = db.Friendships.Where(a => a.FrienderId == currentMem.Id).ToList();
+            var friends = db.Friendships.Where(a => a.FrienderId == currentMem.Id && a.IsFamilyMember == false).ToList();
+            var family = db.Friendships.Where(a => a.FrienderId == currentMem.Id && a.IsFamilyMember == true).ToList();
+
+            ViewData.Add("friends", friends);
+            ViewData.Add("family", family);
 
             //var friend3Incl = db.Friendships.Include(f => f.Friendee).Include(f => f.Friender);
 
-            return View(friends2);
+            return View(friends);
         }
 
         List<ApplicationUser> DummyUsers(List<Friendship> li)

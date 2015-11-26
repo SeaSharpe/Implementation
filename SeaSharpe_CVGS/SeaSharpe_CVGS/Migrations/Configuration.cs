@@ -131,10 +131,10 @@ namespace SeaSharpe_CVGS.Migrations
             
             var mockFriendships = new Friendship[]
             {
-                MakeFriendShip("AYSEBASWELL622782", "PAMELALALOVIC475670", false),
-                MakeFriendShip("AYSEBASWELL622782", "NELLIELEE361672", false),
-                MakeFriendShip("AYSEBASWELL622782", "MELISSABROOKINS141879", true),
-                MakeFriendShip("AYSEBASWELL622782", "GERTRUDEKHAN464278", true),
+                //MakeFriendShip("AYSEBASWELL622782", "PAMELALALOVIC475670", false),
+                //MakeFriendShip("AYSEBASWELL622782", "NELLIELEE361672", false),
+                //MakeFriendShip("AYSEBASWELL622782", "MELISSABROOKINS141879", true),
+                //MakeFriendShip("AYSEBASWELL622782", "GERTRUDEKHAN464278", true)
             };
 
             // Fill the tables
@@ -200,6 +200,7 @@ namespace SeaSharpe_CVGS.Migrations
             var checkIfExist = db.Friendships.FirstOrDefault(a => a.Friender.User.UserName == userNameFriender && a.Friendee.User.UserName == userNameFriendee);
 
             //if the Frienship exist will return the existing friendShip
+            //this is to avoid duplicate mockData
             if (checkIfExist != null)
             {
                 return checkIfExist;
