@@ -6,12 +6,12 @@
 <h2>Report Management</h2>
 <table>
     <tr><th>Report</th><th>View</th><th>Print</th></tr>
-    <tr><td>Game Details</td><td><button>View</button></td><td><button>Print</button></td></tr>
-    <tr><td>List Of Games</td><td><button>View</button></td><td><button>Print</button></td></tr>
-    <tr><td>Member Details</td><td><button>View</button></td><td><button>Print</button></td></tr>
-    <tr><td>List Of Members</td><td><button>View</button></td><td><button>Print</button></td></tr>
-    <tr><td>Wishlist</td><td><button>View</button></td><td><button>Print</button></td></tr>
-    <tr><td>Sales</td><td><button>View</button></td><td><button>Print</button></td></tr>
+    <tr><td>Game Details</td><td>@Html.ActionLink("View", "GameDetailsReport", new { print = false }, new { @class = "btn btn-success" })</td><td><button>Print</button></td></tr>
+    <tr><td>List Of Games</td><td>@Html.ActionLink("View", "ListGamesReport", new { print = false }, new { @class = "btn btn-success" })</td><td><button>Print</button></td></tr>
+    <tr><td>Member Details</td><td>@Html.ActionLink("View", "MemberDetailsReport", new { print = false }, new { @class = "btn btn-success" })</td><td><button>Print</button></td></tr>
+    <tr><td>List Of Members</td><td>@Html.ActionLink("View", "ListMembersReport", new { print = false }, new { @class = "btn btn-success" })</td><td><button>Print</button></td></tr>
+    <tr><td>Wishlist</td><td>@Html.ActionLink("View", "WishListsReport", new { print = false }, new { @class = "btn btn-success" })</td><td><button>Print</button></td></tr>
+    <tr><td>Sales</td><td>@Html.ActionLink("View", "SalesReport", new { print = false }, new { @class = "btn btn-success" })</td><td><button>Print</button></td></tr>
 </table>
 
 

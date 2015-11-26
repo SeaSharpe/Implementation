@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SeaSharpe_CVGS.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,12 +9,15 @@ namespace SeaSharpe_CVGS.Controllers
 {
     public class ReportController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         /// <summary>
         /// Employee Side - display list of reports that can be created
         /// </summary>
         /// <returns>Index View (Report Management)</returns>
         public ActionResult Index()
         {
+
             return View();
         }
 
@@ -33,7 +37,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>List Games view</returns>
         public ActionResult ListGamesReport()
         {
-            return View();
+             return View(db.Games.ToList());
         }
 
         /// <summary>
