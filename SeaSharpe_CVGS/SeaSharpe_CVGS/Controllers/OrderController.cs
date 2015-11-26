@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SeaSharpe_CVGS.Models;
+using SeaSharpe_CVGS.Migrations;
 
 namespace SeaSharpe_CVGS.Controllers
 {
@@ -120,6 +121,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Cart view</returns>
         public ActionResult Cart(int? id)
         {
+            /*
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -130,6 +132,10 @@ namespace SeaSharpe_CVGS.Controllers
                 return HttpNotFound();
             }
             return View(game);
+             */
+            var config = new Configuration();
+            config.SeedDebug(db);
+            return View();
         }
 
         /// <summary>

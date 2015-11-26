@@ -7,6 +7,7 @@ namespace SeaSharpe_CVGS.Migrations
     using System.Data.Entity.Migrations;
     using System.Data.Entity.Validation;
     using System.Linq;
+    using SeaSharpe_CVGS.Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
     {
@@ -36,6 +37,9 @@ namespace SeaSharpe_CVGS.Migrations
 
         protected override void Seed(ApplicationDbContext context)
         {
+            //The top n application users will be employees, where n is the value of the NUMBER_OF_EMPLOYEES variable
+            const int NUMBER_OF_EMPLOYEES = 10;
+
             db = context;
             foreach (PlatformEnum platform in Enum.GetValues(typeof(PlatformEnum)))
             {
@@ -105,8 +109,8 @@ namespace SeaSharpe_CVGS.Migrations
             };
 
             //MockEmployee Data
-            var mockEmployees = new Employee[mockUsers.Count() / 2];
-            for (int i = 0; i < mockEmployees.Length / 2; i++)
+            var mockEmployees = new Employee[NUMBER_OF_EMPLOYEES];
+            for (int i = 0; i < NUMBER_OF_EMPLOYEES; i++)
             {
                 // If the user is already in the db, use that user. 
                 ApplicationUser existingUser = context.Users.Find(mockUsers[i].Id);
@@ -114,18 +118,20 @@ namespace SeaSharpe_CVGS.Migrations
             }
 
             // Mock Member Data
-            var mockMembers = new Member[1 + mockUsers.Count()/2];
-            for (int i = mockMembers.Length / 2; i < mockMembers.Length; i++)
+            var mockMembers = new Member[mockUsers.Count() - NUMBER_OF_EMPLOYEES];
+            for (int i = 0; i < mockMembers.Length; i++)
             {
                 // If the user is already in the db, use that user. 
-                ApplicationUser existingUser = context.Users.Find(mockUsers[i].Id); 
-                mockMembers[i] = new Member { User = existingUser ?? mockUsers[i], Id = i };
+                ApplicationUser existingUser = context.Users.Find(mockUsers[i + NUMBER_OF_EMPLOYEES].Id); 
+                mockMembers[i] = new Member { User = existingUser ?? mockUsers[i], Id = i + NUMBER_OF_EMPLOYEES };
             }
-
+            context.Members.AddOrUpdate(mockMembers);
+            context.Employees.AddOrUpdate(mockEmployees);
+            
             //Mock Address Data
             var mockAddress = new Address[]
             {               //memberId              Address                 City            Region      Country     PostalCode
-                MakeAddress(@"AYSEBASWELL622782",   "123 Victory Road",     "Kitchener",    "Ontario",  "Canada",   "N1N1N1")
+                MakeAddress(@"CRITKUBICKI272730",   "123 Victory Road",     "Kitchener",    "Ontario",  "Canada",   "N1N1N1")
             };
 
             //Mock Order Data
@@ -152,8 +158,6 @@ namespace SeaSharpe_CVGS.Migrations
             
             // Fill the tables
             context.Users.AddOrUpdate(mockUsers);
-            context.Employees.AddOrUpdate(mockEmployees);     
-            context.Members.AddOrUpdate(mockMembers);
             context.Friendships.AddOrUpdate(new Friendship[] { }); // TODO: Update this placeholder
             context.Events.AddOrUpdate(new Event[] { });           // TODO: Update this placeholder
             context.Addresses.AddOrUpdate(mockAddress);      
@@ -293,6 +297,11 @@ namespace SeaSharpe_CVGS.Migrations
                 DateOfBirth = DateTime.Parse(birthdate),
                 DateOfRegistration = DateTime.Parse(dateRegistered),
                 LockoutEnabled = true };
+        }
+
+        public void SeedDebug(ApplicationDbContext context)
+        {
+            Seed(context);
         }
     }
 }
