@@ -108,6 +108,8 @@ namespace SeaSharpe_CVGS.Models
         [MinLength(0), MaxLength(4)]
         public string ESRB { get; set; }
         public DateTime ReleaseDate { get; set; }
+        [Display(Name = "Price")]
+        [DisplayFormat(DataFormatString="{0:c}")]
         public decimal SuggestedRetailPrice { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }

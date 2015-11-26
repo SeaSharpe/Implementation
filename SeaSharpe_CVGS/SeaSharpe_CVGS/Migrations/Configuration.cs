@@ -166,9 +166,16 @@ namespace SeaSharpe_CVGS.Migrations
             var mockOrders = new Order[]
             {
                          //UserName                 ApproverId                  orderPlacementDate      shipDate                billAddr    shippAddr   IsProcessed     Games
-                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-11-11 00:00:00",  1,          1,          true,           "Fallout 4" ),
+                //order shipped
+                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-11 00:00:00",  1,          1,          true,           "Fallout 4" ),
+                //cart made with games, not paid for, not processed, not shipped
                 MakeOrder(@"JOHNESTIS244358",       null,                       null,                   null,                   4,          4,          false,          "Footbal Manager 2016", "Counter-Strike"),
-                MakeOrder(@"JOHNESTIS244358",       null,                       null,                   null,                   4,          4,          false,          "Skyrim", "rwar")
+                //order shipped
+                MakeOrder(@"JOHNESTIS244358",       @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-11 00:00:00",  4,          4,          true,           "Skyrim"),
+                //order paid for, not processed, not shipped
+                MakeOrder(@"JAMES P.FAIRWTHR39",    null,                       "2015-11-11 04:00:00",  null,                   5,          5,          false,          "Skyrim", "rwar"),
+                //order paid for, order has been processed, not shipped
+                MakeOrder(@"HEATHERLUNTERKOFLER5",  @"abaswell@arachnet.ca",    "2015-11-11 04:00:00",  null,                   2,          3,          true,           "Skyrim", "rwar")
             };
             
             // Fill the tables
