@@ -122,24 +122,24 @@ namespace SeaSharpe_CVGS.Migrations
             for (int i = 0; i < mockMembers.Length; i++)
             {
                 // If the user is already in the db, use that user. 
-                ApplicationUser existingUser = context.Users.Find(mockUsers[i + NUMBER_OF_EMPLOYEES].Id); 
-                mockMembers[i] = new Member { User = existingUser ?? mockUsers[i], Id = i + NUMBER_OF_EMPLOYEES };
+                ApplicationUser existingUser = context.Users.Find(mockUsers[i + NUMBER_OF_EMPLOYEES].Id);
+                mockMembers[i] = new Member { User = existingUser ?? mockUsers[i + NUMBER_OF_EMPLOYEES], Id = i + NUMBER_OF_EMPLOYEES };
             }
             context.Members.AddOrUpdate(mockMembers);
             context.Employees.AddOrUpdate(mockEmployees);
+            context.SaveChanges();
+
             
             //Mock Address Data
             var mockAddress = new Address[]
             {               //memberId              Address                 City            Region      Country     PostalCode
-                MakeAddress(@"CRITKUBICKI272730",   "123 Victory Road",     "Kitchener",    "Ontario",  "Canada",   "N1N1N1")
+                MakeAddress(@"CRITKUBICKI272730",   "123 Victory Road",     "Kitchener",    "Ontario",  "Canada",   "N2M5B5")
             };
 
-            //Mock Order Data
-            var mockOrders = new Order[]
-            {
-                         //UserName                 ApproverId                  orderPlacementDate      shipDate                billAddr    shippAddr   IsProcessed     Games
-                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-11-11 00:00:00",  1,          2,          true,           "Fallout 4" )
-            };
+            context.Addresses.AddOrUpdate(mockAddress);
+            context.SaveChanges();
+
+            
             
             // Mock Game Data
             var mockGames = new Game[]
@@ -155,15 +155,22 @@ namespace SeaSharpe_CVGS.Migrations
                 MakeGame("test",                          "2015-12-16 00:00:00",    20.00m,   PlatformEnum.PS4,    "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",             null,   RatingEnum.EC, CategoryEnum.FPS),
                 MakeGame("A Game with no categories",     "2015-11-02 00:00:00",    20.00m,   PlatformEnum.Mobile, "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",             null,   RatingEnum.EC)
             };
+            context.Games.AddOrUpdate(mockGames);
+            context.SaveChanges();
+
+            //Mock Order Data
+            var mockOrders = new Order[]
+            {
+                         //UserName                 ApproverId                  orderPlacementDate      shipDate                billAddr    shippAddr   IsProcessed     Games
+                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-11-11 00:00:00",  1,          1,          true,           "Fallout 4" )
+            };
             
             // Fill the tables
             context.Users.AddOrUpdate(mockUsers);
             context.Friendships.AddOrUpdate(new Friendship[] { }); // TODO: Update this placeholder
             context.Events.AddOrUpdate(new Event[] { });           // TODO: Update this placeholder
-            context.Addresses.AddOrUpdate(mockAddress);      
             context.Orders.AddOrUpdate(mockOrders);           
             context.OrderItems.AddOrUpdate(new OrderItem[] { });   // TODO: Update this placeholder
-            context.Games.AddOrUpdate(mockGames);
             context.Platforms.AddOrUpdate(mockPlatforms.Values.ToArray());
             context.Catagories.AddOrUpdate(mockCategories.Values.ToArray());
             context.Reviews.AddOrUpdate(new Review[] { });         // TODO: Update this placeholder

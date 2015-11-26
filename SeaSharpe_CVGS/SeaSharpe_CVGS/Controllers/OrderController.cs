@@ -134,6 +134,7 @@ namespace SeaSharpe_CVGS.Controllers
             return View(game);
              */
             var config = new Configuration();
+            
             config.SeedDebug(db);
             return View();
         }
