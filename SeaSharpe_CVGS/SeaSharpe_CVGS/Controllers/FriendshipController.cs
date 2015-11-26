@@ -30,14 +30,6 @@ namespace SeaSharpe_CVGS.Controllers
             }
         }
 
-        private bool IsEmployee
-        {
-            get
-            {
-                return db.Employees.Any(u => u.User == CurrentUser);
-            }
-        }
-
         private Member CurrentMember
         {
             get
@@ -54,7 +46,6 @@ namespace SeaSharpe_CVGS.Controllers
             db = new ApplicationDbContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(this.db));
         }
-
 
         #region Members
         /// <summary>
@@ -76,13 +67,32 @@ namespace SeaSharpe_CVGS.Controllers
             var searchList = SearchPerson(nameSearch);
             searchList = RemoveCurrentFriendees(searchList, GiveMeFriendees(allFriends));
 
-            ViewData.Add("friends", friends);
-            ViewData.Add("family", family);
+            ViewData.Add("friends", SetMutualFriendShips(friends));
+            ViewData.Add("family", SetMutualFriendShips(family));
             ViewData.Add("search", searchList);
+
             //use it to hide or not the Search Results
             ViewBag.found = IsSearchFound(searchList, nameSearch);
 
             return View(friends);
+        }
+
+        /// <summary>
+        /// Given a list of FriendShips will define a List of MutualFriendShip
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        List<MutualFriendShip> SetMutualFriendShips(List<Friendship> list)
+        {
+            List<MutualFriendShip> res = new List<MutualFriendShip>();
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                var newMutualFriendShip = new MutualFriendShip(list[i], db, CurrentMember);
+                res.Add(newMutualFriendShip);
+            }
+
+            return res;
         }
 
         /// <summary>
@@ -164,7 +174,6 @@ namespace SeaSharpe_CVGS.Controllers
             }
             return res.Distinct().ToList();
         }
-
 
         /// <summary>
         /// Will return a list of Members that either have a same or like first/last name
@@ -249,39 +258,21 @@ namespace SeaSharpe_CVGS.Controllers
             return res;
         }
 
+        /// <summary>
+        /// Will return a Game object if found
+        /// </summary>
+        /// <param name="id">Game id to be found</param>
+        /// <returns></returns>
         Game FindAGameWithId(int id)
         {
             return db.Games.FirstOrDefault(g => g.Id == id);
         }
 
-            /// <summary>
-        /// post back for creating friendship (add to friends or add to family)
+        /// <summary>
+        /// post back for delete friendship
         /// </summary>
-        /// <param name="friendship">friend object</param>
+        /// <param name="id">FrienderId</param>
         /// <returns>Search/Show Friends view</returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="FriendeeId,FrienderId,IsFamilyMember")] Friendship friendship)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Friendships.Add(friendship);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.FriendeeId = new SelectList(db.Members, "Id", "Id", friendship.FriendeeId);
-            ViewBag.FrienderId = new SelectList(db.Members, "Id", "Id", friendship.FrienderId);
-            return View(friendship);
-        }
-
-       /// <summary>
-       /// post back for delete friendship
-       /// </summary>
-       /// <param name="id">FrienderId</param>
-       /// <returns>Search/Show Friends view</returns>
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
             Friendship friendship = db.Friendships.FirstOrDefault
@@ -311,5 +302,45 @@ namespace SeaSharpe_CVGS.Controllers
             base.Dispose(disposing);
         }
         #endregion
+    }
+
+    /// <summary>
+    /// Class used to hold a friendShip and define if a friendship is mutual
+    /// </summary>
+    public class MutualFriendShip
+    {
+        public Friendship Friendship;
+        public bool IsMutual;
+        private ApplicationDbContext db;
+        private Member currentMember;
+
+        /// <summary>
+        /// Given all param will define if has a Mutual FriendShip with param 'currentMember'
+        /// </summary>
+        /// <param name="friendship"></param>
+        /// <param name="db"></param>
+        /// <param name="currentMember"></param>
+        public MutualFriendShip(Friendship friendship, ApplicationDbContext db, Member currentMember)
+        {
+            this.currentMember = currentMember;
+            this.db = db;
+            Friendship = friendship;
+            DefineIfMutual();
+        }
+
+        /// <summary>
+        /// Will Define if a Friendship is mutual 'IsMutual' class field
+        /// </summary>
+        void DefineIfMutual()
+        {
+            //will find the friendShip of current Member and other member the other way around
+            var friendeeFriends =
+                db.Friendships.FirstOrDefault(a => a.FrienderId == Friendship.FriendeeId && a.FriendeeId == currentMember.Id);
+
+            if (friendeeFriends != null)
+            {
+                IsMutual = true;
+            }
+        }
     }
 }
