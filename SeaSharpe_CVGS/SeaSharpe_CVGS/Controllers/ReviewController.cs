@@ -125,10 +125,16 @@ namespace SeaSharpe_CVGS.Controllers
         {
             try
             {
+                //Update objects for model
+                Game reviewGame = db.Games.FirstOrDefault(g => g.Id == review.Game_Id);
+                review.Game = reviewGame;
+                review.Author = new Member();
+
                 //Update the model to include binded changes
                 ModelState.Clear();
                 TryValidateModel(review);
 
+                //Check if model is valid
                 if(ModelState.IsValid)
                 {
                     Review originalReview = db.Reviews.FirstOrDefault(r => r.Id == review.Id);
@@ -147,9 +153,10 @@ namespace SeaSharpe_CVGS.Controllers
                     db.SaveChanges();
                     TempData["message"] = "Review added.";
                 }
+
             }                
 
-               //Return message to employee if exception
+            //Return message to member if exception
             catch (Exception e)
             {
                 TempData["message"] = "Error creating review: " + e.GetBaseException().Message;

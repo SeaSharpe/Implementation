@@ -125,6 +125,7 @@ namespace SeaSharpe_CVGS.Controllers
             //Get gameReview if it was not stored in tempdata
             if(gameReview == null)
             {
+                //WORK IN PROGRESS: CHECK FOR EXISTING REVIEW FOR THIS USER
                 gameReview = new Review();
             }
 
