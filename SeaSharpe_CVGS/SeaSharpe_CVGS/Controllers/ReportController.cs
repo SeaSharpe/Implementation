@@ -17,7 +17,6 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Index View (Report Management)</returns>
         public ActionResult Index()
         {
-
             return View();
         }
 
@@ -28,7 +27,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Game Details view</returns>
         public ActionResult GameDetailsReport()
         {
-            return View();
+            return View(db.Games.ToList());
         }
 
         /// <summary>
@@ -37,7 +36,6 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>List Games view</returns>
         public ActionResult ListGamesReport()
         {
-            //var query
              return View(db.Games.ToList());
         }
 
@@ -57,7 +55,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Member Details view</returns>
         public ActionResult MemberDetailsReport()
         {
-            return View();
+            return View(db.Members.ToList());
         }
 
         /// <summary>

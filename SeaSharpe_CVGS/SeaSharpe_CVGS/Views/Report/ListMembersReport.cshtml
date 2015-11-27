@@ -4,7 +4,7 @@
     ViewBag.Title = "Member List Report";
 }
 
-<h2>ListMembersReport</h2>
+<h2>@ViewBag.Title</h2>
 
 <table class="table">
     <tr>
@@ -18,11 +18,6 @@
             @Html.DisplayNameFor(model => model.User.LastName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.User.DateOfRegistration)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User.LockoutEnabled)
-        </th>
         <th></th>
     </tr>
 
@@ -38,14 +33,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.User.LastName)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.DateOfRegistration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.LockoutEnabled)
-            </td>
         </tr>
     }
 
 </table>
-
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
