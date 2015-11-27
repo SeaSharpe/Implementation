@@ -218,7 +218,6 @@ namespace SeaSharpe_CVGS.Controllers
             if (!exists)
             {
                 //create cart
-                db.SaveChanges();
                 //add item to cart
                 //return to details
                 return RedirectToAction("details", "Game", new { id });
