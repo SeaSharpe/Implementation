@@ -180,10 +180,10 @@ namespace SeaSharpe_CVGS.Migrations
             
             var mockFriendships = new Friendship[]
             {
-                //MakeFriendShip("AYSEBASWELL622782", "PAMELALALOVIC475670", false),
-                //MakeFriendShip("AYSEBASWELL622782", "NELLIELEE361672", false),
-                //MakeFriendShip("AYSEBASWELL622782", "MELISSABROOKINS141879", true),
-                //MakeFriendShip("AYSEBASWELL622782", "GERTRUDEKHAN464278", true)
+                MakeFriendShip("AYSEBASWELL622782", "PAMELALALOVIC475670", false),
+                MakeFriendShip("AYSEBASWELL622782", "NELLIELEE361672", false),
+                MakeFriendShip("AYSEBASWELL622782", "MELISSABROOKINS141879", true),
+                MakeFriendShip("AYSEBASWELL622782", "GERTRUDEKHAN464278", true)
             };
 
             // Fill the tables
