@@ -22,6 +22,7 @@ footer {
 }
 footer p {
     color: white !important;
+    font-size: 14px !important;
     padding: 15px 0 5px 15px !important;
 }
 /* Header */
