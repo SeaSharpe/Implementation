@@ -7,7 +7,6 @@ namespace SeaSharpe_CVGS.Migrations
     using System.Data.Entity.Migrations;
     using System.Data.Entity.Validation;
     using System.Linq;
-    using SeaSharpe_CVGS.Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
     {
@@ -161,7 +160,7 @@ namespace SeaSharpe_CVGS.Migrations
             };
             context.Games.AddOrUpdate(mockGames);
             context.SaveChanges();
-
+            
             //Mock Order Data
             var mockOrders = new Order[]
             {
@@ -243,8 +242,8 @@ namespace SeaSharpe_CVGS.Migrations
             {
                 Member = db.Members.First(m => m.User.UserName == member),
                 Aprover = db.Employees.FirstOrDefault(e => e.User.UserName == aprover),
-                BillingAddress = db.Addresses.First(b => b.Id == billingAddressIndex),
-                ShippingAddress = db.Addresses.First(b => b.Id == shippingAddressIndex),
+                BillingAddress = null, //db.Addresses.First(b => b.Id == billingAddressIndex),
+                ShippingAddress = null, //db.Addresses.First(b => b.Id == shippingAddressIndex),
                 IsProcessed = isProcessed
             };
 
