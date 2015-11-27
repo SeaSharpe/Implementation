@@ -101,9 +101,23 @@ namespace SeaSharpe_CVGS.Controllers
         /// List all reviews for a game and show average rating
         /// </summary>
         /// <returns>ReviewsRating view</returns>
-        public ActionResult ReviewsRating()
+        public ActionResult ReviewsRating(int id)
         {
-            return View(db.Reviews.ToList());
+            //TODO: only show approved reviews
+            List<Review> approvedReviews = db.Reviews.Where(r => r.Game_Id == id).ToList();
+            TempData["averageRating"] = ;
+            return View(approvedReviews);
+        }
+
+        /// <summary>
+        /// Review/Rate a specific game form
+        /// **displayed on game details view***
+        /// </summary>
+        /// <returns>PartialCreateReview view</returns>
+        public PartialViewResult PartialReviewDetails(int id)
+        {
+            Review review = db.Reviews.Find(id);
+            return PartialView(review);
         }
 
         /// <summary>
