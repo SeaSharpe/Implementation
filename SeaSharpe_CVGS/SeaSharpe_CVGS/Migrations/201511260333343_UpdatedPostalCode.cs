@@ -12,7 +12,9 @@ namespace SeaSharpe_CVGS.Migrations
         
         public override void Down()
         {
+            Sql("SET ANSI_WARNINGS  OFF;");
             AlterColumn("dbo.Addresses", "PostalCode", c => c.String(nullable: false, maxLength: 5, fixedLength: true, unicode: false));
+            Sql("SET ANSI_WARNINGS  ON;");
         }
     }
 }

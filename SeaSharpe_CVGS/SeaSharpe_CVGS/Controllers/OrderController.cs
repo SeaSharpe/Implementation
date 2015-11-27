@@ -131,10 +131,11 @@ namespace SeaSharpe_CVGS.Controllers
              */
 
             //get userid
-            //string testing = User.Identity.GetUserId();
+            //int memberId = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId()).Id;
 
             //placeholder for getting member id
             int memberId = 38;
+            
 
             //validate that memberId is valid
             var exists = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).Any();
