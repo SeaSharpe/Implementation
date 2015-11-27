@@ -117,17 +117,25 @@ namespace SeaSharpe_CVGS.Controllers
                 return HttpNotFound();
             }
 
-            //Check for review in tempdata from postback 
-            Review gameReview = (Review)TempData["review"];
-
             //Get tempData message from postback
             TempData["message"] = TempData["message"];
 
-            //Get gameReview if it was not stored in tempdata
+            //Check for review in tempdata from postback 
+            Review gameReview = (Review)TempData["review"];
+
+            //Get gameReview if it was not stored in tempdata from postback
             if(gameReview == null)
             {
-                //WORK IN PROGRESS: CHECK FOR EXISTING REVIEW FOR THIS USER
-                gameReview = new Review();
+                //Temporary pull a review which mimics existing review for this user
+                //TODO: replace this with review from current user if it exists
+                gameReview = db.Reviews.FirstOrDefault();
+
+                //No review for this user, display blank form
+                if (gameReview == null)
+                {
+                    //WORK IN PROGRESS: CHECK FOR EXISTING REVIEW FOR THIS USER
+                    gameReview = new Review();
+                }               
             }
 
             gameReview.Game_Id = game.Id;            

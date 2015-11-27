@@ -36,7 +36,35 @@ namespace SeaSharpe_CVGS.Controllers
             //      return RedirectToAction("ReviewsRating");
             //}
             
-        }        
+        }   
+     
+        /// <summary>
+        /// List all reviews for a game and show average rating
+        /// </summary>
+        /// <returns>ReviewsRating view</returns>
+        public ActionResult ReviewsRating(int id)
+        {            
+            //Get list of all reviews/ratings for selected game
+            IQueryable<Review> gameReviews = db.Reviews.Where(r => r.Game_Id == id);
+            ViewData["averageRating"] = "No ratings for this game.";
+            if(gameReviews != null)
+            {
+                //Calculate average based on all reviews and ratings
+                ViewData["averageRating"] = gameReviews.Average(r => r.Rating);
+            }
+            //TODO: only show approved reviews
+            return View(gameReviews.ToList());
+        }
+
+        /// <summary>
+        /// Display details for selected review on ReviewsRating page
+        /// </summary>
+        /// <returns>PartialReviewDetails view</returns>
+        public PartialViewResult PartialReviewDetails(int id)
+        {
+            Review review = db.Reviews.Find(id);
+            return PartialView(review);
+        }
         #endregion
 
         #region Employee Side       
@@ -96,43 +124,14 @@ namespace SeaSharpe_CVGS.Controllers
 
         #endregion
 
-        #region Member Side
+        #region Member Side      
         /// <summary>
-        /// List all reviews for a game and show average rating
+        /// Review/Rate a specific game form
+        /// **displayed on game details view***
         /// </summary>
-        /// <returns>ReviewsRating view</returns>
-        public ActionResult ReviewsRating(int id)
+        /// <returns>PartialCreateReview view</returns>
+        public PartialViewResult PartialCreateReview(int id)
         {            
-            //Get list of all reviews/ratings for selected game
-            IQueryable<Review> gameReviews = db.Reviews.Where(r => r.Game_Id == id);
-            ViewData["averageRating"] = "No ratings for this game.";
-            if(gameReviews != null)
-            {
-                //Calculate average based on all reviews and ratings
-                ViewData["averageRating"] = gameReviews.Average(r => r.Rating);
-            }
-            //TODO: only show approved reviews
-            return View(gameReviews.ToList());
-        }
-
-        /// <summary>
-        /// Review/Rate a specific game form
-        /// **displayed on game details view***
-        /// </summary>
-        /// <returns>PartialCreateReview view</returns>
-        public PartialViewResult PartialReviewDetails(int id)
-        {
-            Review review = db.Reviews.Find(id);
-            return PartialView(review);
-        }
-
-        /// <summary>
-        /// Review/Rate a specific game form
-        /// **displayed on game details view***
-        /// </summary>
-        /// <returns>PartialCreateReview view</returns>
-        public PartialViewResult PartialCreateReview()
-        {
             return PartialView();
         }
 
