@@ -94,6 +94,9 @@ namespace SeaSharpe_CVGS.Controllers
             db.Friendships.Add(newFriendship);
             db.SaveChanges();
 
+            TempData["message"] = friendee.User.FirstName
+                + " " + friendee.User.LastName + " added as a friend";
+
             return RedirectToAction("Index");
         }
 
@@ -112,6 +115,9 @@ namespace SeaSharpe_CVGS.Controllers
 
             db.Friendships.Add(newFriendship);
             db.SaveChanges();
+
+            TempData["message"] = friendee.User.FirstName 
+                + " " + friendee.User.LastName + " added as a family";
 
             return RedirectToAction("Index");
         }
@@ -142,8 +148,13 @@ namespace SeaSharpe_CVGS.Controllers
         {
             Friendship friendship = db.Friendships.FirstOrDefault
                 (f => f.FriendeeId == id && f.FrienderId == CurrentMember.Id);
+
+            TempData["message"] = friendship.Friendee.User.FirstName
+                + " " + friendship.Friendee.User.LastName + "'s friendship removed";
+
             db.Friendships.Remove(friendship);
             db.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
@@ -182,13 +193,9 @@ namespace SeaSharpe_CVGS.Controllers
 
             for (int i = 0; i < wishListGames.Count; i++)
             {
-                var id = wishListGames[i].GameId;
-                //Will return a Game object if found
-                var currentGame = db.Games.FirstOrDefault(g => g.Id == id); ;
-
-                if (allGames.Contains(currentGame))
+                if (allGames.Contains(wishListGames[i].Game))
                 {
-                    res.Add(currentGame);
+                    res.Add(wishListGames[i].Game);
                 }
             }
             return res;
