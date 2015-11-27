@@ -31,6 +31,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         public ActionResult Index()
         {
+            // to be uncommented when roles are made
             //User is employee, redirect to GameManagement
 
             //if (Roles.IsUserInRole(@"employee"))
@@ -182,7 +183,7 @@ namespace SeaSharpe_CVGS.Controllers
                 
                 //Add game categories if value not null
                 if(Categories != null)
-                {
+        {
                     ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
                     game.Categories = gameCategories;
                 }     
@@ -191,12 +192,12 @@ namespace SeaSharpe_CVGS.Controllers
                 ModelState.Clear();
                 TryValidateModel(game);
 
-                if (ModelState.IsValid)
-                {
-                    db.Games.Add(game);
-                    db.SaveChanges();
-                    return RedirectToAction("GameManagement");
-                }
+            if (ModelState.IsValid)
+            {
+                db.Games.Add(game);
+                db.SaveChanges();
+                return RedirectToAction("GameManagement");
+            }
             }
 
             //Return message to employee if exception
@@ -260,7 +261,7 @@ namespace SeaSharpe_CVGS.Controllers
                 Game originalGame = db.Games.Find(game.Id);
                 originalGame.Categories.Clear();
                 foreach (Category c in gameCategories)
-                {
+        {
                     originalGame.Categories.Add(c);
                 }
                 db.SaveChanges();
@@ -269,13 +270,13 @@ namespace SeaSharpe_CVGS.Controllers
                 //Update the model to include binded changes
                 ModelState.Clear();
                 TryValidateModel(game);
-                if (ModelState.IsValid)
-                {
-                    db.Entry(game).State = EntityState.Modified;
-                    db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                db.Entry(game).State = EntityState.Modified;
+                db.SaveChanges();
                     TempData["message"] = "Game with ID: " + game.Id + " updated.";
-                    return RedirectToAction("GameManagement");
-                }
+                return RedirectToAction("GameManagement");
+            }
             }
 
             catch (Exception e)
@@ -302,8 +303,8 @@ namespace SeaSharpe_CVGS.Controllers
                 game.Categories.Clear();
 
                 //Remove game and save changes
-                db.Games.Remove(game);
-                db.SaveChanges();
+            db.Games.Remove(game);
+            db.SaveChanges();
                 TempData["message"] = game.Name + " and it's dependencies have been deleted.";
             }
 

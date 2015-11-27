@@ -25,8 +25,12 @@ namespace SeaSharpe_CVGS.Models
         [Required] // NOT NULL
         [Column(TypeName = "char"), StringLength(1)] // CHAR(1)
         public string Gender { get; set; }
+
+        [Display(Name = "First Name")]
         [Required, MinLength(1), MaxLength(50)]
         public string FirstName { get; set; }
+
+        [Display(Name = "Last Name")]
         [Required, MinLength(1), MaxLength(50)]
         public string LastName { get; set; }
         [Required]

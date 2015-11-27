@@ -1,5 +1,19 @@
 # Implementation
 
+## Milestones
+
+Date | Item | Signoffs
+---- | ---- | --------
+November 25, 2015 | Discord Meeting
+November 27, 2015 | Manditory Class Attendance
+November 28, 2015 | Half of assigned controllers completed
+December 2, 2015  | Assigned controllers completed (with views) 
+December 9, 2015  | Unit Tests for Assigned controllers completed
+December 9, 2015  | Technical & Client Documentation
+December 9, 2015  | Installer CD for server
+December 11, 2015 | Final Due Date
+
+## Work Items List
 - ~~Create the solution~~
 - Code First Database *started*
   - [Mock Data](http://www.generatedata.com/) *started*
