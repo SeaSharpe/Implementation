@@ -78,6 +78,7 @@ namespace SeaSharpe_CVGS.Models
         public DateTime? OrderPlacementDate { get; set; }
         public DateTime? ShipDate { get; set; }
         public bool IsProcessed { get; set; }
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
 
     public partial class OrderItem
@@ -111,6 +112,8 @@ namespace SeaSharpe_CVGS.Models
         [MinLength(0), MaxLength(4)]
         public string ESRB { get; set; }
         public DateTime ReleaseDate { get; set; }
+        [Display(Name = "Price")]
+        [DisplayFormat(DataFormatString="{0:c}")]
         public decimal SuggestedRetailPrice { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
