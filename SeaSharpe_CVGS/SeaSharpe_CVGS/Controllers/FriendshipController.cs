@@ -2,7 +2,8 @@
  * File Name: Friendship Controller.cs
  *  
  * Revision History:
- *      25-Nov-2015: Created the class, Wrote code, Commented
+ *      25-Nov-2015: Manuel Lopez. Wrote code
+ *      26-Nov-2015: Manuel Lopez. Wrote code, Commented
  */
 
 using System.Collections.Generic;
@@ -49,9 +50,10 @@ namespace SeaSharpe_CVGS.Controllers
 
         #region Members
         /// <summary>
-        /// search functionality for finding new friends
-        /// ** includes partial views for Friends and Family lists**
-        /// </summary>
+        /// Search functionality for finding new friends
+        /// Includes partial views for Friends and Family Lists
+        /// and if a search was done will include a list with the search results
+        /// <param name="nameSearch">Name to search. Will search first and last name</param>
         /// <returns>Search/Show Friends view</returns>
         public ActionResult Index(string nameSearch)
         {
@@ -78,6 +80,121 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
+        /// Add a Friend to CurrentMember FriendShip
+        /// </summary>
+        /// <returns>Index view</returns>
+        public ActionResult AddFriend(string userName)
+        {
+            Friendship newFriendship = new Friendship();
+            newFriendship.Friender = CurrentMember;
+
+            var friendee = db.Members.FirstOrDefault(a => a.User.UserName == userName);
+            newFriendship.Friendee = friendee;
+
+            db.Friendships.Add(newFriendship);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Add a Friend to CurrentMember FriendShip as a family
+        /// </summary>
+        /// <returns>Index view</returns>
+        public ActionResult AddFamily(string userName)
+        {
+            Friendship newFriendship = new Friendship();
+            newFriendship.Friender = CurrentMember;
+
+            var friendee = db.Members.FirstOrDefault(a => a.User.UserName == userName);
+            newFriendship.Friendee = friendee;
+            newFriendship.IsFamilyMember = true;
+
+            db.Friendships.Add(newFriendship);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Display wishlist of selected friend
+        /// </summary>
+        /// <param name="id">friendee id</param>
+        /// <returns>Wishlist view</returns>
+        public ActionResult Details(int id)
+        {
+            var friendeeMember = db.Members.FirstOrDefault(a => a.Id == id);
+
+            ViewBag.FullName = friendeeMember.User.FirstName + " " + friendeeMember.User.LastName;
+
+            var wishListGames = db.WishLists.Where(w => w.MemberId == id).ToList();
+            var games = PullGamesWithId(wishListGames);
+
+            return View(games);
+        }
+
+        /// <summary>
+        /// Post back for delete friendship
+        /// </summary>
+        /// <param name="id">FrienderId</param>
+        /// <returns>Search/Show Friends view</returns>
+        public ActionResult Delete(int id)
+        {
+            Friendship friendship = db.Friendships.FirstOrDefault
+                (f => f.FriendeeId == id && f.FrienderId == CurrentMember.Id);
+            db.Friendships.Remove(friendship);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        //TODO move to cart
+        //id is the game id wanted to move to the cart
+        public ActionResult MoveToCart(int id)
+        {
+            return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Garbage collection
+        /// </summary>
+        /// <param name="disposing">garbage</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+        #endregion
+
+        #region Helper Methods
+
+        /// <summary>
+        /// Will pull a game list with the a list of WishList objects
+        /// </summary>
+        /// <param name="wishListGames"></param>
+        /// <returns></returns>
+        List<Game> PullGamesWithId(List<WishList> wishListGames)
+        {
+            List<Game> res = new List<Game>();
+            var allGames = db.Games.ToList();
+
+            for (int i = 0; i < wishListGames.Count; i++)
+            {
+                var id = wishListGames[i].GameId;
+                //Will return a Game object if found
+                var currentGame = db.Games.FirstOrDefault(g => g.Id == id); ;
+
+                if (allGames.Contains(currentGame))
+                {
+                    res.Add(currentGame);
+                }
+            }
+            return res;
+        }
+
+        /// <summary>
         /// Given a list of FriendShips will define a List of MutualFriendShip
         /// </summary>
         /// <param name="list"></param>
@@ -92,7 +209,8 @@ namespace SeaSharpe_CVGS.Controllers
                 res.Add(newMutualFriendShip);
             }
 
-            return res;
+            return res.OrderBy(a => a.Friendship.Friendee.User.LastName).
+                ThenBy(a => a.Friendship.Friendee.User.FirstName).ToList();
         }
 
         /// <summary>
@@ -138,7 +256,7 @@ namespace SeaSharpe_CVGS.Controllers
         string IsSearchFound(List<Member> list, string nameSearch)
         {
             //means no search was executed
-            if (nameSearch == null)
+            if (nameSearch == null || nameSearch.Trim() == "" || list == null)
             {
                 return "";
             }
@@ -172,7 +290,10 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 res.AddRange(SearchPersonByWord(words[i].Trim()));
             }
-            return res.Distinct().ToList();
+            res = res.Distinct().ToList();
+
+            return res.OrderBy(a => a.User.LastName).
+                ThenBy(a => a.User.FirstName).ToList();
         }
 
         /// <summary>
@@ -183,124 +304,10 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns></returns>
         List<Member> SearchPersonByWord(string searchName)
         {
-            return db.Members.Where(n => n.User.FirstName.Contains(searchName) 
+            return db.Members.Where(n => n.User.FirstName.Contains(searchName)
                 || n.User.LastName.Contains(searchName)).ToList();
         }
 
-        /// <summary>
-        /// lists all the member's friends
-        /// </summary>
-        /// <returns>PartialFriendsList view</returns>
-        public ActionResult AddFriend(string userName)
-        {
-            Friendship newFriendship = new Friendship();
-            newFriendship.Friender = CurrentMember;
-
-            var friendee = db.Members.FirstOrDefault(a => a.User.UserName == userName);
-            newFriendship.Friendee = friendee;
-
-            db.Friendships.Add(newFriendship);
-            db.SaveChanges();
-
-            return RedirectToAction("Index");
-        }
-
-        /// <summary>
-        /// lists all the member's family
-        /// </summary>
-        /// <returns>PartialFamilyList view</returns>
-        public ActionResult AddFamily(string userName)
-        {
-            Friendship newFriendship = new Friendship();
-            newFriendship.Friender = CurrentMember;
-
-            var friendee = db.Members.FirstOrDefault(a => a.User.UserName == userName);
-            newFriendship.Friendee = friendee;
-            newFriendship.IsFamilyMember = true;
-
-            db.Friendships.Add(newFriendship);
-            db.SaveChanges();
-
-            return RedirectToAction("Index");
-        }
-        /// <summary>
-        /// display wishlist of selected friend
-        /// </summary>
-        /// <param name="id">friendee id</param>
-        /// <returns>wishlist view</returns>
-        public ActionResult Details(int id)
-        {
-            var friendeeMember = db.Members.FirstOrDefault(a => a.Id == id);
-
-            ViewBag.FullName = friendeeMember.User.FirstName + " " + friendeeMember.User.LastName;
-
-            var wishListGames = db.WishLists.Where(w => w.MemberId == id).ToList();
-            var games = PullGamesWithId(wishListGames);
-
-            return View(games);
-        }
-
-        List<Game> PullGamesWithId(List<WishList> wishListGames)
-        {
-            List<Game> res = new List<Game>();
-            var allGames = db.Games.ToList();
-
-            for (int i = 0; i < wishListGames.Count; i++)
-            {
-                var currentGame = FindAGameWithId(wishListGames[i].GameId);
-
-                if (allGames.Contains(currentGame))
-                {
-                    res.Add(currentGame);
-                }
-            }
-
-            return res;
-        }
-
-        /// <summary>
-        /// Will return a Game object if found
-        /// </summary>
-        /// <param name="id">Game id to be found</param>
-        /// <returns></returns>
-        Game FindAGameWithId(int id)
-        {
-            return db.Games.FirstOrDefault(g => g.Id == id);
-        }
-
-        /// <summary>
-        /// post back for delete friendship
-        /// </summary>
-        /// <param name="id">FrienderId</param>
-        /// <returns>Search/Show Friends view</returns>
-        public ActionResult Delete(int id)
-        {
-            Friendship friendship = db.Friendships.FirstOrDefault
-                (f => f.FriendeeId == id && f.FrienderId == CurrentMember.Id);
-            db.Friendships.Remove(friendship);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        //TODO move to cart
-        //id is the game id wanted to move to the cart
-        public ActionResult MoveToCart(int id)
-        {
-            return RedirectToAction("Index");
-        }
-
-        /// <summary>
-        /// garbage collection
-        /// </summary>
-        /// <param name="disposing">garbage</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
         #endregion
     }
 
@@ -310,7 +317,7 @@ namespace SeaSharpe_CVGS.Controllers
     public class MutualFriendShip
     {
         public Friendship Friendship;
-        public bool IsMutual;
+        public bool IsMutual;//bool that indicates if a friendship is mutual
         private ApplicationDbContext db;
         private Member currentMember;
 
