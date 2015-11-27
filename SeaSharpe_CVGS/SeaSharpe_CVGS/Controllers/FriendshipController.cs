@@ -117,7 +117,7 @@ namespace SeaSharpe_CVGS.Controllers
             db.SaveChanges();
 
             TempData["message"] = friendee.User.FirstName 
-                + " " + friendee.User.LastName + " added as a family";
+                + " " + friendee.User.LastName + " added as family";
 
             return RedirectToAction("Index");
         }
