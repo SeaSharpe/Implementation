@@ -20,8 +20,8 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Conestoga Video Game Store", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
+                <img src="~/Content/themes/base/images/logo.png" />
+                     @Html.ActionLink("Conestoga Video Game Store", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })></div>
             <!-- to be uncommented when roles are made-->
              @*@if (Roles.IsUserInRole(@"employee"))
             {
@@ -94,46 +94,46 @@
                     </li>
                     <li>
                         <!-- need to get id for specific platform-->
-                        @Html.ActionLink("PS4", "SearchGames", "Game", new { platformSearch = new int[]{1} })
+                        @Html.ActionLink("PS4", "SearchGames", "Game", new { platformSearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific platform-->
-                        @Html.ActionLink("XBOX One", "SearchGames", "Game", new { platformSearch = new int[] { 1 } })
+                        @Html.ActionLink("XBOX One", "SearchGames", "Game", new { platformSearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific platform-->
-                        @Html.ActionLink("Wii U", "SearchGames", "Game", new { platformSearch = new int[] { 1 } })
+                        @Html.ActionLink("Wii U", "SearchGames", "Game", new { platformSearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific platform-->
-                        @Html.ActionLink("PC", "SearchGames", "Game", new { platformSearch = new int[] { 1 } })
+                        @Html.ActionLink("PC", "SearchGames", "Game", new { platformSearch = new int[] { 1 } }, null)
                     </li>
                     <li class="sidebar-brand">
                         Browse By Category
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("Action", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("Action", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("Adventure", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("Adventure", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("MMO", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("MMO", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("RPG", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("RPG", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("Strategy", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("Strategy", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("Other", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("Other", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                 </ul>
             </div>
