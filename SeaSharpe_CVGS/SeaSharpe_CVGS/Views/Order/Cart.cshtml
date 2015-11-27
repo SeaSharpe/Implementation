@@ -34,10 +34,10 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.CheckBox("download")
+            @Html.CheckBox("download_" + item.Id)
         </td>
         <td>
-            @Html.CheckBox("hardCopy")
+            @Html.CheckBox("hardCopy_" + item.Id)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Name)

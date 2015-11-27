@@ -16,6 +16,9 @@ namespace SeaSharpe_CVGS.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        //placeholder for getting member id
+        private int memberId = 40;
+
         #region Multiple Roles
         /// <summary>
         /// checks authorization and redirects to appropriate page
@@ -122,20 +125,12 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Cart view</returns>
         public ActionResult Cart()
         {
-            /*
-             * TODO:
-             * get member id
+            /* TODO:
              * Clean up view
-             * Create checkboxes and buttons
-             * Verfiy that only one cart can exist at a time
-             */
+             * Create checkboxes and buttons*/
 
             //get userid
-            //int memberId = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId()).Id;
-
-            //placeholder for getting member id
-            int memberId = 40;
-            
+            //var member = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
 
             //validate that memberId is valid
             var exists = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).Any();
@@ -153,16 +148,11 @@ namespace SeaSharpe_CVGS.Controllers
             //get all gameIds for order Id
             var orderItemIds = db.OrderItems.Where(o => o.OrderId == orderId).Select(i => i.GameId);
 
+            
             //get all games for gameIds
             IEnumerable<Game> games = db.Games.Where(g => orderItemIds.Contains(g.Id)).Include(c => c.Platform);
 
             return View(games);
-            /*
-            var config = new Configuration();
-            
-            config.SeedDebug(db);
-            return View();
-             * */
         }
 
         /// <summary>
@@ -202,35 +192,47 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>game details view</returns>
         public ActionResult AddToCart(int? id)
         {
-            /*
-             * add item
-             */
-
             //get userid
-            //int memberId = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId()).Id;
-
-            //placeholder for getting member id
-            int memberId = 40;
+            //var member = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
+            
+            //placeholder
+            var member = db.Members.Find(memberId);
 
             //check whether the member has a cart
-            var exists = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).Any();
+            var theCart = db.Orders.FirstOrDefault(m => m.Member.Id == memberId && m.OrderPlacementDate == null);
 
-            if (!exists)
+            //check that game is valid
+            var game = db.Games.Find(id);
+            if (game == null)
             {
-                //create cart
-                //add item to cart
-                //return to details
+                //do stuff
+            }
+
+            //create new cart if no pre-existing
+            if (theCart == null)
+            {
+                //new order, addresses are default null until checkout
+                theCart = new Order { Member = member };
+
+                //add order to db
+                db.Orders.Add(theCart);
+                db.SaveChanges();
+            }
+
+            //check if game already exists
+            if (db.OrderItems.Where(m => m.OrderId == theCart.Id && m.GameId == game.Id).FirstOrDefault() != null)
+            {
+                //currently this stops the addToCart, if we add a quantity column to the orderItems table, it could increment the quantity instead
+                TempData["message"] = game.Name + " already exists in cart";
                 return RedirectToAction("details", "Game", new { id });
             }
 
-            //This gets the cart order id
-            int orderId = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).First().Id;
-
-            //add item to order
-            Order order = db.Orders.Find(orderId);
-
-            //add item to order
+            OrderItem orderItem = new OrderItem { Game = game, GameId = game.Id, OrderId = theCart.Id, Order = theCart, SalePrice = game.SuggestedRetailPrice };
             
+            db.OrderItems.Add(orderItem);
+            db.SaveChanges();
+
+            TempData["message"] = game.Name + " added to cart";
 
             return RedirectToAction("details", "Game", new { id });
         }
