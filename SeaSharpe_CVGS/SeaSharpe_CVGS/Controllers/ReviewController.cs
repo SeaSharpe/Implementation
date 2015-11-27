@@ -46,7 +46,8 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>ReviewManagement view</returns>
         public ActionResult ReviewManagement()
         {
-            return View(db.Reviews.ToList());
+            List<Review> reviewList = db.Reviews.Where(r => r.Aprover == null && r.Subject != null).ToList();
+            return View(reviewList);
         }
 
         /// <summary>

@@ -1,27 +1,44 @@
 ﻿@model SeaSharpe_CVGS.Models.Review
- <!-- Game Name-->
-<dt>
-    @Html.DisplayNameFor(model => model.Subject)
-</dt>
+ 
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-<dd>
-    @Html.DisplayFor(model => model.Subject)
-</dd>
+    <div class="form-horizontal">
+        <!-- Subject Label -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Subject)
+        </dt>
 
-<!-- Game Publisher-->
-<dt>
-    @Html.DisplayNameFor(model => model.Body)
-</dt>
+        <!-- Subject text-->
+        <dd>
+            @Html.DisplayFor(model => model.Subject)
+        </dd>
 
-<dd>
-    @Html.DisplayFor(model => model.Body)
-</dd>
+        <!-- Body Label -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Body)
+        </dt>
 
-<!-- Game ESRB-->
-<dt>
-    @Html.DisplayNameFor(model => model.Rating)
-</dt>
+        <!-- Body Text -->
+        <dd>
+            @Html.DisplayFor(model => model.Body)
+        </dd>
 
-<dd>
-    @Html.DisplayFor(model => model.Rating)
-</dd>
+        <!-- Rating Label-->
+        <dt>
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+
+        <!-- Rating Text-->
+        <dd>
+            @Html.DisplayFor(model => model.Rating)
+        </dd>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Approve" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
