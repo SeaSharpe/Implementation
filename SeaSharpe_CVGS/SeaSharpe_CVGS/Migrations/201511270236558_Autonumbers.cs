@@ -7,15 +7,15 @@ namespace SeaSharpe_CVGS.Migrations
     {
         public override void Up()
         {
-            Sql("DBCC CHECKIDENT ( 'Employees'  , RESEED, 200000 )");
-            Sql("DBCC CHECKIDENT ( 'Members'    , RESEED, 30000000 )");
-            Sql("DBCC CHECKIDENT ( 'Events'     , RESEED, 4000000 )");
-            Sql("DBCC CHECKIDENT ( 'Addresses'  , RESEED, 500000000 )");
-            Sql("DBCC CHECKIDENT ( 'Orders'     , RESEED, 600000000 )");
-            Sql("DBCC CHECKIDENT ( 'Games'      , RESEED, 7000000 )");
-            Sql("DBCC CHECKIDENT ( 'Platforms'  , RESEED, 800 )");
-            Sql("DBCC CHECKIDENT ( 'Categories' , RESEED, 8000 )");
-            Sql("DBCC CHECKIDENT ( 'Reviews'    , RESEED, 900000000 )");
+            Sql("DBCC CHECKIDENT ( 'Employees'  , RESEED, 200001)");
+            Sql("DBCC CHECKIDENT ( 'Members'    , RESEED, 30000001)");
+            Sql("DBCC CHECKIDENT ( 'Events'     , RESEED, 4000001)");
+            Sql("DBCC CHECKIDENT ( 'Addresses'  , RESEED, 500000001)");
+            Sql("DBCC CHECKIDENT ( 'Orders'     , RESEED, 600000001)");
+            Sql("DBCC CHECKIDENT ( 'Games'      , RESEED, 7000001)");
+            Sql("DBCC CHECKIDENT ( 'Platforms'  , RESEED, 801)");
+            Sql("DBCC CHECKIDENT ( 'Categories' , RESEED, 8001)");
+            Sql("DBCC CHECKIDENT ( 'Reviews'    , RESEED, 900000001)");
         }
         
         public override void Down()
