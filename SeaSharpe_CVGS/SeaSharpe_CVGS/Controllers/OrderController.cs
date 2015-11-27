@@ -7,8 +7,6 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SeaSharpe_CVGS.Models;
-using SeaSharpe_CVGS.Migrations;
-using Microsoft.AspNet.Identity;
 
 namespace SeaSharpe_CVGS.Controllers
 {
@@ -49,10 +47,6 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Order Management view</returns>
         public ActionResult OrderManagement()
         {
-            /*
-             * If employee
-             * all orders with employeeId != null
-             */ 
             return View(db.Orders.ToList());
         }
 
@@ -62,10 +56,6 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Outstanding orders partial view</returns>
         public ActionResult PartialOutstandingOrders()
         {
-            /*
-             * If employee
-             * all orders with employeeId == null
-             */ 
             return View(db.Orders.ToList());
         }
 
@@ -75,11 +65,6 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>selected order partial view</returns>
         public ActionResult PartialSelectedOrder()
         {
-            /*
-             * if employee
-             * all games where orderId == id 
-             * (add param)
-             */ 
             return View();
         }
         /// <summary>
@@ -108,60 +93,26 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns></returns>
         public ActionResult OrderHistory()
         {
-            /*
-             * if member
-             * all orders orderplacementdate != null and employeeId != null
-             */ 
             return View(db.Orders.ToList());
         }
 
         /// <summary>
         /// Show order items in cart order
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">member id</param>
         /// <returns>Cart view</returns>
-        public ActionResult Cart()
+        public ActionResult Cart(int? id)
         {
-            /*
-             * TODO:
-             * get member id
-             * Clean up view
-             * Create checkboxes and buttons
-             * Verfiy that only one cart can exist at a time
-             */
-
-            //get userid
-            //int memberId = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId()).Id;
-
-            //placeholder for getting member id
-            int memberId = 38;
-            
-
-            //validate that memberId is valid
-            var exists = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).Any();
-
-            if (!exists)
+            if (id == null)
             {
-                //empty cart
-                return View();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            //This gets the cart order id
-            int orderId = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).First().Id;
-
-            //get all gameIds for order Id
-            var orderItemIds = db.OrderItems.Where(o => o.OrderId == orderId).Select(i => i.GameId);
-
-            //get all games for gameIds
-            IEnumerable<Game> games = db.Games.Where(g => orderItemIds.Contains(g.Id)).Include(c => c.Platform);
-
-            return View(games);
-            /*
-            var config = new Configuration();
-            
-            config.SeedDebug(db);
-            return View();
-             * */
+            Game game = db.Games.Find(id);
+            if (game == null)
+            {
+                return HttpNotFound();
+            }
+            return View(game);
         }
 
         /// <summary>
