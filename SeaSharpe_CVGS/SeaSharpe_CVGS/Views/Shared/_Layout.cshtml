@@ -14,6 +14,7 @@
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
+            <img src="~/Content/themes/base/images/logo.png" id="logo" />
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -33,7 +34,7 @@
                     <li>@Html.ActionLink("Reports", "Index", "Report")</li>
                                 <li>@Html.ActionLink("Logout", "Index", "Home")</li> @* Needs logout functionality *@
                         @*
-                    </ul>
+                </ul>
                 }
                 else if (Roles.IsUserInRole(@"member"))
                 {
@@ -50,14 +51,14 @@
                 else
                 {*@
                 <div class="navbar-collapse collapse">                    
-                    @Html.Partial("_LoginPartial")
-                </div>
+                @Html.Partial("_LoginPartial")
+            </div>
             @*}*@
             
         </div>
     </div>
     <div class="container body-content">
-        <span>@TempData["message"]</span>
+        <span>@TempData["error"]</span>
         <div id="wrapper">
 
             <!-- Sidebar -->
@@ -94,53 +95,53 @@
                     </li>
                     <li>
                         <!-- need to get id for specific platform-->
-                        @Html.ActionLink("PS4", "SearchGames", "Game", new { platformSearch = new int[]{1} })
+                        @Html.ActionLink("PS4", "SearchGames", "Game", new { platformSearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific platform-->
-                        @Html.ActionLink("XBOX One", "SearchGames", "Game", new { platformSearch = new int[] { 1 } })
+                        @Html.ActionLink("XBOX One", "SearchGames", "Game", new { platformSearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific platform-->
-                        @Html.ActionLink("Wii U", "SearchGames", "Game", new { platformSearch = new int[] { 1 } })
+                        @Html.ActionLink("Wii U", "SearchGames", "Game", new { platformSearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific platform-->
-                        @Html.ActionLink("PC", "SearchGames", "Game", new { platformSearch = new int[] { 1 } })
+                        @Html.ActionLink("PC", "SearchGames", "Game", new { platformSearch = new int[] { 1 } }, null)
                     </li>
                     <li class="sidebar-brand">
                         Browse By Category
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("Action", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("Action", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("Adventure", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("Adventure", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("MMO", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("MMO", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("RPG", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("RPG", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("Strategy", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("Strategy", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("Other", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("Other", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                 </ul>
             </div>
             <!-- /#sidebar-wrapper -->
             <div id="page-content-wrapper">
                 <div class="container-fluid">
-                    @RenderBody()
+        @RenderBody()
                 </div>
             </div>
             <!-- /#page-content-wrapper -->
@@ -153,13 +154,13 @@
         </div>
     </div>
 
-                @Scripts.Render("~/bundles/jquery")
-                @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
 
-                <!-- Jquery UI script for datepicker-->
-                @Scripts.Render("~/Scripts/jquery-ui-1.11.4.js")
-                @Scripts.Render("~/Scripts/datePickerReady.js")
+    <!-- Jquery UI script for datepicker-->
+    @Scripts.Render("~/Scripts/jquery-ui-1.11.4.js")
+    @Scripts.Render("~/Scripts/datePickerReady.js")
 
-                @RenderSection("scripts", required: false)
+    @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -29,13 +29,16 @@ namespace SeaSharpe_CVGS.Models
         [Display(Name = "First Name")]
         [Required, MinLength(1), MaxLength(50)]
         public string FirstName { get; set; }
+        [Display(Name = "Last Name")]
 
         [Display(Name = "Last Name")]
         [Required, MinLength(1), MaxLength(50)]
         public string LastName { get; set; }
         [Required]
+        [Display(Name = "Date of Birth")]
         public DateTime DateOfBirth { get; set; }
         [Required]
+        [Display(Name = "Date of Registration")]
         public DateTime DateOfRegistration { get; set; }
     }
 
@@ -65,18 +68,25 @@ namespace SeaSharpe_CVGS.Models
         public string City { get; set; }
         public string Region { get; set; }
         public string Country { get; set; }
+        [Display(Name = "Postal Code")]
         public string PostalCode { get; set; }
     }
 
     public partial class Order
     {
         public int Id { get; set; }
+        [Display(Name = "Billing Address")]
         public virtual Address BillingAddress { get; set; }
+        [Display(Name = "Shipping Address")]
         public virtual Address ShippingAddress { get; set; }
         public virtual Member Member { get; set; }
-        public virtual Employee Aprover { get; set; }
+        [Display(Name = "Approver")]
+        public virtual Employee Aprover { get; set; } //todo: correct to Approver
+        [Display(Name = "Order Placement Date")]
         public DateTime? OrderPlacementDate { get; set; }
+        [Display(Name = "Ship Date")]
         public DateTime? ShipDate { get; set; }
+        [Display(Name = "Processed?")]
         public bool IsProcessed { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
@@ -89,6 +99,7 @@ namespace SeaSharpe_CVGS.Models
         public int OrderId { get; set; }
         public virtual Game Game { get; set; }
         public virtual Order Order { get; set; }
+        [Display(Name = "Sale Price")]
         public decimal SalePrice { get; set; }
     }
 
@@ -106,11 +117,13 @@ namespace SeaSharpe_CVGS.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        [Display(Name = "Image Path")]
         public string ImagePath { get; set; }
         [MinLength(0), MaxLength(50)]
         public string Publisher { get; set; }
         [MinLength(0), MaxLength(4)]
         public string ESRB { get; set; }
+        [Display(Name = "Release Date")]
         public DateTime ReleaseDate { get; set; }
         [Display(Name = "Price")]
         [DisplayFormat(DataFormatString="{0:c}")]
@@ -127,7 +140,8 @@ namespace SeaSharpe_CVGS.Models
         public int Id { get; set; }
         public virtual Game Game { get; set; }
         public virtual Member Author { get; set; }
-        public virtual Employee Aprover { get; set; }
+        [Display(Name = "Approver")]
+        public virtual Employee Aprover { get; set; } // todo: correct spelling to Approver
         public float Rating { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }
@@ -143,6 +157,7 @@ namespace SeaSharpe_CVGS.Models
         public int FrienderId { get; set; }
         public virtual Member Friendee { get; set; }
         public virtual Member Friender { get; set; }
+        [Display(Name = "Family Member?")]
         public bool IsFamilyMember { get; set; }
     }
 
@@ -165,7 +180,9 @@ namespace SeaSharpe_CVGS.Models
         public int Id { get; set; }
         public virtual Employee Employee { get; set; }
         public string Location { get; set; }
+        [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
+        [Display(Name = "End Date")]
         public DateTime EndDate { get; set; }
         public string Description { get; set; }
         public int Capacity { get; set; }
@@ -203,8 +220,11 @@ namespace SeaSharpe_CVGS.Models
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<Platform> Platforms { get; set; }
-        public DbSet<Category> Catagories { get; set; }
+        [Display(Name = "Categories")]
+        public DbSet<Category> Catagories { get; set; } // to do: correct spelling to Categories
+        [Display(Name = "Wish Lists")]
         public DbSet<WishList> WishLists { get; set; }
+        [Display(Name = "Order Items")]
         public DbSet<OrderItem> OrderItems { get; set; }
     }
 }
