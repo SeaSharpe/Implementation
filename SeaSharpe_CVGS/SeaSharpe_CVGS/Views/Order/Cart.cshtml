@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SeaSharpe_CVGS.Models.Game>
+﻿@model IEnumerable<SeaSharpe_CVGS.Models.Order>
 
 @{
     ViewBag.Title = "Cart";
@@ -12,52 +12,34 @@
 <table class="table">
     <tr>
         <th>
-            Download
+            @Html.DisplayNameFor(model => model.OrderPlacementDate)
         </th>
         <th>
-            Hard Copy
+            @Html.DisplayNameFor(model => model.ShipDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.IsProcessed)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Platform)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ESRB)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SuggestedRetailPrice)
-        </th>
+        <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.CheckBox("download")
+            @Html.DisplayFor(modelItem => item.OrderPlacementDate)
         </td>
         <td>
-            @Html.CheckBox("hardCopy")
+            @Html.DisplayFor(modelItem => item.ShipDate)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            @Html.DisplayFor(modelItem => item.IsProcessed)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Platform.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ESRB)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SuggestedRetailPrice)
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
         </td>
     </tr>
 }
 
 </table>
-
-@(Html.ActionLink("Remove Selected", "Index","Home", new { @class ="btn btn-primary"}))
-@(Html.ActionLink("Empty Cart", "Index", "Home", new { @class = "btn btn-primary" }))
-<br/>
-@(Html.ActionLink("Continue Shoppingd", "Index", "Home", new { @class = "btn btn-primary" }))
-@(Html.ActionLink("Checkout Now", "Index", "Home", new { @class = "btn btn-primary" }))
