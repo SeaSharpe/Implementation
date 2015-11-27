@@ -37,7 +37,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>List Games view</returns>
         public ActionResult ListGamesReport()
         {
-            //IEnumerable<Game> gamesList = db.Games.Joi;
+            //var query
              return View(db.Games.ToList());
         }
 
