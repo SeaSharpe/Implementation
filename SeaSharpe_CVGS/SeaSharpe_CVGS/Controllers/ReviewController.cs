@@ -102,11 +102,17 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <returns>ReviewsRating view</returns>
         public ActionResult ReviewsRating(int id)
-        {
+        {            
+            //Get list of all reviews/ratings for selected game
+            IQueryable<Review> gameReviews = db.Reviews.Where(r => r.Game_Id == id);
+            ViewData["averageRating"] = "No ratings for this game.";
+            if(gameReviews != null)
+            {
+                //Calculate average based on all reviews and ratings
+                ViewData["averageRating"] = gameReviews.Average(r => r.Rating);
+            }
             //TODO: only show approved reviews
-            List<Review> approvedReviews = db.Reviews.Where(r => r.Game_Id == id).ToList();
-            TempData["averageRating"] = ;
-            return View(approvedReviews);
+            return View(gameReviews.ToList());
         }
 
         /// <summary>
