@@ -60,8 +60,8 @@
     <br/>
 }
 
-@(Html.ActionLink("Remove Selected", "Index","Home", new { @class ="btn btn-primary"}))
-@(Html.ActionLink("Empty Cart", "Index", "Home", new { @class = "btn btn-primary" }))
+@(Html.ActionLink("Remove Selected", "Delete", "order", null, new { @class = "btn btn-primary" }))
+@(Html.ActionLink("Empty Cart", "Index", "Home", null, new { @class = "btn btn-primary" }))
 <br/>
-@(Html.ActionLink("Continue Shoppingd", "Index", "Home", new { @class = "btn btn-primary" }))
-@(Html.ActionLink("Checkout Now", "Index", "Home", new { @class = "btn btn-primary" }))
+@(Html.ActionLink("Continue Shoppingd", "Index", "Home", null, new { @class = "btn btn-primary" }))
+@(Html.ActionLink("Checkout Now", "Index", "Home", null, new { @class = "btn btn-primary" }))

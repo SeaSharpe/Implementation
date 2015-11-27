@@ -156,7 +156,7 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
-        /// Member Side - Order Created when first item is added to cart
+        /// Member Side - OrderPlacement date is set (changes it from a cart to an order)
         /// **** No view required ****
         /// </summary>
         /// <returns>Cart view</returns>
@@ -238,25 +238,6 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
-        /// post back order updated when items added to cart
-        /// *** No view required ***
-        /// </summary>
-        /// <param name="order">order object</param>
-        /// <returns>Cart view</returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult UpdateCartWithItem([Bind(Include = "Id,OrderPlacementDate,ShipDate,IsProcessed")] Order order)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(order).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Cart");
-            }
-            return View(order);
-        }
-
-        /// <summary>
         /// post back for deletion of cart item
         /// </summary>
         /// <param name="id">orderItem id</param>
@@ -265,6 +246,11 @@ namespace SeaSharpe_CVGS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int itemId)
         {
+            /*
+             * 
+             */
+            var a = Request.Form;
+            
             Order order = db.Orders.Find(itemId);
             db.Orders.Remove(order);
             db.SaveChanges();
