@@ -7,13 +7,13 @@ namespace SeaSharpe_CVGS.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Autonumbers : IMigrationMetadata
+    public sealed partial class CVGS_Classes : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Autonumbers));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(CVGS_Classes));
         
         string IMigrationMetadata.Id
         {
-            get { return "201511270236558_Autonumbers"; }
+            get { return "201511271956227_CVGS_Classes"; }
         }
         
         string IMigrationMetadata.Source
