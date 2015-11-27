@@ -121,6 +121,7 @@ namespace SeaSharpe_CVGS.Migrations
                         Rating = c.Single(nullable: false),
                         Subject = c.String(maxLength: 500),
                         Body = c.String(maxLength: 4000),
+                        IsApproved = c.Boolean(nullable: false),
                         Aprover_Id = c.Int(),
                         Author_Id = c.Int(nullable: false),
                         Game_Id = c.Int(nullable: false),

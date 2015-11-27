@@ -131,6 +131,7 @@ namespace SeaSharpe_CVGS.Models
         public float Rating { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }
+        public bool IsApproved { get; set; }
     }
 
     public partial class Friendship
