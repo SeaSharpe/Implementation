@@ -184,6 +184,10 @@
     <Compile Include="Migrations\201511181849086_Update Games and EventMembers.Designer.cs">
       <DependentUpon>201511181849086_Update Games and EventMembers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511260333343_UpdatedPostalCode.cs" />
+    <Compile Include="Migrations\201511260333343_UpdatedPostalCode.Designer.cs">
+      <DependentUpon>201511260333343_UpdatedPostalCode.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -352,6 +356,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511181849086_Update Games and EventMembers.resx">
       <DependentUpon>201511181849086_Update Games and EventMembers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511260333343_UpdatedPostalCode.resx">
+      <DependentUpon>201511260333343_UpdatedPostalCode.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
