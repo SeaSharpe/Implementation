@@ -1,7 +1,51 @@
-﻿
+﻿@model IEnumerable<SeaSharpe_CVGS.Models.Member>
+
 @{
-    ViewBag.Title = "ListMembersReport";
+    ViewBag.Title = "Member List Report";
 }
 
 <h2>ListMembersReport</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.User.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.DateOfRegistration)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.LockoutEnabled)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.DateOfRegistration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.LockoutEnabled)
+            </td>
+        </tr>
+    }
+
+</table>
 

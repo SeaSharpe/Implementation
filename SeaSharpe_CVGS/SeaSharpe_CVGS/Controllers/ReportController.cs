@@ -47,7 +47,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>List Members view</returns>
         public ActionResult ListMembersReport()
         {
-            return View();
+            return View(db.Members.ToList());
         }
 
         /// <summary>
