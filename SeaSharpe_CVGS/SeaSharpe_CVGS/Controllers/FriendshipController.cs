@@ -214,11 +214,11 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
-        /// Will remove current friends on '
+        /// Will remove current friends on 'searchList'
         /// </summary>
-        /// <param name="searchList"></param>
-        /// <param name="list"></param>
-        /// <returns></returns>
+        /// <param name="searchList">The whole search list found</param>
+        /// <param name="currentFriendees">The currentFriendees of the CurrentMember</param>
+        /// <returns>A list with searchList minus the currentFriendees</returns>
         private List<Member> RemoveCurrentFriendees(List<Member> searchList, List<Member> currentFriendees)
         {
             if (searchList == null || currentFriendees == null)
@@ -252,7 +252,8 @@ namespace SeaSharpe_CVGS.Controllers
         /// Will return true if 'list.Count' is greater than zero
         /// </summary>
         /// <param name="list"></param>
-        /// <returns></returns>
+        /// <returns>emtpy string if the param 'nameSearch' was not used. "found" if list.Count > 0
+        /// other wise "notFound"</returns>
         string IsSearchFound(List<Member> list, string nameSearch)
         {
             //means no search was executed
