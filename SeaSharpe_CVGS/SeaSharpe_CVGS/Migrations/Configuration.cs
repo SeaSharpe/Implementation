@@ -178,9 +178,17 @@ namespace SeaSharpe_CVGS.Migrations
                 MakeOrder(@"HEATHERLUNTERKOFLER5",  @"abaswell@arachnet.ca",    "2015-11-11 04:00:00",  null,                   2,          3,          true,           "Skyrim", "rwar")
             };
             
+            var mockFriendships = new Friendship[]
+            {
+                //MakeFriendShip("AYSEBASWELL622782", "PAMELALALOVIC475670", false),
+                //MakeFriendShip("AYSEBASWELL622782", "NELLIELEE361672", false),
+                //MakeFriendShip("AYSEBASWELL622782", "MELISSABROOKINS141879", true),
+                //MakeFriendShip("AYSEBASWELL622782", "GERTRUDEKHAN464278", true)
+            };
+
             // Fill the tables
             context.Users.AddOrUpdate(mockUsers);
-            context.Friendships.AddOrUpdate(new Friendship[] { }); // TODO: Update this placeholder
+            context.Friendships.AddOrUpdate(mockFriendships);
             context.Events.AddOrUpdate(new Event[] { });           // TODO: Update this placeholder
             context.Orders.AddOrUpdate(mockOrders);           
             context.OrderItems.AddOrUpdate(new OrderItem[] { });   // TODO: Update this placeholder
@@ -189,6 +197,8 @@ namespace SeaSharpe_CVGS.Migrations
             context.Reviews.AddOrUpdate(new Review[] { });         // TODO: Update this placeholder
             context.SaveChanges();
         }
+
+
 
         /// <summary>
         /// Use this method to create a mock addresses
@@ -294,13 +304,16 @@ namespace SeaSharpe_CVGS.Migrations
         /// <returns>A game object with category relationships in place</returns>
         private Game MakeGame(string name, string releaseDate, decimal price, PlatformEnum platform, string image, string publisher, RatingEnum esrb, params CategoryEnum[] categories)
         {
+            Platform platformObj = mockPlatforms[platform];
+
             // Create game object
-            Game game = new Game
+            Game game = db.Games.FirstOrDefault(g => g.Name == name && g.Platform.Id == platformObj.Id) ??
+                new Game
             {
                 Name                 = name,
                 ReleaseDate          = DateTime.Parse(releaseDate),
                 SuggestedRetailPrice = price,
-                Platform             = mockPlatforms[platform],
+                Platform             = platformObj,
                 ImagePath            = image,
                 Publisher            = publisher,
                 ESRB                 = Enum.GetName(typeof(RatingEnum), esrb)
@@ -314,6 +327,29 @@ namespace SeaSharpe_CVGS.Migrations
             }
 
             return game;
+        }
+
+
+        private Friendship MakeFriendShip(string userNameFriender, string userNameFriendee, bool isFamily)
+        {
+            var checkIfExist = db.Friendships.FirstOrDefault(a => a.Friender.User.UserName == userNameFriender && a.Friendee.User.UserName == userNameFriendee);
+
+            //if the Frienship exist will return the existing friendShip
+            //this is to avoid duplicate mockData
+            if (checkIfExist != null)
+            {
+                return checkIfExist;
+            }
+
+            Member memberFriender = db.Members.FirstOrDefault(f => f.User.UserName == userNameFriender);
+            Member memberFriendee = db.Members.FirstOrDefault(f => f.User.UserName == userNameFriendee);
+
+            Friendship res = new Friendship();
+            res.Friender = memberFriender;
+            res.Friendee = memberFriendee;
+            res.IsFamilyMember = isFamily;
+
+            return res;
         }
 
         /// <summary>

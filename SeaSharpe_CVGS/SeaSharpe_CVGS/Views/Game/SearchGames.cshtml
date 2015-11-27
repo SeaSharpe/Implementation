@@ -9,65 +9,6 @@
         <title>@ViewBag.Title</title>
     </head>
     <body>
-        
-        <div id="wrapper">
-
-            <!-- Sidebar -->
-            <div id="sidebar-wrapper">
-                <ul class="sidebar-nav">
-                    <li class="sidebar-brand">
-                            Navigation                        
-                    </li>
-                    <li>
-                        <a href="#">Contact Us</a>
-                    </li>
-                    <li>
-                        <a href="#">Events</a>
-                    </li>
-                    <li>
-                        <a href="#">Shop</a>
-                    </li>
-                    <li class="sidebar-brand">
-                            Browse By Platform
-                    </li>
-                    <li>
-                        <a href="#">PS4</a>
-                    </li>
-                    <li>
-                        <a href="#">XBOX One</a>
-                    </li>
-                    <li>
-                        <a href="#">Wii U</a>
-                    </li>
-                    <li>
-                        <a href="#">PC</a>
-                    </li>
-                    <li class="sidebar-brand">
-                            Browse By Category
-                    </li>
-                    <li>
-                        <a href="#">Action</a>
-                    </li>
-                    <li>
-                        <a href="#">Adventure</a>
-                    </li>
-                    <li>
-                        <a href="#">MMO</a>
-                    </li>
-                    <li>
-                        <a href="#">RPG</a>
-                    </li>
-                    <li>
-                        <a href="#">Strategy</a>
-                    </li>
-                    <li>
-                        <a href="#">Other</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /#sidebar-wrapper -->
-            <div id="page-content-wrapper">
-                <div class="container-fluid">
                     <h2>@ViewBag.Title</h2>
                     <div class="row">
                         <div class="col-lg-12">
@@ -122,8 +63,6 @@
                                 </div>
                             }
 
-
-
                             <table class="table">
 
                                 <tr>
@@ -169,19 +108,12 @@
 
                                         <!-- Game Details Link-->
                                         <td>
-                                            @Html.ActionLink("Details", "Details", new { id = item.Id })
+                                            @Html.ActionLink("Details", "Details", new { id = item.Id})
                                         </td>
                                     </tr>
                                 }
                             </table>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /#page-content-wrapper -->
         </div>
-        <!-- /#wrapper -->
-       
-
     </body>
 </html>

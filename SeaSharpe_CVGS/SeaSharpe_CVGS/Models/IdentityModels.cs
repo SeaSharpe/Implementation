@@ -25,8 +25,12 @@ namespace SeaSharpe_CVGS.Models
         [Required] // NOT NULL
         [Column(TypeName = "char"), StringLength(1)] // CHAR(1)
         public string Gender { get; set; }
+
+        [Display(Name = "First Name")]
         [Required, MinLength(1), MaxLength(50)]
         public string FirstName { get; set; }
+
+        [Display(Name = "Last Name")]
         [Required, MinLength(1), MaxLength(50)]
         public string LastName { get; set; }
         [Required]
@@ -114,6 +118,8 @@ namespace SeaSharpe_CVGS.Models
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
         public virtual Platform Platform { get; set; }
+        [ForeignKey("Platform")]
+        public int Platform_Id { get; set; }
     }
 
     public partial class Review
