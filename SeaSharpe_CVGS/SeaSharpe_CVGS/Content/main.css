@@ -4,7 +4,12 @@
     background: linear-gradient(black, #05630C, #0FA00F, #05630C, black) center center fixed !important;
     font-size:18px;
 }
-
+#logo {
+    height: 3em;
+    width: 60px;
+    float:left;
+    margin-right: 15px;
+}
 /* Footer */
 footer {
     z-index:1111 !important;
