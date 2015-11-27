@@ -53,8 +53,12 @@
         </td>
     </tr>
 }
-
 </table>
+@if (TempData["EmptyCart"] != null)
+{
+    <p>@TempData["EmptyCart"]</p>
+    <br/>
+}
 
 @(Html.ActionLink("Remove Selected", "Index","Home", new { @class ="btn btn-primary"}))
 @(Html.ActionLink("Empty Cart", "Index", "Home", new { @class = "btn btn-primary" }))

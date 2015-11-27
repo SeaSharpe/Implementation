@@ -134,7 +134,7 @@ namespace SeaSharpe_CVGS.Controllers
             //int memberId = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId()).Id;
 
             //placeholder for getting member id
-            int memberId = 38;
+            int memberId = 40;
             
 
             //validate that memberId is valid
@@ -143,7 +143,8 @@ namespace SeaSharpe_CVGS.Controllers
             if (!exists)
             {
                 //empty cart
-                return View();
+                TempData["EmptyCart"] = "Cart is empty";
+                return View(Enumerable.Empty<Game>());
             }
 
             //This gets the cart order id
@@ -201,7 +202,38 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>game details view</returns>
         public ActionResult AddToCart(int? id)
         {
-            return RedirectToAction("Cart");
+            /*
+             * add item
+             */
+
+            //get userid
+            //int memberId = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId()).Id;
+
+            //placeholder for getting member id
+            int memberId = 40;
+
+            //check whether the member has a cart
+            var exists = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).Any();
+
+            if (!exists)
+            {
+                //create cart
+                db.SaveChanges();
+                //add item to cart
+                //return to details
+                return RedirectToAction("details", "Game", new { id });
+            }
+
+            //This gets the cart order id
+            int orderId = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).First().Id;
+
+            //add item to order
+            Order order = db.Orders.Find(orderId);
+
+            //add item to order
+            
+
+            return RedirectToAction("details", "Game", new { id });
         }
 
         /// <summary>

@@ -39,10 +39,11 @@ namespace SeaSharpe_CVGS.Controllers
             //    return RedirectToAction("GameManagement");
             //}
 
-            if (Roles.IsUserInRole(@"employee"))
-            {
-            return RedirectToAction("GameManagement");
-            }
+            //TODO: Comment back in
+            //if (Roles.IsUserInRole(@"employee"))
+            //{
+            //return RedirectToAction("GameManagement");
+            //}
 
 
             //User is visitor or member, redirect to SearchGames
