@@ -26,5 +26,32 @@ namespace SeaSharpe_CVGS.Controllers
 
             return View();
         }
+
+        public JsonResult SeedDatabase()
+        {
+            var db = new SeaSharpe_CVGS.Models.ApplicationDbContext();
+            try
+            {
+                (new SeaSharpe_CVGS.Migrations.Configuration()).SeedDebug(db);
+            }
+            catch (Exception e)
+            {
+                return Json(new { Success = false, Exception = new { Message = e.Message, Stacktrace = e.StackTrace } }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new
+            {
+                Success = true,
+                Users = db.Users.Count(),
+                Employees = db.Employees.Count(),
+                Members = db.Members.Count(),
+                Events = db.Events.Count(),
+                Addresses = db.Addresses.Count(),
+                Orders = db.Orders.Count(),
+                Games = db.Games.Count(),
+                Platforms = db.Platforms.Count(),
+                Categories = db.Catagories.Count(),
+                Reviews = db.Reviews.Count(),
+            }, JsonRequestBehavior.AllowGet);
+        }
     }
 }
