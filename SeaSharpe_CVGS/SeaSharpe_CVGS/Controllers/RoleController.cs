@@ -69,9 +69,12 @@ namespace SeaSharpe_CVGS.Controllers
         public override string[] GetRolesForUser(string username)
         {
             var roles = new System.Collections.Generic.List<string>();
-            if (DbContext.Members.Any(m => m.User.UserName == username)) roles.Add(Enum.GetName<Roles>(Roles.Member));
-            if (DbContext.Employees.Any(e => e.User.UserName == username)) roles.Add(Enum.GetName<Roles>(Roles.Employee));
-            if (DbContext.Users.Any(u => u.UserName == username)) roles.Add(Enum.GetName<Roles>(Roles.User));
+            if (DbContext.Members.Any(m => m.User.UserName == username)) 
+                roles.Add(Enum.GetName(typeof(Roles), Roles.Member));
+            if (DbContext.Employees.Any(e => e.User.UserName == username)) 
+                roles.Add(Enum.GetName(typeof(Roles), Roles.Employee));
+            if (DbContext.Users.Any(u => u.UserName == username)) 
+                roles.Add(Enum.GetName(typeof(Roles), Roles.User));
             return roles.ToArray();
         }
 
