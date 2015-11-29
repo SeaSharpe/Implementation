@@ -205,17 +205,5 @@ namespace SeaSharpe_CVGS.Controllers
         #endregion
        
 
-        /// <summary>
-        /// garbage collection
-        /// </summary>
-        /// <param name="disposing">garbage</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

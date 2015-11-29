@@ -161,18 +161,6 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("Index");
         }
 
-        /// <summary>
-        /// Garbage collection
-        /// </summary>
-        /// <param name="disposing">garbage</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
         #endregion
 
         #region Helper Methods
