@@ -36,7 +36,35 @@ namespace SeaSharpe_CVGS.Controllers
             //      return RedirectToAction("ReviewsRating");
             //}
             
-        }        
+        }   
+     
+        /// <summary>
+        /// List all reviews for a game and show average rating
+        /// </summary>
+        /// <returns>ReviewsRating view</returns>
+        public ActionResult ReviewsRating(int id)
+        {            
+            //Get list of all reviews/ratings for selected game
+            IQueryable<Review> gameReviews = db.Reviews.Where(r => r.Game_Id == id);
+            ViewData["averageRating"] = "No ratings for this game.";
+            if(gameReviews != null)
+            {
+                //Calculate average based on all reviews and ratings
+                ViewData["averageRating"] = gameReviews.Average(r => r.Rating);
+            }
+            //TODO: only show approved reviews
+            return View(gameReviews.ToList());
+        }
+
+        /// <summary>
+        /// Display details for selected review on ReviewsRating page
+        /// </summary>
+        /// <returns>PartialReviewDetails view</returns>
+        public PartialViewResult PartialReviewDetails(int id)
+        {
+            Review review = db.Reviews.Find(id);
+            return PartialView(review);
+        }
         #endregion
 
         #region Employee Side       
@@ -46,16 +74,18 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>ReviewManagement view</returns>
         public ActionResult ReviewManagement()
         {
-            return View(db.Reviews.ToList());
+            List<Review> reviewList = db.Reviews.Where(r => r.Aprover == null && r.Subject != null).ToList();
+            return View(reviewList);
         }
 
         /// <summary>
         /// displays the currently selected review for approval/rejection
         /// </summary>
         /// <returns>PartialSelectedReview view</returns>
-        public ActionResult PartialSelectedReview()
+        public PartialViewResult PartialSelectedReview(int id)
         {
-            return View();
+            Review review = db.Reviews.Find(id);
+            return PartialView(review);
         }
         /// <summary>
         /// post back for updating review to Accepted
@@ -94,25 +124,69 @@ namespace SeaSharpe_CVGS.Controllers
 
         #endregion
 
-        #region Member Side
-        /// <summary>
-        /// List all reviews for a game and show average rating
-        /// </summary>
-        /// <returns>ReviewsRating view</returns>
-        public ActionResult ReviewsRating()
-        {
-            return View(db.Reviews.ToList());
-        }
-
+        #region Member Side      
         /// <summary>
         /// Review/Rate a specific game form
         /// **displayed on game details view***
         /// </summary>
         /// <returns>PartialCreateReview view</returns>
-        public ActionResult PartialCreateReview()
-        {
-            return View();
+        public PartialViewResult PartialCreateReview(int id)
+        {            
+            return PartialView();
         }
+
+        /// <summary>
+        /// Postback for partialCreateReview, creates a new review or updates existing one if it is just a rating
+        /// </summary>
+        /// <returns>GameDetails view</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PartialCreateReview([Bind(Include = "Id,Rating,Subject,Body,Game_Id")] Review review)
+        {
+            try
+            {
+                //Update objects for model
+                Game reviewGame = db.Games.FirstOrDefault(g => g.Id == review.Game_Id);
+                review.Game = reviewGame;
+                review.Author = new Member();
+
+                //Update the model to include binded changes
+                ModelState.Clear();
+                TryValidateModel(review);
+
+                //Check if model is valid
+                if(ModelState.IsValid)
+                {
+                    Review originalReview = db.Reviews.FirstOrDefault(r => r.Id == review.Id);
+                    
+                    //Add new review if one does not already exist
+                    if (originalReview == null)
+                    {
+                        db.Reviews.Add(review);
+                    }
+
+                    //Update if review already exists
+                    else
+                    {
+                        db.Entry(review).State = EntityState.Modified;                        
+                    }
+                    db.SaveChanges();
+                    TempData["message"] = "Review added.";
+                }
+
+            }                
+
+            //Return message to member if exception
+            catch (Exception e)
+            {
+                TempData["message"] = "Error creating review: " + e.GetBaseException().Message;
+            }
+
+            TempData["review"] = review;
+            return RedirectToAction("Details", "Game", new { id = review.Game_Id });
+        }
+
+
        /// <summary>
         /// post back for review creation
         /// **** review must be validated by employee before appears in Reviews/Rating list ****
