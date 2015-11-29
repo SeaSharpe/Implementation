@@ -10,6 +10,13 @@
     float:left;
     margin-right: 15px;
 }
+hr {
+    margin-bottom: 50px !important;
+}
+.title {
+    text-decoration:underline;
+    font-weight:bold;
+}
 /* Footer */
 footer {
     z-index:1111 !important;
@@ -74,9 +81,25 @@ footer p {
 	color: #0FA00F;
 	box-shadow: inset 0 2px 0 0 black, inset 0 2px 2px 0 black;
 }
-h1 {
-    margin-bottom: 50px;
+ .defaultButton {
+	border-radius: 5px;
+	color: black;
+	border-left: black solid 1px;
+	border-right: black solid 1px;
+	border-top: black solid .1px;
+	border-bottom: black solid 1px;
+	font-weight: bold;	
+	font-size: 16px;
+	box-shadow: inset 0 0 2px 0 black;
 }
+.defaultButton:hover {
+	box-shadow: inset 0 1px 0 0 black, inset 0 1px 1px 0 black;
+	color: black;
+}
+.defaultButton:active {
+	box-shadow: inset 0 2px 0 0 black, inset 0 2px 2px 0 black;
+}
+
 /* tables */
 th {
     background-color: #0FA00F !important;
