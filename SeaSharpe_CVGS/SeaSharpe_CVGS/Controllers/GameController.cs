@@ -39,7 +39,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             if (Roles.IsUserInRole(@"employee"))
             {
-                return RedirectToAction("GameManagement");
+            return RedirectToAction("GameManagement");
             }
 
 

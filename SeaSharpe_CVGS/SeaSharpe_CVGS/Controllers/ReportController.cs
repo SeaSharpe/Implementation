@@ -9,7 +9,6 @@ namespace SeaSharpe_CVGS.Controllers
 {
     public class ReportController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
 
         /// <summary>
         /// Employee Side - display list of reports that can be created
