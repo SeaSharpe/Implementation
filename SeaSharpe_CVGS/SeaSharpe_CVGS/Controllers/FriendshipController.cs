@@ -20,14 +20,12 @@ namespace SeaSharpe_CVGS.Controllers
         /// <summary>
         /// Prop and Fields
         /// </summary>
-        private ApplicationDbContext db = new ApplicationDbContext();
-        private UserManager<ApplicationUser> userManager;
 
         private ApplicationUser CurrentUser
         {
             get
             {
-                return userManager.FindById(User.Identity.GetUserId());
+                return UserManager.FindById(User.Identity.GetUserId());
             }
         }
 
@@ -44,8 +42,6 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         public FriendshipController()
         {
-            db = new ApplicationDbContext();
-            userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(this.db));
         }
 
         #region Members
@@ -105,7 +101,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <returns>Index view</returns>
         public ActionResult AddFamily(string userName)
-        {
+            {
             Friendship newFriendship = new Friendship();
             newFriendship.Friender = CurrentMember;
 
@@ -114,13 +110,13 @@ namespace SeaSharpe_CVGS.Controllers
             newFriendship.IsFamilyMember = true;
 
             db.Friendships.Add(newFriendship);
-            db.SaveChanges();
+                db.SaveChanges();
 
             TempData["message"] = friendee.User.FirstName 
                 + " " + friendee.User.LastName + " added as family";
 
-            return RedirectToAction("Index");
-        }
+                return RedirectToAction("Index");
+            }
 
         /// <summary>
         /// Display wishlist of selected friend
@@ -139,11 +135,11 @@ namespace SeaSharpe_CVGS.Controllers
             return View(games);
         }
 
-        /// <summary>
+       /// <summary>
         /// Post back for delete friendship
-        /// </summary>
+       /// </summary>
         /// <param name="id">FrienderId</param>
-        /// <returns>Search/Show Friends view</returns>
+       /// <returns>Search/Show Friends view</returns>
         public ActionResult Delete(int id)
         {
             Friendship friendship = db.Friendships.FirstOrDefault
@@ -165,18 +161,6 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("Index");
         }
 
-        /// <summary>
-        /// Garbage collection
-        /// </summary>
-        /// <param name="disposing">garbage</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
         #endregion
 
         #region Helper Methods

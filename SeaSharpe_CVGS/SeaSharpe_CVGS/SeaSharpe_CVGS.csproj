@@ -160,6 +160,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AddressController.cs" />
+    <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\FriendshipController.cs" />
     <Compile Include="Controllers\GameController.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
