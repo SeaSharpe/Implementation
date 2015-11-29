@@ -73,7 +73,7 @@ namespace SeaSharpe_CVGS.Models
             [StringLength(50, MinimumLength = 2, ErrorMessage = "{0} needs to be between {2} and {1} characters long")]
             public string Country { get; set; }
 
-            [Required, StringLength(5), Column(TypeName = "char")]
+            [Required, StringLength(6), Column(TypeName = "char")]
             [PostalCodeValidation(ErrorMessage = "Postal Code must be valid 'N2H5C1'")]
             public string PostalCode { get; set; }
         }
@@ -126,6 +126,7 @@ namespace SeaSharpe_CVGS.Models
 
             [Required(ErrorMessage = "Required")]
             public virtual Platform Platform { get; set; }
+
         }
     }
 

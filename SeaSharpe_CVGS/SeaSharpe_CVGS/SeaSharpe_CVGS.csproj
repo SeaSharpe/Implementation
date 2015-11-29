@@ -178,13 +178,9 @@
     <Compile Include="Migrations\201511140312453_Init.Designer.cs">
       <DependentUpon>201511140312453_Init.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201511140503256_CVGS_Classes.cs" />
-    <Compile Include="Migrations\201511140503256_CVGS_Classes.Designer.cs">
-      <DependentUpon>201511140503256_CVGS_Classes.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511181849086_Update Games and EventMembers.cs" />
-    <Compile Include="Migrations\201511181849086_Update Games and EventMembers.Designer.cs">
-      <DependentUpon>201511181849086_Update Games and EventMembers.cs</DependentUpon>
+    <Compile Include="Migrations\201511271956227_CVGS_Classes.cs" />
+    <Compile Include="Migrations\201511271956227_CVGS_Classes.Designer.cs">
+      <DependentUpon>201511271956227_CVGS_Classes.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -198,6 +194,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\game.css" />
     <Content Include="Content\main.css" />
     <Content Include="Content\simple-sidebar.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -290,7 +287,6 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Game\Create.cshtml" />
-    <Content Include="Views\Game\Delete.cshtml" />
     <Content Include="Views\Game\Details.cshtml" />
     <Content Include="Views\Game\Edit.cshtml" />
     <Content Include="Views\Game\GameManagement.cshtml" />
@@ -350,11 +346,8 @@
     <EmbeddedResource Include="Migrations\201511140312453_Init.resx">
       <DependentUpon>201511140312453_Init.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511140503256_CVGS_Classes.resx">
-      <DependentUpon>201511140503256_CVGS_Classes.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511181849086_Update Games and EventMembers.resx">
-      <DependentUpon>201511181849086_Update Games and EventMembers.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511271956227_CVGS_Classes.resx">
+      <DependentUpon>201511271956227_CVGS_Classes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

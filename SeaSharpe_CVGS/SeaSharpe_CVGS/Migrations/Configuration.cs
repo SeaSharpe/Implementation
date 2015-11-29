@@ -23,6 +23,8 @@ namespace SeaSharpe_CVGS.Migrations
             AO,  // Adult Only"
         }
 
+        ApplicationDbContext db;
+
         Dictionary<PlatformEnum, Platform> mockPlatforms = new Dictionary<PlatformEnum, Platform>();
 
         Dictionary<CategoryEnum, Category> mockCategories = new Dictionary<CategoryEnum, Category>();
@@ -34,6 +36,10 @@ namespace SeaSharpe_CVGS.Migrations
 
         protected override void Seed(ApplicationDbContext context)
         {
+            //The top n application users will be employees, where n is the value of the NUMBER_OF_EMPLOYEES variable
+            const int NUMBER_OF_EMPLOYEES = 10;
+
+            db = context;
             foreach (PlatformEnum platform in Enum.GetValues(typeof(PlatformEnum)))
             {
                 string platformName = Enum.GetName(typeof(PlatformEnum), platform);
@@ -101,14 +107,42 @@ namespace SeaSharpe_CVGS.Migrations
                 MakeUser(@"fc9f53e7-7e24-42a6-9d06-ba9fe617f615", @"ckubicki@spider.com",      @"AA9TUtBQVS2mBeB4OoP5diXp9fKxg5L4iTPkQd7OuT609x7gJKt1No+c4U0Y9JW++g==",   @"CRITKUBICKI272730",      @"O",  @"CRIT",         @"KUBICKI",    @"2015-11-19 22:46:39",  @"2015-11-19 22:46:39")
             };
 
+            //MockEmployee Data
+            var mockEmployees = new Employee[NUMBER_OF_EMPLOYEES];
+            for (int i = 0; i < NUMBER_OF_EMPLOYEES; i++)
+            {
+                // If the user is already in the db, use that user. 
+                ApplicationUser existingUser = context.Users.Find(mockUsers[i].Id);
+                mockEmployees[i] = new Employee { User = existingUser ?? mockUsers[i], Id = i };
+            }
+
             // Mock Member Data
-            var mockMembers = new Member[mockUsers.Count()];
+            var mockMembers = new Member[mockUsers.Count() - NUMBER_OF_EMPLOYEES];
             for (int i = 0; i < mockMembers.Length; i++)
             {
                 // If the user is already in the db, use that user. 
-                ApplicationUser existingUser = context.Users.Find(mockUsers[i].Id); 
-                mockMembers[i] = new Member { User = existingUser ?? mockUsers[i], Id = i };
+                ApplicationUser existingUser = context.Users.Find(mockUsers[i + NUMBER_OF_EMPLOYEES].Id);
+                mockMembers[i] = new Member { User = existingUser ?? mockUsers[i + NUMBER_OF_EMPLOYEES], Id = i + NUMBER_OF_EMPLOYEES };
             }
+            context.Members.AddOrUpdate(mockMembers);
+            context.Employees.AddOrUpdate(mockEmployees);
+            context.SaveChanges();
+
+            
+            //Mock Address Data
+            var mockAddress = new Address[]
+            {               //memberId                  Address                 City            Region      Country     PostalCode
+                MakeAddress(@"CRITKUBICKI272730",       "123 Victory Road",     "Kitchener",    "Ontario",  "Canada",   "N2M5B5"),
+                MakeAddress(@"HEATHERLUNTERKOFLER5",    "789 Blue Ave",         "Kitchener",    "Ontario",  "Canada",   "N6M7B8"),
+                MakeAddress(@"HEATHERLUNTERKOFLER5",    "456 Fake Road",        "Kitchener",    "Ontario",  "Canada",   "N3M4B5"),
+                MakeAddress(@"JOHNESTIS244358",         "15 Weber St.",         "Waterloo",     "Ontario",  "Canada",   "N9M8B1"),
+                MakeAddress(@"JAMES P.FAIRWTHR39",      "815 Brybeck St.",      "Kitchener",    "Ontario",  "Canada",   "N3M4B7"),
+            };
+
+            context.Addresses.AddOrUpdate(mockAddress);
+            context.SaveChanges();
+
+            
             
             // Mock Game Data
             var mockGames = new Game[]
@@ -124,21 +158,135 @@ namespace SeaSharpe_CVGS.Migrations
                 MakeGame("test",                          "2015-12-16 00:00:00",    20.00m,   PlatformEnum.PS4,    "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",             null,   RatingEnum.EC, CategoryEnum.FPS),
                 MakeGame("A Game with no categories",     "2015-11-02 00:00:00",    20.00m,   PlatformEnum.Mobile, "http://files.sabotagetimes.com/image/upload/MTI5NDc3Mjk5NTgxMDY1Njk0.jpg",             null,   RatingEnum.EC)
             };
+            context.Games.AddOrUpdate(mockGames);
+            context.SaveChanges();
             
+            //Mock Order Data
+            var mockOrders = new Order[]
+            {
+                         //UserName                 ApproverId                  orderPlacementDate      shipDate                billAddr    shippAddr   IsProcessed     Games
+                //order shipped
+                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-11 00:00:00",  1,          1,          true,           "Fallout 4" ),
+                //cart made with games, not paid for, not processed, not shipped
+                MakeOrder(@"JOHNESTIS244358",       null,                       null,                   null,                   4,          4,          false,          "Footbal Manager 2016", "Counter-Strike"),
+                //order shipped
+                MakeOrder(@"JOHNESTIS244358",       @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-11 00:00:00",  4,          4,          true,           "Skyrim"),
+                //order paid for, not processed, not shipped
+                MakeOrder(@"JAMES P.FAIRWTHR39",    null,                       "2015-11-11 04:00:00",  null,                   5,          5,          false,          "Skyrim", "rwar"),
+                //order paid for, order has been processed, not shipped
+                MakeOrder(@"HEATHERLUNTERKOFLER5",  @"abaswell@arachnet.ca",    "2015-11-11 04:00:00",  null,                   2,          3,          true,           "Skyrim", "rwar")
+            };
+            
+            var mockFriendships = new Friendship[]
+            {
+                MakeFriendShip("JOHNESTIS244358", "HEATHERLUNTERKOFLER5", false),
+                MakeFriendShip("JOHNESTIS244358", "CRITKUBICKI272730", false),
+                MakeFriendShip("JOHNESTIS244358", "PAULACOSTAIN1188335", true),
+                MakeFriendShip("JOHNESTIS244358", "RICHARD M.TURNER473", true)
+            };
+
             // Fill the tables
             context.Users.AddOrUpdate(mockUsers);
-            context.Employees.AddOrUpdate(new Employee[] { });     // TODO: Update this placeholder
-            context.Members.AddOrUpdate(mockMembers);
-            context.Friendships.AddOrUpdate(new Friendship[] { }); // TODO: Update this placeholder
+            context.Friendships.AddOrUpdate(mockFriendships);
             context.Events.AddOrUpdate(new Event[] { });           // TODO: Update this placeholder
-            context.Addresses.AddOrUpdate(new Address[] { });      // TODO: Update this placeholder
-            context.Orders.AddOrUpdate(new Order[] { });           // TODO: Update this placeholder
+            context.Orders.AddOrUpdate(mockOrders);           
             context.OrderItems.AddOrUpdate(new OrderItem[] { });   // TODO: Update this placeholder
-            context.Games.AddOrUpdate(mockGames);
             context.Platforms.AddOrUpdate(mockPlatforms.Values.ToArray());
             context.Catagories.AddOrUpdate(mockCategories.Values.ToArray());
             context.Reviews.AddOrUpdate(new Review[] { });         // TODO: Update this placeholder
             context.SaveChanges();
+        }
+
+
+
+        /// <summary>
+        /// Use this method to create a mock addresses
+        /// </summary>
+        /// <param name="member">Username of the ApplicationUser</param>
+        /// <param name="addressName">address</param>
+        /// <param name="city">city name</param>
+        /// <param name="region">region(/province)</param>
+        /// <param name="country">country name</param>
+        /// <param name="postalCode">postal code</param>
+        /// <returns>Address Object</returns>
+        private Address MakeAddress(string member, string addressName, string city, string region, string country, string postalCode)
+        {
+            Address address = new Address
+            {
+                Member = db.Members.First(m => m.User.UserName == member),
+                StreetAddress = addressName,
+                City = city,
+                Region = region,
+                Country = country,
+                PostalCode = postalCode
+            };
+
+            return address;
+        }
+
+        /// <summary>
+        /// Use this method to create a mock order
+        /// </summary>
+        /// <param name="member">memberId</param>
+        /// <param name="aprover">approverId (null if unprocessed)</param>
+        /// <param name="orderPlacementDate">order placement date (null for shopping cart)</param>
+        /// <param name="shipDate">date that it was shipped out (null if not yet shipped)</param>
+        /// <param name="billingAddressIndex">index of billing address</param>
+        /// <param name="shippingAddressIndex">index of shipping address</param>
+        /// <param name="isProcessed">true if it has been processed</param>
+        /// <param name="games">name of all games in the order</param>
+        /// <returns>Order Object</returns>
+        private Order MakeOrder(string member, string aprover, string orderPlacementDate, string shipDate, int billingAddressIndex, int shippingAddressIndex, bool isProcessed, params string[] games)
+        {
+            Order order = new Order
+            {
+                Member = db.Members.First(m => m.User.UserName == member),
+                Aprover = db.Employees.FirstOrDefault(e => e.User.UserName == aprover),
+                BillingAddress = null, //db.Addresses.First(b => b.Id == billingAddressIndex),
+                ShippingAddress = null, //db.Addresses.First(b => b.Id == shippingAddressIndex),
+                IsProcessed = isProcessed
+            };
+
+            if (shipDate == null)
+            {
+                order.ShipDate = null;
+            }
+            else
+            {
+                order.ShipDate = DateTime.Parse(shipDate);
+            }
+
+            if (orderPlacementDate == null)
+            {
+                order.OrderPlacementDate = null;
+            }
+            else
+            {
+                order.OrderPlacementDate = DateTime.Parse(orderPlacementDate);
+            }
+
+            /*
+            if (aprover == null)
+            {
+                order.Aprover = null;
+            }
+            else
+            {
+                order.Aprover = 
+            }*/
+
+            if (order.OrderItems == null)
+            {
+                order.OrderItems = new List<OrderItem>();
+            }
+
+            foreach (string game in games)
+            {
+                var currGame = db.Games.First(g => g.Name == game);
+                order.OrderItems.Add(new OrderItem { Order = order, Game = currGame, SalePrice = currGame.SuggestedRetailPrice });
+            }
+
+            return order;
         }
 
         /// <summary>
@@ -155,13 +303,16 @@ namespace SeaSharpe_CVGS.Migrations
         /// <returns>A game object with category relationships in place</returns>
         private Game MakeGame(string name, string releaseDate, decimal price, PlatformEnum platform, string image, string publisher, RatingEnum esrb, params CategoryEnum[] categories)
         {
+            Platform platformObj = mockPlatforms[platform];
+
             // Create game object
-            Game game = new Game
+            Game game = db.Games.FirstOrDefault(g => g.Name == name && g.Platform.Id == platformObj.Id) ??
+                new Game
             {
                 Name                 = name,
                 ReleaseDate          = DateTime.Parse(releaseDate),
                 SuggestedRetailPrice = price,
-                Platform             = mockPlatforms[platform],
+                Platform             = platformObj,
                 ImagePath            = image,
                 Publisher            = publisher,
                 ESRB                 = Enum.GetName(typeof(RatingEnum), esrb)
@@ -175,6 +326,29 @@ namespace SeaSharpe_CVGS.Migrations
             }
 
             return game;
+        }
+
+
+        private Friendship MakeFriendShip(string userNameFriender, string userNameFriendee, bool isFamily)
+        {
+            var checkIfExist = db.Friendships.FirstOrDefault(a => a.Friender.User.UserName == userNameFriender && a.Friendee.User.UserName == userNameFriendee);
+
+            //if the Frienship exist will return the existing friendShip
+            //this is to avoid duplicate mockData
+            if (checkIfExist != null)
+            {
+                return checkIfExist;
+            }
+
+            Member memberFriender = db.Members.FirstOrDefault(f => f.User.UserName == userNameFriender);
+            Member memberFriendee = db.Members.FirstOrDefault(f => f.User.UserName == userNameFriendee);
+
+            Friendship res = new Friendship();
+            res.Friender = memberFriender;
+            res.Friendee = memberFriendee;
+            res.IsFamilyMember = isFamily;
+
+            return res;
         }
 
         /// <summary>
@@ -204,6 +378,11 @@ namespace SeaSharpe_CVGS.Migrations
                 DateOfBirth = DateTime.Parse(birthdate),
                 DateOfRegistration = DateTime.Parse(dateRegistered),
                 LockoutEnabled = true };
+        }
+
+        public void SeedDebug(ApplicationDbContext context)
+        {
+            Seed(context);
         }
     }
 }

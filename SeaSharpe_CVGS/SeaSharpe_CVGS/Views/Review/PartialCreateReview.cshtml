@@ -1,1 +1,60 @@
-﻿
+﻿@model SeaSharpe_CVGS.Models.Review
+
+<!-- Add review form partial page -->
+<h2>Review Game</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Game</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+
+        <!-- Review Subject -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Subject, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Subject)
+                @Html.ValidationMessageFor(model => model.Subject)
+            </div>
+        </div>
+
+        <!-- Review Body -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Body, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Body)
+                @Html.ValidationMessageFor(model => model.Body)
+            </div>
+        </div>
+
+        <!-- Rating -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Rating, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.RadioButtonFor(model => model.Rating, 1)
+                @Html.RadioButtonFor(model => model.Rating, 2)
+                @Html.RadioButtonFor(model => model.Rating, 3)
+                @Html.RadioButtonFor(model => model.Rating, 4)
+                @Html.RadioButtonFor(model => model.Rating, 5)
+                @Html.RadioButtonFor(model => model.Rating, 6)
+                @Html.RadioButtonFor(model => model.Rating, 7)
+                @Html.RadioButtonFor(model => model.Rating, 8)
+                @Html.RadioButtonFor(model => model.Rating, 9)
+                @Html.RadioButtonFor(model => model.Rating, 10)
+                @Html.ValidationMessageFor(model => model.Body)
+            </div>
+        </div>
+        
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="reset" value="Reset" class="btn btn-default" />
+                <input type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

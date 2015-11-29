@@ -1,4 +1,17 @@
-﻿footer {
+﻿body {
+    padding-bottom: 70px !important;
+    color: black !important;
+    background: linear-gradient(black, #05630C, #0FA00F, #05630C, black) center center fixed !important;
+    font-size:18px;
+}
+#logo {
+    height: 3em;
+    width: 60px;
+    float:left;
+    margin-right: 15px;
+}
+/* Footer */
+footer {
     z-index:1111 !important;
     background-color:black !important;
     margin:0 !important;
@@ -8,15 +21,11 @@
     bottom:0 !important;
 }
 footer p {
-    color:white !important;
+    color: white !important;
+    font-size: 14px !important;
     padding: 15px 0 5px 15px !important;
 }
-body {
-    padding-bottom: 70px !important;
-    color:black !important;
-    background: linear-gradient(black, #05630C, #0FA00F, #05630C, black) center center fixed !important;
-}
-
+/* Header */
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
   color: #05630C !important;
@@ -34,6 +43,73 @@ body {
   color: #0FA00F !important;
 }
 .navbar-inverse {
-  background-color: black;
-  border-color: #080808;
+  background-color: black !important;
+  border-color: #080808 !important;
+}
+@media (min-width: 768px) {
+    .navbar-nav {
+        float: right !important;
+    }
+}
+/* Button button who's got the button? */
+ .greenButton {
+	border-radius: 5px;
+	background-color: #0FA00F;
+	color: black;
+	border-left: black solid 1px;
+	border-right: black solid 1px;
+	border-top: black solid .1px;
+	border-bottom: black solid 1px;
+	font-weight: bold;	
+	font-size: 16px;
+	box-shadow: inset 0 0 2px 0 black;
+}
+.greenButton:hover {
+	box-shadow: inset 0 1px 0 0 black, inset 0 1px 1px 0 black;
+	background: linear-gradient(-45deg, black, #0FA00F, #0FA00F, black);
+	color: black;
+}
+.greenButton:active {
+	background: linear-gradient(-45deg, #0FA00F, black, #0FA00F);
+	color: #0FA00F;
+	box-shadow: inset 0 2px 0 0 black, inset 0 2px 2px 0 black;
+}
+h1 {
+    margin-bottom: 50px;
+}
+/* tables */
+th {
+    background-color: #0FA00F !important;
+    text-align:center;
+}
+td {
+    font-weight: bold;  
+    text-align:center;
+}
+.table tbody>tr>td{
+    vertical-align: middle;
+}
+table td, table th {
+  border: 1px solid black;
+}
+table tr:first-child th {
+  border-top: 0;
+}
+
+table tr:last-child td {
+  border-bottom: 0;
+}
+table tr td:first-child,
+table tr th:first-child {
+  border-left: 0;
+}
+table tr td:last-child,
+table tr th:last-child{
+  border-right: 0;
+}
+table a {
+    color: #0FA00F !important;
+}
+table a:hover {
+    color: #05630C !important;
 }

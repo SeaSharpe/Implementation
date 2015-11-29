@@ -1,0 +1,13 @@
+﻿.listbox {
+    width:125px;
+    height:5em;
+}
+
+img {
+    height:2.5em;
+    width:75px;
+}
+
+#searchSubmit {
+    margin-left:25px;
+}
