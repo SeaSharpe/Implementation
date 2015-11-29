@@ -10,7 +10,7 @@ namespace SeaSharpe_CVGS.Controllers
     {
         public ActionResult Index()
         {
-            return View(db.Games.ToList());
+            return View();
         }
 
         public ActionResult About()
