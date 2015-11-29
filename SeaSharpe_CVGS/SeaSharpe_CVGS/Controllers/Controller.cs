@@ -38,7 +38,7 @@ namespace SeaSharpe_CVGS.Controllers
         {
             get
             {
-                return _db ?? new ApplicationDbContext();
+                return _db ?? (_db = new ApplicationDbContext());
             }
 
             protected set
@@ -75,6 +75,12 @@ namespace SeaSharpe_CVGS.Controllers
         {
             if (disposing)
             {
+                if (_db != null)
+                {
+                    _db.Dispose();
+                    _db = null;
+                }
+
                 if (_userManager != null)
                 {
                     _userManager.Dispose();
