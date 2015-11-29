@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SeaSharpe_CVGS.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +9,8 @@ namespace SeaSharpe_CVGS.Controllers
 {
     public class ReportController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         /// <summary>
         /// Employee Side - display list of reports that can be created
         /// </summary>
@@ -24,7 +27,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Game Details view</returns>
         public ActionResult GameDetailsReport()
         {
-            return View();
+            return View(db.Games.ToList());
         }
 
         /// <summary>
@@ -33,7 +36,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>List Games view</returns>
         public ActionResult ListGamesReport()
         {
-            return View();
+             return View(db.Games.ToList());
         }
 
         /// <summary>
@@ -42,7 +45,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>List Members view</returns>
         public ActionResult ListMembersReport()
         {
-            return View();
+            return View(db.Members.ToList());
         }
 
         /// <summary>
@@ -52,7 +55,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Member Details view</returns>
         public ActionResult MemberDetailsReport()
         {
-            return View();
+            return View(db.Members.ToList());
         }
 
         /// <summary>
