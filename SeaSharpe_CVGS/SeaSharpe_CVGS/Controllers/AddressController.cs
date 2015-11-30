@@ -12,8 +12,6 @@ namespace SeaSharpe_CVGS.Controllers
 {
     public class AddressController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
         /// <summary>
         /// Partial view in member profile
         /// </summary>
@@ -95,17 +93,5 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("Index");
         }
 
-        /// <summary>
-        /// garbage collection
-        /// </summary>
-        /// <param name="disposing">garbage</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

@@ -61,7 +61,18 @@
             @Html.DisplayFor(model => model.ESRB)
         </dd>
 
-        @Html.Partial("~/Views/Review/PartialCreateReview.cshtml", ViewData["review"])
+        <!-- display create review form if review is approved, else display review details TODO: replace true with !isApproved-->
+        @if (true) 
+        { 
+            @Html.Partial("~/Views/Review/PartialCreateReview.cshtml", ViewData["review"]); 
+        }        
+        
+        else
+        {
+            @Html.Partial("~/Views/Review/PartialReviewDetails.cshtml", ViewData["review"]);    
+        }
+        
+        
     </dl>
 </div>
 <!-- End Right Hand Side-->

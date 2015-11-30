@@ -143,6 +143,8 @@ namespace SeaSharpe_CVGS.Models
         public virtual Employee Aprover { get; set; } // todo: correct spelling to Approver
         public float Rating { get; set; }
         public string Subject { get; set; }
+        [ForeignKey("Game")]
+        public int Game_Id { get; set; }
         public string Body { get; set; }
         public bool IsApproved { get; set; }
     }
