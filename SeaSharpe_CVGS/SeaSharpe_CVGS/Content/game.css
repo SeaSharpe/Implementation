@@ -19,6 +19,3 @@ a {
 a:hover {
     color: #05630C;
 }
-select option[selected=selected]{
-    background-color: #05630C;
-}
