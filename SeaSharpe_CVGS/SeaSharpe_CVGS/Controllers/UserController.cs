@@ -27,30 +27,19 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Edit view</returns>
         public ActionResult Edit(int? id)
         {
-            Member member = db.Members.Find(id);
+            Member member = db.Members.FirstOrDefault(m => m.Id == id || m.User.UserName == User.Identity.Name);
 
-            if (id == null)
-            {   // Return view with current member when no id supplied
-                return View(CurrentMember);
-            }
-            else if (CurrentMember != null && CurrentMember.Id == id)
-            {   // Return view with current member when their id supplied
-                return View(CurrentMember);
+            if (member == null)
+            {
+                return HttpNotFound();
             }
 
-            if (IsEmployee)
-            {   
-                if (member != null)
-                {
-                    return View(member);
-                }
-                else
-                {
-                    return HttpNotFound();
-                }
+            if ( User.IsInRole("Employee") || member.User.UserName == User.Identity.Name )
+            {
+                return View(member);
             }
 
-            return new HttpUnauthorizedResult("You do not have permission to edit another member's profile.");
+            throw new UnauthorizedAccessException("You may not access this profile.");
         }
 
         /// <summary>
