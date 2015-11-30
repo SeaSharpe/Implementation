@@ -1,7 +1,7 @@
 ﻿body {
-    padding-bottom: 70px !important;
-    color: black !important;
-    background: linear-gradient(black, #05630C, #0FA00F, #05630C, black) center center fixed !important;
+    padding-bottom: 70px;
+    color: black;
+    background: linear-gradient(black, #05630C, #0FA00F, #05630C, black) center center fixed;
     font-size:18px;
 }
 #logo {
@@ -11,7 +11,7 @@
     margin-right: 15px;
 }
 hr {
-    margin-bottom: 50px !important;
+    margin-bottom: 50px;
 }
 .title {
     text-decoration:underline;
@@ -19,43 +19,43 @@ hr {
 }
 /* Footer */
 footer {
-    z-index:1111 !important;
-    background-color:black !important;
-    margin:0 !important;
-    margin-bottom:-5px !important;
-    clear:both !important;
-    padding-bottom:5px !important;
-    bottom:0 !important;
+    z-index:1111;
+    background-color:black;
+    margin:0;
+    margin-bottom:-5px;
+    clear:both;
+    padding-bottom:5px;
+    bottom:0;
 }
 footer p {
-    color: white !important;
-    font-size: 14px !important;
-    padding: 15px 0 5px 15px !important;
+    color: white;
+    font-size: 14px;
+    padding: 15px 0 5px 15px;
 }
 /* Header */
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
-  color: #05630C !important;
-  background-color: transparent !important;
+  color: #05630C;
+  background-color: transparent;
 }
 .navbar-inverse .navbar-nav > li > a {
-  color: white !important;
+  color: white;
 }
 .navbar-inverse .navbar-brand:hover,
 .navbar-inverse .navbar-brand:focus {
-  color: #05630C !important;
-  background-color: transparent !important;
+  color: #05630C;
+  background-color: transparent;
 }
 .navbar-inverse .navbar-brand {
-  color: #0FA00F !important;
+  color: #0FA00F;
 }
 .navbar-inverse {
-  background-color: black !important;
-  border-color: #080808 !important;
+  background-color: black;
+  border-color: #080808;
 }
 @media (min-width: 768px) {
     .navbar-nav {
-        float: right !important;
+        float: right;
     }
 }
 /* Button button who's got the button? */
@@ -102,7 +102,7 @@ footer p {
 
 /* tables */
 th {
-    background-color: #0FA00F !important;
+    background-color: #0FA00F;
     text-align:center;
 }
 td {
@@ -131,8 +131,17 @@ table tr th:last-child{
   border-right: 0;
 }
 table a {
-    color: #0FA00F !important;
+    color: #0FA00F;
 }
 table a:hover {
-    color: #05630C !important;
+    color: #05630C;
+}
+/* selects */
+select[multiple]{
+    border: 1px solid #0FA00F;
+}
+
+select[multiple] option:hover
+{
+    background-color:#0FA00F;
 }
