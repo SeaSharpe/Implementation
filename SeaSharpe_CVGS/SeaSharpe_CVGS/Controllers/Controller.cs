@@ -71,6 +71,36 @@ namespace SeaSharpe_CVGS.Controllers
             }
         }
 
+        public ApplicationUser CurrentUser
+        {
+            get
+            {
+                return DbContext.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            }
+        }
+
+        public Member CurrentMember
+        {
+            get
+            {
+                return DbContext.Members.FirstOrDefault(m => m.User.UserName == User.Identity.Name);
+            }
+        }
+
+        public Employee CurrentEmployee
+        {
+            get
+            {
+                return DbContext.Employees.FirstOrDefault(e => e.User.UserName == User.Identity.Name);
+            }
+        }
+
+        public bool IsAuthenticated { get { return User.Identity.IsAuthenticated; } }
+
+        public bool IsEmployee { get { return CurrentEmployee != null; } }
+
+        public bool IsMember { get { return CurrentMember != null; } }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

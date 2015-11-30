@@ -29,25 +29,18 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         public ActionResult Index()
         {
-            // to be uncommented when roles are made
-            //User is employee, redirect to GameManagement
-
-            //if (Roles.IsUserInRole(@"employee"))
-            //{
-            //    return RedirectToAction("GameManagement");
-            //}
-
-            if (Roles.IsUserInRole(@"employee"))
+            //User is employee, go to game management page
+            if (IsEmployee)
             {
-            return RedirectToAction("GameManagement");
+                return RedirectToAction("GameManagement");
             }
 
 
             //User is visitor or member, redirect to SearchGames
-            //else
-            //{
+            else
+            {
                return RedirectToAction("SearchGames");
-            //}        
+            }        
         }
 
         /// <summary>
@@ -109,6 +102,7 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Game game = db.Games.Find(id);
             if (game == null)
             {
@@ -124,22 +118,26 @@ namespace SeaSharpe_CVGS.Controllers
             //Get gameReview if it was not stored in tempdata from postback
             if(gameReview == null)
             {
-                //Temporary pull a review which mimics existing review for this user
-                //TODO: replace this with review from current user if it exists
-                gameReview = db.Reviews.FirstOrDefault();
+                if(IsMember)
+                {
+                    //Get current review for this member/game combination
+                    gameReview = db.Reviews.FirstOrDefault(r => r.Author.Id == CurrentMember.Id && r.Game_Id == id);
+                }                
 
                 //No review for this user, display blank form
                 if (gameReview == null)
                 {
-                    //WORK IN PROGRESS: CHECK FOR EXISTING REVIEW FOR THIS USER
                     gameReview = new Review();
-                }               
+                }
+
+                //Set gameReview game id to current game
+                gameReview.Game_Id = game.Id;  
             }
 
-            gameReview.Game_Id = game.Id;            
-
             //Push game review to view so it can be passed to the partial view for review
-            ViewData["review"] = gameReview;          
+            ViewData["isApproved"] = gameReview.IsApproved;
+            ViewData["review"] = gameReview;   
+                   
             return View(game);
         }
 
@@ -189,7 +187,7 @@ namespace SeaSharpe_CVGS.Controllers
                 
                 //Add game categories if value not null
                 if(Categories != null)
-        {
+                {
                     ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
                     game.Categories = gameCategories;
                 }     
@@ -198,12 +196,12 @@ namespace SeaSharpe_CVGS.Controllers
                 ModelState.Clear();
                 TryValidateModel(game);
 
-            if (ModelState.IsValid)
-            {
-                db.Games.Add(game);
-                db.SaveChanges();
-                return RedirectToAction("GameManagement");
-            }
+                if (ModelState.IsValid)
+                {
+                    db.Games.Add(game);
+                    db.SaveChanges();
+                    return RedirectToAction("GameManagement");
+                }
             }
 
             //Return message to employee if exception
@@ -267,7 +265,7 @@ namespace SeaSharpe_CVGS.Controllers
                 Game originalGame = db.Games.Find(game.Id);
                 originalGame.Categories.Clear();
                 foreach (Category c in gameCategories)
-        {
+                {
                     originalGame.Categories.Add(c);
                 }
                 db.SaveChanges();
@@ -276,13 +274,13 @@ namespace SeaSharpe_CVGS.Controllers
                 //Update the model to include binded changes
                 ModelState.Clear();
                 TryValidateModel(game);
-            if (ModelState.IsValid)
-            {
-                db.Entry(game).State = EntityState.Modified;
-                db.SaveChanges();
+                if (ModelState.IsValid)
+                {
+                    db.Entry(game).State = EntityState.Modified;
+                    db.SaveChanges();
                     TempData["message"] = "Game with ID: " + game.Id + " updated.";
-                return RedirectToAction("GameManagement");
-            }
+                    return RedirectToAction("GameManagement");
+                }
             }
 
             catch (Exception e)
@@ -309,8 +307,8 @@ namespace SeaSharpe_CVGS.Controllers
                 game.Categories.Clear();
 
                 //Remove game and save changes
-            db.Games.Remove(game);
-            db.SaveChanges();
+                db.Games.Remove(game);
+                db.SaveChanges();
                 TempData["message"] = game.Name + " and it's dependencies have been deleted.";
             }
 
