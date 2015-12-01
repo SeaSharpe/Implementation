@@ -140,27 +140,28 @@ namespace SeaSharpe_CVGS.Controllers
             ViewData["review"] = gameReview;   
                    
             return View(game);
-        }
-
-        /// <summary>
-        /// Displays game list page for employees
-        /// </summary>
-        /// <returns>List of games view</returns>
-        public ActionResult GameManagement()
-        {
-            IEnumerable<Game> gameList = db.Games.Include(g => g.Platform).Include(g => g.Categories);
-            return View(gameList.ToList());
-        }
+        }        
 
         #endregion
 
         #region Employee Side
 
         /// <summary>
+        /// Displays game list page for employees
+        /// </summary>
+        /// <returns>List of games view</returns>
+        [Authorize(Roles = "Employee")]
+        public ActionResult GameManagement()
+        {
+            IEnumerable<Game> gameList = db.Games.Include(g => g.Platform).Include(g => g.Categories);
+            return View(gameList.ToList());
+        }
+
+        /// <summary>
         /// Employee Side - Add a game
         /// </summary>
         /// <returns>return add/edit game view</returns>
-       
+        [Authorize(Roles = "Employee")]
         public ActionResult Create()
         {
             PopulateDropdownData();
@@ -175,6 +176,7 @@ namespace SeaSharpe_CVGS.Controllers
         //ADD EMPLOYY AUTH
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee")]
         public ActionResult Create([Bind(Include = "Id,Name,ReleaseDate,SuggestedRetailPrice, ImagePath, Publisher, ESRB")] Game game, int? Platform, int[] Categories)
         {            
             try
@@ -220,6 +222,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>add/edit game view</returns>
+        [Authorize(Roles = "Employee")]
         public ActionResult Edit(int? id)
         {
             //Attempt to access edit page without game id
@@ -253,6 +256,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee")]
         public ActionResult Edit([Bind(Include = "Id,Name,ReleaseDate,SuggestedRetailPrice, ImagePath, Publisher, ESRB, Categories, Platform_id")] Game game, int[] Categories)
         {
             try
@@ -299,6 +303,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>list of games view</returns>
+        [Authorize(Roles = "Employee")]
         public ActionResult Delete(int id)
         {
             Game game = db.Games.Find(id);
@@ -327,6 +332,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>game details view</returns>
+        [Authorize(Roles = "Member")]
         public ActionResult AddToWishList(int? id)
         {
             return RedirectToAction("Details");
@@ -337,6 +343,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>game details view</returns>
+        [Authorize(Roles = "Member")]
         public ActionResult Download(int? id)
         {
             return RedirectToAction("Details");
