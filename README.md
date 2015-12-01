@@ -35,22 +35,32 @@ December 11, 2015 | Final Due Date
 - ~~Add String to games table for image path~~
 - ~~ESRB Rating & Publisher add to DB~~
 - Game controller
-  - let members search for games
-  - let members select games from a list
-  - let employees add, edit and delete games
-  - display details of the selected games
+  - ~~let members search for games~~
+  - ~~let members select games from a list~~
+  - ~~let employees add, edit and delete games~~
+  - ~~display details of the selected games~~
   - add to wishlist
-  - rate game: let 1) members rate games; 2) summarize individual results and display the overall rating for each game
-  - review games: let members write reviews of games.  Reviews must be approved by a moderator before they are published on the website
+  - display library of members ordered/downloaded games
+  - ~~rate game: let 1) members rate games; 2) summarize individual results and display the overall rating for each game~~
+  - ~~review games: let members write reviews of games.  Reviews must be approved by a moderator before they are published on the website~~
+  - ~~review games: let employees view pending reviews for approval~~
+  - ~~review games: let employees approve/disprove reviews~~
+  - ~~review games: let members and visitors view reviews for a game~~
   - download: let members download free and shareware games
 - User controller
   - Profile: let members enter their display name, actual name, email, gender and birth date; let the member decide whether to receive promotional emails from CVGS
+    - **Started** 
+    - fighting with modelstate
   - Preferences: let members indicate their: favourite platform(or platforms) and; favourite game category (or categories)
+    - **Not Started**
+    - requires db / model modification 
   - Address: let the member enter, modify and delete their 1) address; 2) "ship to" address
-  - ~~Credit Cards: let the member register one or more valid credit card~~ **Using Stripe**
+    - **Started** 
+  - Credit Cards: let the member register one or more valid credit card Using Stripe
+    - **Not Started**
 - Friendship controller
-  - view wishlist (pass in id, either of friend or member's own id to view own wishlist).  Let only friends and relatives view the wish list with option
-  - Add member/members in the Friends and Family list
+  - ~~view wishlist (pass in id, either of friend or member's own id to view own wishlist).  Let only friends and relatives view the wish list with option~~
+  - ~~Add member/members in the Friends and Family list~~
 - Event controller
  - let employees add, edit and delete information about upcoming events.
  - let members register for upcoming events

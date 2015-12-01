@@ -215,30 +215,6 @@ namespace SeaSharpe_CVGS.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Check if a user is an employee
-        /// </summary>
-        /// <param name="user">The user to check</param>
-        /// <param name="db">If the db context is not provided a new one will be created.</param>
-        /// <returns>True if user is an employee.</returns>
-        public static bool IsEmployee(ApplicationUser user, ApplicationDbContext db = null)
-        {
-            if (db == null) db = new ApplicationDbContext();
-            return db.Employees.FirstOrDefault(employee => employee.User == user) != null;
-        }
-
-        /// <summary>
-        /// Check if a user is a member
-        /// </summary>
-        /// <param name="user">The user to check</param>
-        /// <param name="db">If the db context is not provided a new one will be created.</param>
-        /// <returns>True if user is a member</returns>
-        public static bool IsMember(ApplicationUser user, ApplicationDbContext db = null)
-        {
-            if (db == null) db = new ApplicationDbContext();
-            return db.Members.FirstOrDefault(member => member.User == user) != null;
-        }
-
         //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
