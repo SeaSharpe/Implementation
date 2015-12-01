@@ -53,8 +53,8 @@ December 11, 2015 | Final Due Date
   - Address: let the member enter, modify and delete their 1) address; 2) "ship to" address
   - ~~Credit Cards: let the member register one or more valid credit card~~ **Using Stripe**
 - Friendship controller
-  - view wishlist (pass in id, either of friend or member's own id to view own wishlist).  Let only friends and relatives view the wish list with option
-  - Add member/members in the Friends and Family list
+  - ~~view wishlist (pass in id, either of friend or member's own id to view own wishlist).  Let only friends and relatives view the wish list with option~~
+  - ~~Add member/members in the Friends and Family list~~
 - Event controller
  - let employees add, edit and delete information about upcoming events.
  - let members register for upcoming events
