@@ -1,15 +1,40 @@
 ﻿@model SeaSharpe_CVGS.Models.Game
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Game Details";
 }
 
-<h2>Details</h2>
+<!-- Left Hand Side-->
+<div class="col-md-6">
+    <img src="@Model.ImagePath"/>
+    <!-- Download Game-->
+    <p>
+        @Html.ActionLink("Download", "Download", new { id = Model.Id })
+    </p>
 
-<div>
-    <h4>Game</h4>
-	<hr />
+    <!-- Add To Cart-->
+    <p>
+        @Html.ActionLink("Add To Cart", "AddToCart", "Order", new { id = Model.Id }, null)
+    </p>
+
+    <!-- Add To Wishlist -->
+    <p>
+        @Html.ActionLink("Add To Wishlist", "AddToWishlist", "Order", new { id = Model.Id},null)
+    </p>
+
+    <!-- Back To Games-->
+    <p>
+        @Html.ActionLink("Back to Games", "Index")
+    </p>
+</div>
+<!-- End Left Hand Side-->
+
+
+
+<!-- Right Hand Side-->
+<div class="col-md-6">
     <dl class="dl-horizontal">
+        <!-- Game Name-->
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -18,25 +43,36 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
 
+        <!-- Game Publisher-->
         <dt>
-            @Html.DisplayNameFor(model => model.ReleaseDate)
+            @Html.DisplayNameFor(model => model.Publisher)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ReleaseDate)
+            @Html.DisplayFor(model => model.Publisher)
         </dd>
 
+        <!-- Game ESRB-->
         <dt>
-            @Html.DisplayNameFor(model => model.SuggestedRetailPrice)
+            @Html.DisplayNameFor(model => model.ESRB)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.SuggestedRetailPrice)
+            @Html.DisplayFor(model => model.ESRB)
         </dd>
 
+        <!-- display create review form if review is approved, else display review details TODO: replace true with !isApproved-->
+        @if (true) 
+        { 
+            @Html.Partial("~/Views/Review/PartialCreateReview.cshtml", ViewData["review"]); 
+        }        
+        
+        else
+        {
+            @Html.Partial("~/Views/Review/PartialReviewDetails.cshtml", ViewData["review"]);    
+        }
+        
+        
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<!-- End Right Hand Side-->

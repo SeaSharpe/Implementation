@@ -3,44 +3,66 @@
 @{
     ViewBag.Title = "Game Management";
 }
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>@ViewBag.Title</title>
+        <link rel="stylesheet" href="~/Content/game.css" type="text/css">
+    </head>
+    <body>
+        <h1>@ViewBag.Title</h1>
+        <hr />
+        <p>
+            @Html.ActionLink("Add New Game", "Create", null, new { @class = "btn greenButton" })
+        </p>
+        <table class="table">
+            <tr>
+                <!-- Game Name header-->
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
 
-<h2>@ViewBag.Title</h2>
+                <!-- Game Platform header-->
+                <th>
+                    @Html.DisplayNameFor(model => model.Platform)
+                </th>
 
-<p>
-    @Html.ActionLink("Add New Game", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ReleaseDate)
-        </th>
-        <th>
-            Update
-        </th>
-        <th>
-            Delete
-        </th>
-    </tr>
+                <!-- Game Update header-->
+                <th>
+                    Update
+                </th>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReleaseDate)
-            </td>
-            <td>
-                @Html.ActionLink("Update", "Edit", new { id = item.Id })
-            </td>
-            <td>
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
-        </tr>
-    }
+                <!-- Game Delete header-->
+                <th>
+                    Delete
+                </th>
+            </tr>
 
-</table>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <!-- Game Name-->
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+
+                    <!-- Game Platform-->
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Platform.Name)
+                    </td>
+
+                    <!-- Game Update Link-->
+                    <td>
+                        @Html.ActionLink("Update", "Edit", new { id = item.Id })
+                    </td>
+
+                    <!-- Game Delete Link-->
+                    <td>
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </body>
+</html>

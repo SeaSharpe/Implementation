@@ -15,9 +15,6 @@ namespace SeaSharpe_CVGS.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
-
         public AccountController()
         {
         }
@@ -26,30 +23,6 @@ namespace SeaSharpe_CVGS.Controllers
         {
             UserManager = userManager;
             SignInManager = signInManager;
-        }
-
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set 
-            { 
-                _signInManager = value; 
-            }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
         }
 
         //
@@ -242,6 +215,30 @@ namespace SeaSharpe_CVGS.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Check if a user is an employee
+        /// </summary>
+        /// <param name="user">The user to check</param>
+        /// <param name="db">If the db context is not provided a new one will be created.</param>
+        /// <returns>True if user is an employee.</returns>
+        public static bool IsEmployee(ApplicationUser user, ApplicationDbContext db = null)
+        {
+            if (db == null) db = new ApplicationDbContext();
+            return db.Employees.FirstOrDefault(employee => employee.User == user) != null;
+        }
+
+        /// <summary>
+        /// Check if a user is a member
+        /// </summary>
+        /// <param name="user">The user to check</param>
+        /// <param name="db">If the db context is not provided a new one will be created.</param>
+        /// <returns>True if user is a member</returns>
+        public static bool IsMember(ApplicationUser user, ApplicationDbContext db = null)
+        {
+            if (db == null) db = new ApplicationDbContext();
+            return db.Members.FirstOrDefault(member => member.User == user) != null;
+        }
+
         //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
@@ -414,26 +411,6 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_userManager != null)
-                {
-                    _userManager.Dispose();
-                    _userManager = null;
-                }
-
-                if (_signInManager != null)
-                {
-                    _signInManager.Dispose();
-                    _signInManager = null;
-                }
-            }
-
-            base.Dispose(disposing);
         }
 
         #region Helpers

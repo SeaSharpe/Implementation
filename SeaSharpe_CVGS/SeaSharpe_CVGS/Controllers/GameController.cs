@@ -13,12 +13,10 @@ namespace SeaSharpe_CVGS.Controllers
 {
     public class GameController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
         //Dictionary containing ESRB ratings
-        public static List<string> esrbList = new List<string>
+        public static Dictionary<string, string> esrbDict = new Dictionary<string, string>
             {
-                {"EC"},{"E"},{"E10"},{"T"},{"M"},{"AO"}
+                {"EC", "Early Childhood"},{"E", "Everyone"},{"E10", "Everyone 10+"},{"T", "Teen"},{"M", "Mature"},{"AO", "Adult Only"}
             };
         
 
@@ -94,6 +92,7 @@ namespace SeaSharpe_CVGS.Controllers
             {                
                 gameList = gameList.Where(g => esrbSearch.Contains(g.ESRB));
             }
+            
             PopulateDropdownData();
             return View(gameList.ToList());
         }
@@ -115,10 +114,45 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 return HttpNotFound();
             }
+
+            //Get tempData message from postback
+            TempData["message"] = TempData["message"];
+
+            //Check for review in tempdata from postback 
+            Review gameReview = (Review)TempData["review"];
+
+            //Get gameReview if it was not stored in tempdata from postback
+            if(gameReview == null)
+            {
+                //Temporary pull a review which mimics existing review for this user
+                //TODO: replace this with review from current user if it exists
+                gameReview = db.Reviews.FirstOrDefault();
+
+                //No review for this user, display blank form
+                if (gameReview == null)
+                {
+                    //WORK IN PROGRESS: CHECK FOR EXISTING REVIEW FOR THIS USER
+                    gameReview = new Review();
+                }               
+            }
+
+            gameReview.Game_Id = game.Id;            
+
+            //Push game review to view so it can be passed to the partial view for review
+            ViewData["review"] = gameReview;          
             return View(game);
         }
 
-        
+        /// <summary>
+        /// Displays game list page for employees
+        /// </summary>
+        /// <returns>List of games view</returns>
+        public ActionResult GameManagement()
+        {
+            IEnumerable<Game> gameList = db.Games.Include(g => g.Platform).Include(g => g.Categories);
+            return View(gameList.ToList());
+        }
+
         #endregion
 
         #region Employee Side
@@ -146,8 +180,6 @@ namespace SeaSharpe_CVGS.Controllers
         {            
             try
             {
-                //TODO: ensure that datetime for releasedate is being validated properly
-
                 //Add game platform if value not null
                 if(Platform != null)
                 {
@@ -165,19 +197,19 @@ namespace SeaSharpe_CVGS.Controllers
                 //Update the model state to reflect manual addition of platforms and categories
                 ModelState.Clear();
                 TryValidateModel(game);
+
             if (ModelState.IsValid)
             {
                 db.Games.Add(game);
                 db.SaveChanges();
                 return RedirectToAction("GameManagement");
             }
-
             }
 
             //Return message to employee if exception
             catch(Exception e)
             {
-                TempData["error"] = "Error creating game: " + e.GetBaseException().Message;                
+                TempData["message"] = "Error creating game: " + e.GetBaseException().Message;                
             }
 
             Create();
@@ -191,15 +223,27 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>add/edit game view</returns>
         public ActionResult Edit(int? id)
         {
+            //Attempt to access edit page without game id
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Game game = db.Games.Find(id);
+
+            //Game with current id does not exist
             if (game == null)
             {
                 return HttpNotFound();
             }
+
+            //Selected values for game categories on edit view
+            ViewData["Categories"] = game.Categories.Select(c => c.Id);
+
+            //Select value for game platform on edit view
+            ViewData["Platform"] = game.Platform.Id;
+
+            PopulateDropdownData();
             return View(game);
         }
 
@@ -210,15 +254,43 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name,ReleaseDate,SuggestedRetailPrice")] Game game, int Platform)
+        public ActionResult Edit([Bind(Include = "Id,Name,ReleaseDate,SuggestedRetailPrice, ImagePath, Publisher, ESRB, Categories, Platform_id")] Game game, int[] Categories)
         {
+            try
+            {
+                //Add platform object for model state
+                game.Platform = db.Platforms.Find(game.Platform_Id);
 
+                //Update game categories
+                if(Categories == null) Categories = new int[] {};
+                ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
+                Game originalGame = db.Games.Find(game.Id);
+                originalGame.Categories.Clear();
+                foreach (Category c in gameCategories)
+        {
+                    originalGame.Categories.Add(c);
+                }
+                db.SaveChanges();
+                db.Entry(originalGame).State = EntityState.Detached;
+
+                //Update the model to include binded changes
+                ModelState.Clear();
+                TryValidateModel(game);
             if (ModelState.IsValid)
             {
                 db.Entry(game).State = EntityState.Modified;
                 db.SaveChanges();
+                    TempData["message"] = "Game with ID: " + game.Id + " updated.";
                 return RedirectToAction("GameManagement");
             }
+            }
+
+            catch (Exception e)
+            {
+                TempData["message"] = e.GetBaseException().Message;
+            }            
+
+            Edit(game.Id);
             return View(game);
         }
 
@@ -228,13 +300,25 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>list of games view</returns>
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int id)
         {
             Game game = db.Games.Find(id);
+            try
+            {
+                //Remove the gameCategories associated with the game being deleted
+                game.Categories.Clear();
+
+                //Remove game and save changes
             db.Games.Remove(game);
             db.SaveChanges();
+                TempData["message"] = game.Name + " and it's dependencies have been deleted.";
+            }
+
+            catch (Exception e)
+            {
+                TempData["message"] = "Error deleting game: " + e.GetBaseException().Message;
+            }
+            
             return RedirectToAction("GameManagement");
         }
         
@@ -273,22 +357,10 @@ namespace SeaSharpe_CVGS.Controllers
             //Send category selectlist to view for listbox
             ViewData["categoryList"] = new SelectList(db.Catagories, "Id", "Name");
 
-            //Send esrb seletlist to view for dropdown
-            ViewData["esrbList"] = new SelectList(esrbList);
+            //Send esrb selectlist to view for dropdown
+            ViewData["esrbList"] = new SelectList(esrbDict,"Key", "Value");
         }
         #endregion
 
-        /// <summary>
-        /// garbage disposal
-        /// </summary>
-        /// <param name="disposing">garbage</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

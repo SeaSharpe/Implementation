@@ -25,9 +25,11 @@ namespace SeaSharpe_CVGS.Models
         [Required] // NOT NULL
         [Column(TypeName = "char"), StringLength(1)] // CHAR(1)
         public string Gender { get; set; }
+
         [Display(Name = "First Name")]
         [Required, MinLength(1), MaxLength(50)]
         public string FirstName { get; set; }
+
         [Display(Name = "Last Name")]
         [Required, MinLength(1), MaxLength(50)]
         public string LastName { get; set; }
@@ -85,6 +87,7 @@ namespace SeaSharpe_CVGS.Models
         public DateTime? ShipDate { get; set; }
         [Display(Name = "Processed?")]
         public bool IsProcessed { get; set; }
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
 
     public partial class OrderItem
@@ -121,11 +124,14 @@ namespace SeaSharpe_CVGS.Models
         public string ESRB { get; set; }
         [Display(Name = "Release Date")]
         public DateTime ReleaseDate { get; set; }
-        [Display(Name = "Suggested Retail Price")]
+        [Display(Name = "Price")]
+        [DisplayFormat(DataFormatString="{0:c}")]
         public decimal SuggestedRetailPrice { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
         public virtual Platform Platform { get; set; }
+        [ForeignKey("Platform")]
+        public int Platform_Id { get; set; }
     }
 
     public partial class Review
@@ -137,7 +143,10 @@ namespace SeaSharpe_CVGS.Models
         public virtual Employee Aprover { get; set; } // todo: correct spelling to Approver
         public float Rating { get; set; }
         public string Subject { get; set; }
+        [ForeignKey("Game")]
+        public int Game_Id { get; set; }
         public string Body { get; set; }
+        public bool IsApproved { get; set; }
     }
 
     public partial class Friendship

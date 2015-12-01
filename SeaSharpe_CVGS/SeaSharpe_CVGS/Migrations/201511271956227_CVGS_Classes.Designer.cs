@@ -13,7 +13,7 @@ namespace SeaSharpe_CVGS.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201511140503256_CVGS_Classes"; }
+            get { return "201511271956227_CVGS_Classes"; }
         }
         
         string IMigrationMetadata.Source

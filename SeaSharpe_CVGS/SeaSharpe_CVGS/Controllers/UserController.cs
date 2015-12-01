@@ -12,9 +12,6 @@ namespace SeaSharpe_CVGS.Controllers
 {
     public class UserController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
-
         #region Member Side
         /// <summary>
         /// Displays sign up form for new members
@@ -132,18 +129,6 @@ namespace SeaSharpe_CVGS.Controllers
         {
             return RedirectToAction("Game/SearchGames");
 
-        }
-        /// <summary>
-        /// garbage collection
-        /// </summary>
-        /// <param name="disposing">garbage</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }
