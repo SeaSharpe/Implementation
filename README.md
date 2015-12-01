@@ -45,9 +45,15 @@ December 11, 2015 | Final Due Date
   - download: let members download free and shareware games
 - User controller
   - Profile: let members enter their display name, actual name, email, gender and birth date; let the member decide whether to receive promotional emails from CVGS
+    - **Started** 
+    - fighting with modelstate
   - Preferences: let members indicate their: favourite platform(or platforms) and; favourite game category (or categories)
+    - **Not Started**
+    - requires db / model modification 
   - Address: let the member enter, modify and delete their 1) address; 2) "ship to" address
-  - ~~Credit Cards: let the member register one or more valid credit card~~ **Using Stripe**
+    - **Started** 
+  - Credit Cards: let the member register one or more valid credit card Using Stripe
+    - **Not Started**
 - Friendship controller
   - view wishlist (pass in id, either of friend or member's own id to view own wishlist).  Let only friends and relatives view the wish list with option
   - Add member/members in the Friends and Family list
