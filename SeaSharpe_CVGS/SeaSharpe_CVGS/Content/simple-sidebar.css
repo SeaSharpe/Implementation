@@ -110,6 +110,7 @@
         /*padding: 20px 10px 90px 50px !important;*/
         position: relative;
 		background-color:white;
+        opacity:0.85;
     }
 
     #wrapper.toggled #page-content-wrapper {

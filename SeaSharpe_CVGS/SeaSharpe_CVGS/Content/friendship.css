@@ -1,0 +1,23 @@
+﻿#lblFriendSearch {
+    margin-bottom: 0;
+    padding-right: 5px;
+    text-align:right;
+}
+
+btnFriendSearch {
+    margin-left: 25px;
+}
+
+.col-md-3 {
+    padding-left: 0;
+}
+
+@media (min-width: 992px){
+    .col-md-2 {
+        width: 14%;
+    }
+}
+
+#frmSearchFriend {
+    padding-bottom: 20px;
+}
