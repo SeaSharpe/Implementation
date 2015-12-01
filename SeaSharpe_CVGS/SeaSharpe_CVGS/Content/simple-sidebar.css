@@ -32,7 +32,9 @@
 #page-content-wrapper {
     width: 100%;
     position: relative;
-    padding: 15px;
+    padding: 0 15px;
+    padding-top: 10px;
+    padding-bottom: 45px;
 }
 
 #wrapper.toggled #page-content-wrapper {
