@@ -16,6 +16,7 @@ namespace SeaSharpe_CVGS.Controllers
         //Dictionary containing ESRB ratings
         public static Dictionary<string, string> esrbDict = new Dictionary<string, string>
             {
+                //TODO: Change key to local image path 
                 {"EC", "Early Childhood"},{"E", "Everyone"},{"E10", "Everyone 10+"},{"T", "Teen"},{"M", "Mature"},{"AO", "Adult Only"}
             };
         

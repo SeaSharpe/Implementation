@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SeaSharpe_CVGS.Models;
+using System.Data.Entity.Validation;
 
 namespace SeaSharpe_CVGS.Controllers
 {
@@ -102,13 +103,16 @@ namespace SeaSharpe_CVGS.Controllers
                 Review review = db.Reviews.FirstOrDefault(r => r.Id == Id);
                 review.IsApproved = IsApproved;
                 review.Aprover = CurrentEmployee;
+                //Update the model to include binded changes
+                ModelState.Clear();
+                TryValidateModel(review);
                 db.Entry(review).State = EntityState.Modified;
                 db.SaveChanges();
             }
 
-            catch (Exception e)
+            catch (DbEntityValidationException e)
             {
-                TempData["message"] = e.Message.ToString();
+                TempData["message"] = e.EntityValidationErrors.First().ValidationErrors.First().ToString();
             }
             
             return RedirectToAction("ReviewManagement");
