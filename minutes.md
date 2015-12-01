@@ -95,7 +95,7 @@ Steve | nil | 0 | 0 |
 | ---- | ---- | -------- |
 | November 25, 2015 | Discord Meeting | DH JS ML ND PT SB |
 | November 27, 2015 | Manditory Class Attendance | DH JS ML ND PT RS SB |
-| November 28, 2015 | Half of assigned controllers completed | 
+| November 28, 2015 | Half of assigned controllers completed | DH JS ML ND(N/A) PT RS |
 | December 2, 2015  | Assigned controllers completed (with views)  |
 | December 9, 2015  | Unit Tests for Assigned controllers completed |
 | December 9, 2015  | Technical & Client Documentation |

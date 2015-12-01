@@ -23,38 +23,37 @@
                 </button>
                 @Html.ActionLink("Conestoga Video Game Store", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <!-- to be uncommented when roles are made-->
-             @*@if (Roles.IsUserInRole(@"employee"))
+             @if (User.IsInRole("Employee"))
             {
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Events", "EventManagement", "Event")</li>
                     <li>@Html.ActionLink("Reviews", "ReviewManagement", "Review")</li>
                     <li>@Html.ActionLink("Games", "GameManagement", "Game")</li>
                     <li>@Html.ActionLink("Orders", "OrderManagement", "Order")</li>
-                    <li>@Html.ActionLink("Reports", "Index", "Report")</li>
-                                <li>@Html.ActionLink("Logout", "Index", "Home")</li> @* Needs logout functionality *@
-                        @*
+                    <li>@Html.ActionLink("Reports", "Index", "Report")</li>   
+                    <li>@Html.Partial("_LoginPartial")</li>                            
                 </ul>
-                }
-                else if (Roles.IsUserInRole(@"member"))
-                {
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Friends/Family", "Index", "Friendship")</li>
-                        <li>@Html.ActionLink("Wish List", "Details", "Friendship")</li>
-                        <li>@Html.ActionLink("Library", "Index", "Home")</li> @*library page not created yet??*@@*
-                        <li>@Html.ActionLink("Profile", "Edit", "User")</li>
-                        <li>@Html.ActionLink("Cart", "Cart", "Order")</li> |
-                        <li>@Html.ActionLink("Logout", "Contact", "Home")</li>@* Needs logout functionality *@
-            @*
-                     </ul>
-                }
-                else
-                {*@
+            }
+             else if (User.IsInRole("Member"))
+             {
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Friends/Family", "Index", "Friendship")</li>
+                    <li>@Html.ActionLink("Wish List", "Details", "Friendship")</li>
+                    <li>@Html.ActionLink("Library", "Index", "Home")</li> @*library page not created yet*@
+                    <li>@Html.ActionLink("Profile", "Edit", "User")</li>
+                    <li>@Html.ActionLink("Cart", "Cart", "Order")</li>   
+                    <li>@Html.Partial("_LoginPartial")</li>    
+                </ul>
+                
+                    
+                
+            }
+             else
+             {
                 <div class="navbar-collapse collapse">                    
                 @Html.Partial("_LoginPartial")
-            </div>
-            @*}*@
-            
+                </div>
+            }            
         </div>
     </div>
     <div class="container body-content">
@@ -69,17 +68,17 @@
                         Navigation
                     </li>
                     <!-- to be uncommented when roles are made-->
-                  @*@if ((Roles.IsUserInRole(@"employee")))
-                    {
-                        <li>
-                             @Html.ActionLink("Events", "ViewEvents", "Event")
-                        </li>
-                        <li>
-                            @Html.ActionLink("Shop", "SearchGames", "Game")
-                        </li>
-                    }
-                    else
-                    {*@ 
+                 @if (User.IsInRole("Employee"))
+                {
+                    <li>
+                            @Html.ActionLink("Events", "ViewEvents", "Event")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Shop", "SearchGames", "Game")
+                    </li>
+                }
+                else
+                { 
                     <li>
                         <!-- contact us page not created yet-->
                         @Html.ActionLink("Contact Us", "Index", "Home")
@@ -90,7 +89,7 @@
                     <li>
                         @Html.ActionLink("Shop", "SearchGames", "Game")
                     </li>
-                    @*}*@
+                 }
                     <li class="sidebar-brand">
                         Browse By Platform
                     </li>

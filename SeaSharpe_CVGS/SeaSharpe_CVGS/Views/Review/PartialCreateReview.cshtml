@@ -2,16 +2,23 @@
 
 <!-- Add review form partial page -->
 <h2>Review Game</h2>
-
-
-@using (Html.BeginForm())
+@using (Ajax.BeginForm("PartialCreateReview", "Review", new AjaxOptions{HttpMethod = "Post"}))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Game</h4>
-        <hr />
         @Html.ValidationSummary(true)
+
+        <!-- Hidden Element for review id-->
+        <!-- note: not using HtmlHelper to prevent GameId from parent view being passed in-->
+        <input type="hidden" name="Id" value="@Model.Id" />
+
+        <!-- Hidden element for game Id-->
+        @Html.HiddenFor(model => model.Game_Id)
+
+        <!-- Hidden Element for user -->
+        @Html.HiddenFor(model => model.Author)
+
 
         <!-- Review Subject -->
         <div class="form-group">
@@ -47,13 +54,14 @@
                 @Html.RadioButtonFor(model => model.Rating, 10)
                 @Html.ValidationMessageFor(model => model.Body)
             </div>
-        </div>
+        </div>      
         
-
+        <!-- Submit, Reset, and View Reviews buttons-->      
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="reset" value="Reset" class="btn btn-default" />
                 <input type="submit" value="Submit" class="btn btn-default" />
+                @Html.ActionLink("View Reviews & Ratings", "ReviewsRating", "Review", new { id = Model.Game_Id }, null)
             </div>
         </div>
     </div>
