@@ -44,7 +44,7 @@ December 11, 2015 | Final Due Date
   - ~~rate game: let 1) members rate games; 2) summarize individual results and display the overall rating for each game~~
   - ~~review games: let members write reviews of games.  Reviews must be approved by a moderator before they are published on the website~~
   - ~~review games: let employees view pending reviews for approval~~
-  - review games: let employees approve/disprove reviews
+  - ~~review games: let employees approve/disprove reviews~~
   - ~~review games: let members and visitors view reviews for a game~~
   - download: let members download free and shareware games
 - User controller
