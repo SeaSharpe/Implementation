@@ -25,10 +25,11 @@ December 11, 2015 | Final Due Date
 - Add partial classes for validation *started*
 - Doc comments on methods / functions *started*
 - GUI Design See Nicole *started*
-- User Auth See John 
-  - Sign up: require a uniqe display name, require strong passwords
-  - Log in: limit the number of consecutive login attempts
-  - Password: let members change their passwords; if a recognized member forgets their password; reset it and email the new password
+- User Auth See John
+  - ~~Sign up: require a unique display name, require strong passwords~~
+  - ~~Log in: limit the number of consecutive login attempts~~
+  - ~~Find out how long user is locked out for after 5 consecutive attempts~~
+  - Password: let members change their passwords; if a recognized member forgets their password; reset it and email the new password *started needs testing*
 - Roles See John
  - Add layout views (header, footer) for each role (employee, member, visitor) *started*
 - ~~Revisit Events Table (Update ERD?)~~
