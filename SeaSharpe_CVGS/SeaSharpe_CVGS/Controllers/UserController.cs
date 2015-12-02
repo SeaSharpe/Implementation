@@ -44,17 +44,11 @@ namespace SeaSharpe_CVGS.Controllers
                 Where(a => a.Member.Id == model.Member.Id).
                 OrderBy(a => a.Id);
 
-            // Shipping address is the first address Billing adddress is the second address or a new adress
-            model.ShippingAddress = memberAddresses.FirstOrDefault() 
+            // Billing address is the first address Shipping adddress is the second address or a new adress
+            model.BillingAddress = memberAddresses.FirstOrDefault() 
                 ?? new Address { Member = model.Member };
-            model.BillingAddress = memberAddresses.Skip(1).FirstOrDefault() 
+            model.ShippingAddress = memberAddresses.Skip(1).FirstOrDefault() 
                 ?? new Address { Member = model.Member };
-
-
-            if (model.Member == null)
-            {
-                return HttpNotFound();
-            }
 
             if ( User.IsInRole("Employee") || model.Member.User.UserName == User.Identity.Name )
             {
@@ -74,41 +68,45 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult Edit(
             [Bind(Prefix = "Member")] Member member, 
             [Bind(Prefix = "BillingAddress")] Address billingAddress, 
-            [Bind(Prefix = "ShippingAddress")] Address shippingAddress) {
-            var dbMember = db.Members.Find(member.Id);
-            var dbBillingAddress = db.Addresses.Find(billingAddress.Id);
-            var dbShippingAddress = db.Addresses.Find(billingAddress.Id);
+            [Bind(Prefix = "ShippingAddress")] Address shippingAddress)
+        {
+            var sqlLog = new StringBuilder("");
+            db.Database.Log = x => sqlLog.Append(x);
+            db.Users.Attach(member.User);
+            var userEntry = db.Entry<ApplicationUser>(member.User);
+            //member.User = null;
+            db.Members.Attach(member);
+            var memberEntry = db.Entry<Member>(member);
 
-            if (dbMember == null)
-            {
-                TempData["Message"] = "Warning: Member not found.";
-            }
-            else
-            {
-                UpdateMember(member, dbMember);
-            }
+            memberEntry.State = EntityState.Unchanged;
 
-            if (dbBillingAddress == null)
+
+            memberEntry.Property(m => m.IsEmailMarketingAllowed).IsModified = true;
+            userEntry.Property(u => u.FirstName).IsModified = true;
+            //userEntry.Property(u => u.LastName).IsModified = true;
+            //userEntry.Property(u => u.PhoneNumber).IsModified = true;
+            //userEntry.Property(u => u.Gender).IsModified = true;
+            //userEntry.Property(u => u.PhoneNumber).IsModified = true;
+            userEntry.Property(u => u.UserName).IsModified = false;
+            if (billingAddress != null)
             {
                 billingAddress.Member = member;
-                db.Addresses.Add(billingAddress);
+                if (billingAddress.Id == 0)
+                {
+                    db.Addresses.Add(billingAddress);
+                }
+                else
+                {
+                    db.Addresses.Attach(billingAddress);
+                    db.Entry<Address>(billingAddress).State = EntityState.Modified;
+                }
             }
-            else
+            foreach (var value in ModelState.Values)
             {
-                UpdateAddress(billingAddress, dbBillingAddress);
+                value.Errors.Clear();
             }
 
-            if (dbShippingAddress == null)
-            {
-                shippingAddress.Member = member;
-                db.Addresses.Add(shippingAddress);
-            }
-            else
-            {
-                UpdateAddress(shippingAddress, dbShippingAddress);
-            }
-
-            if (ModelState.IsValid || true)
+            if (true)
             {
                 try
                 {
@@ -126,7 +124,6 @@ namespace SeaSharpe_CVGS.Controllers
                     }
                     TempData["Message"] = sb.ToString();
                 }
-                //return RedirectToAction("SearchGames", "Game");
             }
             return View(new ProfileViewModel { Member = member, BillingAddress = billingAddress, ShippingAddress = shippingAddress });
         }

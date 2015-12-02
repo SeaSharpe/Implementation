@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Data.Entity.Infrastructure;
 
 namespace SeaSharpe_CVGS.Models
 {
@@ -54,6 +56,8 @@ namespace SeaSharpe_CVGS.Models
 
     public partial class Employee
     {
+        [Column("User_Id")]
+        public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
         public int Id { get; set; }
     }
@@ -194,6 +198,27 @@ namespace SeaSharpe_CVGS.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+        }
+
+        protected override DbEntityValidationResult ValidateEntity(DbEntityEntry entityEntry, IDictionary<object, object> items)
+        {   // This stops validation of items that wern't changed.
+            // Source: http://stackoverflow.com/a/29689644
+            var result = base.ValidateEntity(entityEntry, items);
+            var falseErrors = new List<DbValidationError>();
+
+            foreach (var error in result.ValidationErrors)
+            {
+                var member = entityEntry.Member(error.PropertyName);
+                var property = member as DbPropertyEntry;
+                if (property != null && !property.IsModified)
+                {
+                    falseErrors.Add(error);
+                }
+            }
+
+            foreach (var error in falseErrors.ToArray())
+                result.ValidationErrors.Remove(error);
+            return result;
         }
 
         public static ApplicationDbContext Create()
