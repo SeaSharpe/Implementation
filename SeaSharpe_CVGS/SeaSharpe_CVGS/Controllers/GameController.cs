@@ -54,7 +54,7 @@ namespace SeaSharpe_CVGS.Controllers
             //Name search query
             if(nameSearch != null)
             {
-                gameList = gameList.Where(g => g.Name.Contains(nameSearch));
+                gameList = gameList.Where(g => g.Name.ToLower().Contains(nameSearch.ToLower()));
             }
 
             //Platform search query
