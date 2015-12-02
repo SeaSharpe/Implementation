@@ -17,20 +17,26 @@ December 11, 2015 | Final Due Date
 - ~~Create the solution~~
 - Code First Database *started*
   - [Mock Data](http://www.generatedata.com/) *started*
-  - Get / Create Game Images and store in db as path
+    - Friendship(mutual) data
+    - Games data
+    - Reviews data
+    - Wishlist data (maybe?)
+    - Sales data (for sales report)
+  - Get / Create Game Images and store in db as path *started*
 - ~~Build db from code first classes~~
-- Add controllers as per design class digram *started*
-  - Unit Tests
+- ~~Add controllers as per design class digram~~
   - Minimal Views (just functional) *started*
-- Add partial classes for validation *started*
+- Unit Tests
+- ~~Add partial classes for validation~~
 - Doc comments on methods / functions *started*
 - GUI Design See Nicole *started*
-- User Auth See John 
-  - Sign up: require a uniqe display name, require strong passwords
-  - Log in: limit the number of consecutive login attempts
-  - Password: let members change their passwords; if a recognized member forgets their password; reset it and email the new password
-- Roles See John
- - Add layout views (header, footer) for each role (employee, member, visitor) *started*
+- User Auth See John
+  - ~~Sign up: require a unique display name, require strong passwords~~
+  - ~~Log in: limit the number of consecutive login attempts~~
+  - Find out how long user is locked out for after 5 consecutive attempts
+  - Password: let members change their passwords; if a recognized member forgets their password; reset it and email the new password *started needs testing*
+- ~~Roles See John~~
+- ~~Add layout views (header, footer) for each role (employee, member, visitor)~~
 - ~~Revisit Events Table (Update ERD?)~~
 - ~~Add String to games table for image path~~
 - ~~ESRB Rating & Publisher add to DB~~
@@ -65,18 +71,17 @@ December 11, 2015 | Final Due Date
  - let employees add, edit and delete information about upcoming events.
  - let members register for upcoming events
 - Order controller
-  - create a cart
-  - let members add games to cart
+  - ~~create a cart~~ 
+  - ~~let members add games to cart~~
   - let members check out with ~~any credit card registered~~ Stripe
-  - save the "check out" info to a db table (orders) so that an employee can post the games physically
-  - after posting, the employee should be able to mark that order as processed
+  - ~~save the "check out" info to a db table (orders) so that an employee can post the games physically~~
+  - after posting, the employee should be able to mark that order as processed *started*
 - Report controller
-  - let employees view and print reports
-  - game list report
-  - game detail report
-  - member list report
-  - member detail report
+  - let employees view and print reports *started*
+  - ~~game list report~~ 
+  - ~~game detail report~~
+  - ~~member list report~~
+  - ~~member detail report~~
   - wish list report
   - sales report
-  - other reports as needed
 
