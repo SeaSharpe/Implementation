@@ -71,7 +71,9 @@ namespace SeaSharpe_CVGS.Models
         public virtual Address ShippingAddress { get; set; }
         public virtual Member Member { get; set; }
         public virtual Employee Aprover { get; set; }
+        [Display(Name = "Order Date")]
         public DateTime? OrderPlacementDate { get; set; }
+        [Display(Name = "Ship Date")]
         public DateTime? ShipDate { get; set; }
         public bool IsProcessed { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
@@ -85,6 +87,7 @@ namespace SeaSharpe_CVGS.Models
         public int OrderId { get; set; }
         public virtual Game Game { get; set; }
         public virtual Order Order { get; set; }
+        [Display(Name = "Price")]
         public decimal SalePrice { get; set; }
     }
 

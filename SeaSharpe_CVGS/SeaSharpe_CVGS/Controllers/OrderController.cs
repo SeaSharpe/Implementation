@@ -17,7 +17,7 @@ namespace SeaSharpe_CVGS.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         //placeholder for getting member id
-        private int memberId = 40;
+        private int memberId = 38;
 
         #region Multiple Roles
         /// <summary>
@@ -54,9 +54,14 @@ namespace SeaSharpe_CVGS.Controllers
         {
             /*
              * If employee
-             * all orders with employeeId != null
-             */ 
-            return View(db.Orders.ToList());
+             * all orders with IsProcessed == true
+             */
+
+            IEnumerable<Order> outstandingOrders = db.Orders
+                .Where(o => o.IsProcessed == true)
+                .Include(m => m.Member).Include(u => u.Aprover.User).Include(oi => oi.OrderItems).OrderBy(d => d.ShipDate);
+
+            return View(outstandingOrders);
         }
 
         /// <summary>
@@ -67,9 +72,13 @@ namespace SeaSharpe_CVGS.Controllers
         {
             /*
              * If employee
-             * all orders with employeeId == null
-             */ 
-            return View(db.Orders.ToList());
+             * all orders with IsProcessed == false
+             */
+            IEnumerable<Order> outstandingOrders = db.Orders
+                .Where(o => o.OrderPlacementDate != null && o.IsProcessed == false)
+                .Include(m => m.Member.User).Include(oi => oi.OrderItems).OrderBy(d => d.OrderPlacementDate);
+
+            return View(outstandingOrders);
         }
 
         /// <summary>
@@ -82,8 +91,12 @@ namespace SeaSharpe_CVGS.Controllers
              * if employee
              * all games where orderId == id 
              * (add param)
-             */ 
-            return View();
+             */
+            int orderId = 3;
+
+            Order order = db.Orders.Find(orderId);
+
+            return View(order);
         }
         /// <summary>
         /// post back order updated to processed
@@ -111,11 +124,62 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns></returns>
         public ActionResult OrderHistory()
         {
-            /*
-             * if member
-             * all orders orderplacementdate != null and employeeId != null
-             */ 
-            return View(db.Orders.ToList());
+            var member = db.Members.Find(memberId);
+
+            //get orders for member (not cart)
+            var exists = db.Orders.Where(m => m.Member.Id == member.Id).Where(d => d.OrderPlacementDate != null).Any();
+
+            if (!exists)
+            {
+                //empty cart
+                TempData["EmptyCart"] = "No order history";
+                return View(Enumerable.Empty<Game>());
+            }
+
+            //get all gameIds for order Id
+            IEnumerable<int> gameIds = db.OrderItems.
+                Where(o => o.Order.Member.Id == member.Id && o.Order.OrderPlacementDate != null)
+                .Select(i => i.GameId);
+
+            IEnumerable<Order> orderIds = db.Orders.Where(m => m.Member.Id == member.Id && m.OrderPlacementDate != null).ToList();
+
+            DateTime orderDate;
+            DateTime shipDate;
+            string gameName;
+            string platformName;
+            decimal pricePaid;
+
+            List<OrderHistoryViewModel> userOrderHistory = new List<OrderHistoryViewModel>();
+            OrderHistoryViewModel ohvm;
+
+            foreach (var item in orderIds)
+            {
+                orderDate = (DateTime)item.OrderPlacementDate;
+                if (item.ShipDate != null)
+                {
+                    shipDate = (DateTime)item.ShipDate;
+                }
+                else
+                {
+                    shipDate = DateTime.Parse("1900-01-01 00:00:00");
+                }
+                
+
+                IEnumerable<OrderItem> orderItemIds = db.OrderItems.Where(oi => oi.OrderId == item.Id).ToList();
+                foreach (var orderItem in orderItemIds)
+                {
+                    
+                    gameName = db.Games.Where(g => g.Id == orderItem.GameId).Select(ga => ga.Name).First();
+                    platformName = db.Games.Include(p => p.Platform).Where(g => g.Id == orderItem.GameId).Select(ga => ga.Platform.Name).First().ToString();
+                    pricePaid = orderItem.SalePrice;
+                    ohvm = new OrderHistoryViewModel(orderDate, shipDate, gameName, platformName, pricePaid);
+                    userOrderHistory.Add(ohvm);
+                }
+            }
+
+            //get all games for gameIds
+            //IEnumerable<Game> games = db.Games.Where(g => orderItemIds.Contains(g.Id)).Include(c => c.Platform);
+            return View(userOrderHistory);
         }
 
         /// <summary>
@@ -166,25 +230,6 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
-        /// Post back for order creation
-        /// </summary>
-        /// <param name="order">order object</param>
-        /// <returns>Cart view</returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,OrderPlacementDate,ShipDate,IsProcessed")] Order order)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Orders.Add(order);
-                db.SaveChanges();
-                return RedirectToAction("Cart");
-            }
-
-            return View(order);
-        }
-
-        /// <summary>
         /// Member side - Add a specific game to cart
         /// ****No view required****
         /// </summary>
@@ -205,7 +250,8 @@ namespace SeaSharpe_CVGS.Controllers
             var game = db.Games.Find(id);
             if (game == null)
             {
-                //do stuff
+                TempData["message"] = "Invalid Game";
+                return RedirectToAction("Index", "Game");
             }
 
             //create new cart if no pre-existing
@@ -249,7 +295,6 @@ namespace SeaSharpe_CVGS.Controllers
             /*
              * 
              */
-            var a = Request.Form;
             
             Order order = db.Orders.Find(itemId);
             db.Orders.Remove(order);

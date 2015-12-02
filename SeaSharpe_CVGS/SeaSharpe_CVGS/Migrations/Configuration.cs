@@ -7,7 +7,6 @@ namespace SeaSharpe_CVGS.Migrations
     using System.Data.Entity.Migrations;
     using System.Data.Entity.Validation;
     using System.Linq;
-    using SeaSharpe_CVGS.Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
     {
@@ -171,6 +170,8 @@ namespace SeaSharpe_CVGS.Migrations
                          //UserName                 ApproverId                  orderPlacementDate      shipDate                billAddr    shippAddr   IsProcessed     Games
                 //order shipped
                 MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-11 00:00:00",  1,          1,          true,           "Fallout 4" ),
+                //order shipped
+                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-04-07 00:00:00",  1,          1,          true,           "Footbal Manager 2016" ),
                 //cart made with games, not paid for, not processed, not shipped
                 MakeOrder(@"JOHNESTIS244358",       null,                       null,                   null,                   4,          4,          false,          "Footbal Manager 2016", "Counter-Strike"),
                 //order shipped
