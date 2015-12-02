@@ -76,9 +76,11 @@
             </div>
         </div>
             <div class="col-md-4">
+                <h4>Billing Address</h4>
                 @Html.Partial("_AddressPartial", Model.BillingAddress, new ViewDataDictionary() { TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "BillingAddress" } })
             </div>
             <div class="col-md-4">
+                <h4>Shipping Address</h4>
                 @Html.Partial("_AddressPartial", Model.ShippingAddress, new ViewDataDictionary() { TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "ShippingAddress" } })
             </div>
     </div>

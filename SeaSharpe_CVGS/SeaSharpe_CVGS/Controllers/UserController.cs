@@ -34,6 +34,11 @@ namespace SeaSharpe_CVGS.Controllers
                 Member = db.Members.FirstOrDefault(m => m.Id == id || m.User.UserName == User.Identity.Name)
             };
 
+            if (model.Member == null)
+            {
+                return HttpNotFound();
+            }
+
             var memberAddresses = db.
                 Addresses.
                 Where(a => a.Member.Id == model.Member.Id).
