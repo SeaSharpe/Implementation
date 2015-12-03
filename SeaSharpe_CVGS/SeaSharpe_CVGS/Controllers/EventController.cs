@@ -109,7 +109,7 @@ namespace SeaSharpe_CVGS.Controllers
        public ActionResult Edit([Bind(Include = "Id,Location,StartDate,EndDate,Description,Capacity")] Event @event)
        {
            @event.Employee = CurrentEmployee;
-           ModelState.Clear();
+            ModelState.Clear();
            if (ModelState.IsValid)
            {
                db.Entry(@event).State = EntityState.Modified;
@@ -141,7 +141,7 @@ namespace SeaSharpe_CVGS.Controllers
        /// </summary>
        /// <returns>ViewEvents view</returns>
        
-        [AllowAnonymous]
+       [AllowAnonymous]
        public ActionResult ViewEvents()
        {
            return View(db.Events.ToList());
