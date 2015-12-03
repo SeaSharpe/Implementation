@@ -54,7 +54,7 @@ namespace SeaSharpe_CVGS.Controllers
         {
             /*
              * If employee
-             * all orders with IsProcessed == true
+             * show all orders with IsProcessed == true
              */
 
             IEnumerable<Order> completedOrders = db.Orders
@@ -72,7 +72,7 @@ namespace SeaSharpe_CVGS.Controllers
         {
             /*
              * If employee
-             * all orders with IsProcessed == false
+             * show all orders with IsProcessed == false
              */
             IEnumerable<Order> outstandingOrders = db.Orders
                 .Where(o => o.OrderPlacementDate != null && o.IsProcessed == false)
@@ -109,6 +109,10 @@ namespace SeaSharpe_CVGS.Controllers
 
         public ActionResult MarkAsProcessed(int id = 0)
         {
+            //TODO: replace (placeholder for employee)
+            int employeeId = 1;
+            
+
             //if no item selected
             if (id == 0)
             {
@@ -137,36 +141,18 @@ namespace SeaSharpe_CVGS.Controllers
             //get approver
             //Employee employee = db.Employees.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
 
-            //get approver placeholder
-            Employee approver = db.Employees.Find(1);
+            //TODO remove (placeholder for employee)
+            Employee approver = db.Employees.Find(employeeId);
 
 
             order.IsProcessed = true;
             order.Aprover = approver;
+            order.ShipDate = DateTime.Now;
             db.SaveChanges();
 
             return RedirectToAction("OrderManagement");
         }
 
-
-        /// <summary>
-        /// post back order updated to processed
-        /// *** No view required ***
-        /// </summary>
-        /// <param name="order">order object</param>
-        /// <returns>Order Management view</returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Update([Bind(Include = "Id,OrderPlacementDate,ShipDate,IsProcessed")] Order order)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(order).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("OrderManagement");
-            }
-            return View(order);
-        }
         #endregion
         #region Member Side
         /// <summary>
@@ -271,16 +257,6 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
-        /// Member Side - OrderPlacement date is set (changes it from a cart to an order)
-        /// **** No view required ****
-        /// </summary>
-        /// <returns>Cart view</returns>
-        public ActionResult Create()
-        {
-            return RedirectToAction("Cart");
-        }
-
-        /// <summary>
         /// Member side - Add a specific game to cart
         /// ****No view required****
         /// </summary>
@@ -353,18 +329,65 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("Cart");
         }
 
+        public ActionResult Delete()
+        {
+            return RedirectToAction("Cart");
+        }
+
         /// <summary>
         /// post back for deletion of entire cart
         /// </summary>
         /// <param name="id">order id</param>
         /// <returns>Cart view</returns>
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteCartConfirmed(int orderId)
+        public ActionResult DeleteCartConfirmed()
         {
-            Order order = db.Orders.Find(orderId);
-            db.Orders.Remove(order);
+            //get userid
+            //var member = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
+
+            //validate that memberId is valid
+            var exists = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).Any();
+
+            if (!exists)
+            {
+                //empty cart
+                TempData["message"] = "Cart is empty";
+                return View(Enumerable.Empty<Game>());
+            }
+
+            //This gets the cart order
+            Order cart = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).First();
+
+            //delete cart
+            db.Orders.Remove(cart);
             db.SaveChanges();
+
+            return RedirectToAction("Cart");
+        }
+
+        public ActionResult DeleteCart()
+        {
+            //get userid
+            //var member = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
+
+            //validate that memberId is valid
+            var exists = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).Any();
+
+            if (!exists)
+            {
+                //empty cart
+                TempData["message"] = "Cart is empty";
+                return RedirectToAction("Cart");
+            }
+
+            //This gets the cart order
+            Order cart = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).First();
+
+            //delete cart
+            db.Orders.Remove(cart);
+            db.SaveChanges();
+
             return RedirectToAction("Cart");
         }
         
