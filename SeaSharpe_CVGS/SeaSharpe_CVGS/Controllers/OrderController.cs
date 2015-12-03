@@ -59,7 +59,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             IEnumerable<Order> completedOrders = db.Orders
                 .Where(o => o.IsProcessed == true)
-                .Include(m => m.Member).Include(u => u.Aprover.User).Include(oi => oi.OrderItems).OrderBy(d => d.ShipDate);
+                .Include(m => m.Member).Include(u => u.Aprover.User).Include(oi => oi.OrderItems).OrderByDescending(d => d.ShipDate);
 
             return View(completedOrders);
         }
