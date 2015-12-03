@@ -337,6 +337,7 @@
     <Content Include="Views\Event\PartialSelectedEvent.cshtml" />
     <Content Include="Views\Friendship\PartialFriendsList.cshtml" />
     <Content Include="Views\Friendship\PartialFamilyList.cshtml" />
+    <Content Include="Views\Order\Shipping.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

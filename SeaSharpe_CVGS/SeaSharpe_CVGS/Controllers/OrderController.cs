@@ -64,6 +64,13 @@ namespace SeaSharpe_CVGS.Controllers
             return View(completedOrders);
         }
 
+        public ActionResult Shipping(int id)
+        {
+            //get order
+            Order orderToShip = db.Orders.Find(id);
+            return View(orderToShip);
+        }
+
         /// <summary>
         /// list all orders waiting to be processed
         /// </summary>

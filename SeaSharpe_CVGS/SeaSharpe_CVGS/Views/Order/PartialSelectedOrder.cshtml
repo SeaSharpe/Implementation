@@ -71,5 +71,6 @@
         }
         
     </table>
-    @Html.ActionLink("Mark as Processed", "MarkAsProcessed", new { id = Model.Id })
+    @Html.ActionLink("Mark as Processed", "MarkAsProcessed", new { id = Model.Id }) | 
+    @Html.ActionLink("Print Shipping Label", "Shipping", new { id = Model.Id })
 </div>
