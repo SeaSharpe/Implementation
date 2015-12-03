@@ -108,6 +108,8 @@ namespace SeaSharpe_CVGS.Controllers
        [ValidateAntiForgeryToken]
        public ActionResult Edit([Bind(Include = "Id,Location,StartDate,EndDate,Description,Capacity")] Event @event)
        {
+           @event.Employee = CurrentEmployee;
+           ModelState.Clear();
            if (ModelState.IsValid)
            {
                db.Entry(@event).State = EntityState.Modified;
