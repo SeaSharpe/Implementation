@@ -57,11 +57,11 @@ namespace SeaSharpe_CVGS.Controllers
              * all orders with IsProcessed == true
              */
 
-            IEnumerable<Order> outstandingOrders = db.Orders
+            IEnumerable<Order> completedOrders = db.Orders
                 .Where(o => o.IsProcessed == true)
                 .Include(m => m.Member).Include(u => u.Aprover.User).Include(oi => oi.OrderItems).OrderBy(d => d.ShipDate);
 
-            return View(outstandingOrders);
+            return View(completedOrders);
         }
 
         /// <summary>

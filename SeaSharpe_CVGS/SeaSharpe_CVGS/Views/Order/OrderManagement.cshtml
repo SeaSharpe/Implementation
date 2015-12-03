@@ -6,6 +6,15 @@
 
 <h2>OrderManagement</h2>
 
+@{
+    Html.RenderPartial("PartialOutstandingOrders");
+    //Below is causing the error (Dec 3, 11:23 am)
+    //Html.RenderPartial("PartialSelectedOrder");
+}
+
+
+
+
 <table class="table">
     <tr>
         <th>
