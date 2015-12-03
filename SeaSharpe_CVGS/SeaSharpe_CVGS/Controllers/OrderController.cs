@@ -50,7 +50,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// list all completed orders
         /// </summary>
         /// <returns>Order Management view</returns>
-        public ActionResult OrderManagement()
+        public ActionResult OrderManagement(int id = 0)
         {
             /*
              * If employee
@@ -85,19 +85,70 @@ namespace SeaSharpe_CVGS.Controllers
         /// list order items in selected order
         /// </summary>
         /// <returns>selected order partial view</returns>
-        public ActionResult PartialSelectedOrder()
+        public ActionResult PartialSelectedOrder(int id = 0)
         {
             /*
              * if employee
              * all games where orderId == id 
              * (add param)
              */
-            int orderId = 3;
 
-            Order order = db.Orders.Find(orderId);
+            Order order;
+            if (id == 0)
+            {
+                order = new Order();
+                order.Id = -1;
+            }
+            else
+            {
+                order = db.Orders.Find(id);
+            }
 
             return View(order);
         }
+
+        public ActionResult MarkAsProcessed(int id = 0)
+        {
+            //if no item selected
+            if (id == 0)
+            {
+                //Message should only appear in SelectedOrderPartialView, so unique TempData key is given
+                TempData["messageDan1"] = "Please select a game to Process";
+                return RedirectToAction("OrderManagement");
+            }
+            Order order = db.Orders.Find(id);
+
+            //if no valid item selected
+            if (order == null)
+            {
+                //Message should only appear in SelectedOrderPartialView, so unique TempData key is given
+                TempData["messageDan1"] = "Please select a valid game";
+                return RedirectToAction("OrderManagement");
+            }
+
+            //if order is already processed
+            if (order.IsProcessed == true)
+            {
+                //Message should only appear in SelectedOrderPartialView, so unique TempData key is given
+                TempData["messageDan1"] = "Order has already been processed";
+                return RedirectToAction("OrderManagement");
+            }
+
+            //get approver
+            //Employee employee = db.Employees.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
+
+            //get approver placeholder
+            Employee approver = db.Employees.Find(1);
+
+
+            order.IsProcessed = true;
+            order.Aprover = approver;
+            db.SaveChanges();
+
+            return RedirectToAction("OrderManagement");
+        }
+
+
         /// <summary>
         /// post back order updated to processed
         /// *** No view required ***
@@ -202,7 +253,7 @@ namespace SeaSharpe_CVGS.Controllers
             if (!exists)
             {
                 //empty cart
-                TempData["EmptyCart"] = "Cart is empty";
+                TempData["message"] = "Cart is empty";
                 return View(Enumerable.Empty<Game>());
             }
 
