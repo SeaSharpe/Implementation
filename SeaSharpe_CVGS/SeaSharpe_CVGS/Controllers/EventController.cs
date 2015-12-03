@@ -10,6 +10,7 @@ using SeaSharpe_CVGS.Models;
 
 namespace SeaSharpe_CVGS.Controllers
 {
+    [Authorize(Roles="Employee")]
     public class EventController : Controller
     {
         #region Multiple Roles
@@ -67,7 +68,9 @@ namespace SeaSharpe_CVGS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Location,StartDate,EndDate,Description,Capacity")] Event @event)
         {
-            if (ModelState.IsValid)
+            @event.Employee = CurrentEmployee;
+            ModelState.Clear();
+            if (TryValidateModel(@event))
             {
                 db.Events.Add(@event);
                 db.SaveChanges();
@@ -135,6 +138,8 @@ namespace SeaSharpe_CVGS.Controllers
        /// list all current events
        /// </summary>
        /// <returns>ViewEvents view</returns>
+       
+        [AllowAnonymous]
        public ActionResult ViewEvents()
        {
            return View(db.Events.ToList());
