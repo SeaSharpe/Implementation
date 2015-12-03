@@ -70,43 +70,37 @@ namespace SeaSharpe_CVGS.Controllers
             [Bind(Prefix = "BillingAddress")] Address billingAddress, 
             [Bind(Prefix = "ShippingAddress")] Address shippingAddress)
         {
+            var model = new ProfileViewModel { Member = member, BillingAddress = billingAddress, ShippingAddress = shippingAddress };
             var sqlLog = new StringBuilder("");
             db.Database.Log = x => sqlLog.Append(x);
-            db.Users.Attach(member.User);
-            var userEntry = db.Entry<ApplicationUser>(member.User);
-            //member.User = null;
+
+            foreach (var address in new Address[] { billingAddress, shippingAddress })
+            {
+                if (address != null) 
+                {
+                    address.Member = member;
+                    if (address.Id == 0)
+                    {
+                        if (!String.IsNullOrWhiteSpace(address.StreetAddress) &&
+                            !String.IsNullOrWhiteSpace(address.Region) &&
+                            !String.IsNullOrWhiteSpace(address.City) &&
+                            !String.IsNullOrWhiteSpace(address.Country) &&
+                            !String.IsNullOrWhiteSpace(address.PostalCode))
+                        {
+                            db.Addresses.Add(address);
+                        }
+                    }
+                    else
+                    {
+                        db.Addresses.Attach(address);
+                        db.Entry<Address>(address).State = EntityState.Modified;
+                    }
+                }
+            }
+
             db.Members.Attach(member);
-            var memberEntry = db.Entry<Member>(member);
 
-            memberEntry.State = EntityState.Unchanged;
-
-
-            memberEntry.Property(m => m.IsEmailMarketingAllowed).IsModified = true;
-            userEntry.Property(u => u.FirstName).IsModified = true;
-            //userEntry.Property(u => u.LastName).IsModified = true;
-            //userEntry.Property(u => u.PhoneNumber).IsModified = true;
-            //userEntry.Property(u => u.Gender).IsModified = true;
-            //userEntry.Property(u => u.PhoneNumber).IsModified = true;
-            userEntry.Property(u => u.UserName).IsModified = false;
-            if (billingAddress != null)
-            {
-                billingAddress.Member = member;
-                if (billingAddress.Id == 0)
-                {
-                    db.Addresses.Add(billingAddress);
-                }
-                else
-                {
-                    db.Addresses.Attach(billingAddress);
-                    db.Entry<Address>(billingAddress).State = EntityState.Modified;
-                }
-            }
-            foreach (var value in ModelState.Values)
-            {
-                value.Errors.Clear();
-            }
-
-            if (true)
+            if (TryValidateModel(model))
             {
                 try
                 {
@@ -125,7 +119,8 @@ namespace SeaSharpe_CVGS.Controllers
                     TempData["Message"] = sb.ToString();
                 }
             }
-            return View(new ProfileViewModel { Member = member, BillingAddress = billingAddress, ShippingAddress = shippingAddress });
+
+            return View(model);
         }
 
         void UpdateMember(Member updateFrom, Member updateTo)

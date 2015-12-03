@@ -1,7 +1,14 @@
 ﻿@model SeaSharpe_CVGS.Models.ProfileViewModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit Profile";
+    
+    ViewBag.Genders = from gender in new Dictionary<string, string> { { "Male", "M" }, { "Female", "F" }, { "Other", "O" } }
+                      select new System.Web.Mvc.SelectListItem {
+                          Text = gender.Key, 
+                          Value    = gender.Value,
+                          Selected = gender.Value.ToUpper() == Model.Member.User.Gender
+                      };
 }
 
 <h2>Edit</h2>
@@ -15,8 +22,9 @@
             <div class="form-horizontal">
                 <h4>Member</h4>
                 <hr />
-                @Html.ValidationSummary(true)
                 @Html.HiddenFor(model => model.Member.Id)
+                @Html.HiddenFor(model => model.Member.User.Id)
+                @Html.HiddenFor(model => model.Member.User.UserName)
 
                 <div class="form-group">
                     <div class="col-md-10">
@@ -48,7 +56,7 @@
 
                 <div class="form-group">
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.Member.User.Gender, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Member.User.Gender) } })
+                        @Html.DropDownListFor(model => model.Member.User.Gender, (IEnumerable<SelectListItem>)ViewBag.Genders)
                         @Html.ValidationMessageFor(model => model.Member.User.Gender, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -76,12 +84,18 @@
             </div>
         </div>
             <div class="col-md-4">
+                @{
+                    ViewData.TemplateInfo.HtmlFieldPrefix = "BillingAddress";
+                }
                 <h4>Billing Address</h4>
-                @Html.Partial("_AddressPartial", Model.BillingAddress, new ViewDataDictionary() { TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "BillingAddress" } })
+                @Html.Partial("_AddressPartial", Model.BillingAddress)
             </div>
             <div class="col-md-4">
+                @{
+                    ViewData.TemplateInfo.HtmlFieldPrefix = "ShippingAddress";
+                }
                 <h4>Shipping Address</h4>
-                @Html.Partial("_AddressPartial", Model.ShippingAddress, new ViewDataDictionary() { TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "ShippingAddress" } })
+                @Html.Partial("_AddressPartial", Model.ShippingAddress)
             </div>
     </div>
 }
