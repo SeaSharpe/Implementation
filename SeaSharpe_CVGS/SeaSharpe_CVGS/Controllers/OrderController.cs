@@ -10,6 +10,27 @@ using SeaSharpe_CVGS.Models;
 using SeaSharpe_CVGS.Migrations;
 using Microsoft.AspNet.Identity;
 
+/*
+ * This Controller tracks orders for site members and employees.
+ * 
+ * **************For Members*********************
+ * Cart:
+ * can add items to a cart
+ * view their cart
+ * delete from their cart
+ * purchase games from their cart
+ * 
+ * OrderHistory
+ * View ordered games and the ship dates
+ * 
+ * **************For Employees*******************
+ * Order Management:
+ * View all completed orders
+ * with partial views for orders waiting to be processed and a partial view to view the selected order
+ * which also provides options to mark the selected order as "processed" as well as print a shipping 
+ * label with the pertinent details.
+ */
+
 namespace SeaSharpe_CVGS.Controllers
 {
     public class OrderController : Controller
@@ -50,7 +71,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <summary>
         /// list all completed orders
         /// </summary>
-        /// <returns>Order Management view</returns>
+        /// <returns>OrderManagement view</returns>
         public ActionResult OrderManagement(int id = 0)
         {
             /*
@@ -65,9 +86,13 @@ namespace SeaSharpe_CVGS.Controllers
             return View(completedOrders);
         }
 
+        /// <summary>
+        /// Gets order and uses it to create a shipping label
+        /// </summary>
+        /// <param name="id">Order Id</param>
+        /// <returns>Shipping View</returns>
         public ActionResult Shipping(int id)
         {
-            //get order
             Order orderToShip = db.Orders.Find(id);
             return View(orderToShip);
         }
@@ -75,7 +100,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <summary>
         /// list all orders waiting to be processed
         /// </summary>
-        /// <returns>Outstanding orders partial view</returns>
+        /// <returns>PartialOutstandingOrders partial view</returns>
         public ActionResult PartialOutstandingOrders()
         {
             /*
@@ -90,9 +115,10 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
-        /// list order items in selected order
+        /// list order items in selected order and provides controls to mark
+        /// the order as "processed" as well as print a shipping label
         /// </summary>
-        /// <returns>selected order partial view</returns>
+        /// <returns>PartialSelectedOrder partial view</returns>
         public ActionResult PartialSelectedOrder(int id = 0)
         {
             /*
@@ -115,6 +141,11 @@ namespace SeaSharpe_CVGS.Controllers
             return View(order);
         }
 
+        /// <summary>
+        /// Finds current employee and adds their name as the order's approver, as well as setting the ship date
+        /// </summary>
+        /// <param name="id">Order Id</param>
+        /// <returns>OrderManagement View</returns>
         public ActionResult MarkAsProcessed(int id = 0)
         {
             //TODO: replace (placeholder for employee)
@@ -166,7 +197,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <summary>
         /// list all orders waiting to be processed
         /// </summary>
-        /// <returns></returns>
+        /// <returns>OrderHistory view</returns>
         public ActionResult OrderHistory()
         {
             var member = db.Members.Find(memberId);
@@ -177,8 +208,8 @@ namespace SeaSharpe_CVGS.Controllers
             if (!exists)
             {
                 //empty cart
-                TempData["EmptyCart"] = "No order history";
-                return View(Enumerable.Empty<Game>());
+                TempData["message"] = "No order history";
+                return View(Enumerable.Empty<OrderHistoryViewModel>().ToList());
             }
 
             //get all gameIds for order Id
@@ -222,8 +253,6 @@ namespace SeaSharpe_CVGS.Controllers
                 }
             }
 
-            //get all games for gameIds
-            //IEnumerable<Game> games = db.Games.Where(g => orderItemIds.Contains(g.Id)).Include(c => c.Platform);
             return View(userOrderHistory);
         }
 
@@ -234,11 +263,6 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Cart view</returns>
         public ActionResult Cart()
         {
-            /* TODO:
-             * Clean up view
-             * Create checkboxes and buttons
-             */ 
-
             //get userid
             //var member = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
 
@@ -271,7 +295,6 @@ namespace SeaSharpe_CVGS.Controllers
 
         /// <summary>
         /// Member side - Add a specific game to cart
-        /// ****No view required****
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>game details view</returns>
@@ -323,6 +346,13 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("details", "Game", new { id });
         }
 
+        /// <summary>
+        /// Accepts post from cart view, determines whether the member clicked "Remove Selected"
+        /// or "Checkout Now" and then directs to the appropriate method
+        /// </summary>
+        /// <param name="cart">CartViewModel object</param>
+        /// <param name="submit">String value of the button clicked</param>
+        /// <returns>Cart View</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AlterCart(CartViewModel[] cart, string submit)
@@ -338,6 +368,12 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("Cart");
         }
 
+        /// <summary>
+        /// Checks the checkboxes (represented in the CartViewModel object as download and hardcopy booleans,
+        /// deletes the items, and then checks to see if the cart has any items left, if it does not it deletes
+        /// cart (which is an order with no order items at that point)
+        /// </summary>
+        /// <param name="cart">CartViewModel object</param>
         public void Delete(CartViewModel[] cart)
         {
             //get original order count
@@ -370,6 +406,15 @@ namespace SeaSharpe_CVGS.Controllers
             }
         }
 
+        /// <summary>
+        /// Checks the checkboxes (represented in the CartViewModel object as download and hardcopy booleans,
+        /// creates a new order object for downloads and a new order object for hardcopies (Since their order
+        /// behaviour is completely different from eachother)
+        /// it then creates new order items and assigns them to the order which matches their type (either 
+        ///download or hardcopy).
+        ///It then deletes the cart if it has no remaining games in it.
+        /// </summary>
+        /// <param name="cart">CartViewModel object</param>
         public void Checkout(CartViewModel[] cart)
         {
             //find if there are any downloads or hardcopies
@@ -460,6 +505,10 @@ namespace SeaSharpe_CVGS.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes the entire cart by getting the member id and checking for a valid cart and then deleting it
+        /// </summary>
+        /// <returns>Cart View</returns>
         public ActionResult DeleteCart()
         {
             //get userid
