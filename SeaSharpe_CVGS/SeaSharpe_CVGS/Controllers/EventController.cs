@@ -120,19 +120,44 @@ namespace SeaSharpe_CVGS.Controllers
        }
 
        /// <summary>
+       /// Employee -side post back for delete event.  **no delete view, delete button on list of events view***
+       /// ****No view required****
+       /// </summary>
+       /// <param name="id">event id</param>
+       /// <returns>list of events view</returns>
+       public ActionResult Delete(int id)
+       {
+           Event @event = db.Events.Find(id);
+           try
+           {
+               //Remove event and save changes
+               db.Events.Remove(@event);
+               db.SaveChanges();
+               TempData["message"] = @event.Description + " has been deleted.";
+           }
+
+           catch (Exception e)
+           {
+               TempData["message"] = "Error deleting event: " + e.GetBaseException().Message;
+           }
+
+           return RedirectToAction("Index");
+       }
+
+       /// <summary>
        /// post back for delete event
        /// </summary>
        /// <param name="id">event id</param>
        /// <returns>Event Management view</returns>
-       [HttpPost, ActionName("Delete")]
-       [ValidateAntiForgeryToken]
-       public ActionResult DeleteConfirmed(int id)
-       {
-           Event @event = db.Events.Find(id);
-           db.Events.Remove(@event);
-           db.SaveChanges();
-           return RedirectToAction("EventManagement");
-       }
+       //[HttpPost, ActionName("Delete")]
+       //[ValidateAntiForgeryToken]
+       //public ActionResult DeleteConfirmed(int id)
+       //{
+       //    Event @event = db.Events.Find(id);
+       //    db.Events.Remove(@event);
+       //    db.SaveChanges();
+       //    return RedirectToAction("EventManagement");
+       //}
         #endregion
 
         #region Member Side
