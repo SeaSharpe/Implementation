@@ -135,13 +135,20 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("Index");
         }
 
+        //TODO move to cart
+        //id is the game id wanted to move to the cart
+        public ActionResult MoveToCart(int id)
+        {
+            return RedirectToAction("Index");
+        }
+
         /// <summary>
         /// Member side - Add a specific game to wish list
         /// ****No view required****
         /// </summary>
         /// <param name="id">game id</param>
         [Authorize(Roles = "Member")]
-        public void AddToWishList(int id)
+        public ActionResult AddToWishList(int id)
         {
             try
             {
@@ -150,7 +157,7 @@ namespace SeaSharpe_CVGS.Controllers
 
                 //Check if game is already in user's wishlist
                 IQueryable<WishList> wishList = db.WishLists.Where(w => w.MemberId == CurrentMember.Id && w.GameId == id);
-                if(wishList.Count() == 0)
+                if (wishList.Count() == 0)
                 {
                     //Add new wishlist item if user does not have one for this game
                     TempData["message"] = "Game was added to your wishlist!";
@@ -160,13 +167,14 @@ namespace SeaSharpe_CVGS.Controllers
 
                     db.WishLists.Add(newWishList);
                     db.SaveChanges();
-                }              
+                }
             }
             catch (Exception e)
             {
                 TempData["message"] = "Could not add to wish list: " + e.Message;
             }
-            
+
+            return RedirectToAction("Details", "Game", new { id = id });
         }
 
         #endregion

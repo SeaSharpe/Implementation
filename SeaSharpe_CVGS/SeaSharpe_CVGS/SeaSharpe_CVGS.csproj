@@ -300,10 +300,6 @@
     <Content Include="Views\Event\Edit.cshtml" />
     <Content Include="Views\Event\EventManagement.cshtml" />
     <Content Include="Views\Event\ViewEvents.cshtml" />
-    <Content Include="Views\Review\Create.cshtml" />
-    <Content Include="Views\Review\Delete.cshtml" />
-    <Content Include="Views\Review\Details.cshtml" />
-    <Content Include="Views\Review\Edit.cshtml" />
     <Content Include="Views\Review\ReviewManagement.cshtml" />
     <Content Include="Views\Review\ReviewsRating.cshtml" />
     <Content Include="Views\Order\Create.cshtml" />
