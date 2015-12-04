@@ -6,159 +6,178 @@
 @{
     ViewBag.Title = "Search/Show Friends";
 }
+<head>
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Content/friendship.css" type="text/css">
+</head>   
+<h1>@ViewBag.Title</h1>
+<hr/>
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("Index", "Friendship", FormMethod.Get))
+        {
+            <div id="frmSearchFriend">
+                <!-- Name Search Field -->
+                <div class="form-group">
+                    @Html.Label("Enter Name:", new { @class = "control-label col-md-2 col-md-offset-2", @id = "lblFriendSearch" })
+                    <div class="col-md-3">
+                        @Html.TextBox("nameSearch", null, new { @id = "txtFriendSearch" })
+                    </div>
+                </div>
 
-<h2>@ViewBag.Title</h2>
+                <!-- Submit Button -->
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <input type="submit" value="Search" class="btn greenButton" />
+                    </div>
+                </div>
+            </div>
+        }
+
+        <br /><hr />
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+                <!-- Will be shown only if a search was found-->
+                @if (ViewBag.found == "found")
+                {
+                    <p>
+                        <h3><b>Search Results:</b></h3>
+                    </p>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Friendee.User.FirstName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Friendee.User.LastName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Friendee.User.UserName)
+                            </th>
+                            <th></th>
+                            <th></th>
+                        </tr>
 
 
-@using (Html.BeginForm("Index", "Friendship", FormMethod.Get))
-{
-    <!-- Name Search Field -->
-    <div class="form-group">
-        @Html.Label("Enter Name:", new {@class = "control-label col-md-2"})
-        <div class="col-md-10">
-            @Html.TextBox("nameSearch")
+                        @foreach (var item in (IEnumerable<Member>)ViewData["search"])
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.User.FirstName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.User.LastName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.User.UserName)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Add As Friend", "AddFriend", new { userName = item.User.UserName }, new { @class = "btn greenButton" })
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Add As Family", "AddFamily", new { userName = item.User.UserName }, new { @class = "btn greenButton" })
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                    <hr />
+                }
+                @if (ViewBag.found == "notFound")
+                {
+                    <p>
+                        <h3><b>No Results</b></h3><br/>
+                    </p>
+                }
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- Friends List-->
+                        <p>
+                            <h3><b>Friend's List</b></h3>
+                        </p>
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Friendee.User.FirstName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Friendee.User.LastName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Friendee.User.UserName)
+                                </th>
+                                <th></th>
+                            </tr>
+
+                            @foreach (var item in (IEnumerable<MutualFriendShip>)ViewData["friends"])
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Friendship.Friendee.User.FirstName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Friendship.Friendee.User.LastName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Friendship.Friendee.User.UserName)
+                                    </td>
+                                    <td>
+                                        @if (item.IsMutual)
+                                        {
+                                            @Html.ActionLink("View Wishlist", "Details", new { id = item.Friendship.FriendeeId }, new { @class = "btn greenButton" })
+                                        }
+
+                                        @Html.ActionLink("Remove", "Delete", new { id = item.Friendship.FriendeeId }, new { @class = "btn greenButton" })
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+
+                        <!-- Family List -->
+                        <p>
+                            <h3><b>Family List</b></h3>
+                        </p>
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Friendee.User.FirstName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Friendee.User.LastName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Friendee.User.UserName)
+                                </th>
+                                <th></th>
+                            </tr>
+
+                            @foreach (var item in (IEnumerable<MutualFriendShip>)ViewData["family"])
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Friendship.Friendee.User.FirstName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Friendship.Friendee.User.LastName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Friendship.Friendee.User.UserName)
+                                    </td>
+                                    <td>
+                                        @if (item.IsMutual)
+                                        {
+                                            @Html.ActionLink("View Wishlist", "Details", new { id = item.Friendship.FriendeeId })
+                                        }
+
+                                        @Html.ActionLink("Remove", "Delete", new { id = item.Friendship.FriendeeId }, new { @class = "btn greenButton" })
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
-    <!-- Submit Button -->
-    <div class="form-group">
-        <div class="col-md-10">
-            <input type="submit" value="Search" class="btn btn-default"/>
-        </div>
-    </div>
-}
-
-<br/><br /><br /><br />
-
-<!-- Will be shown only if a search was found-->
-@if(ViewBag.found == "found")
-{
-<p>
-    <h2>Search Results</h2>
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Friendee.User.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Friendee.User.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Friendee.User.UserName)
-        </th>
-        <th></th>
-    </tr>
-
-    
-    @foreach (var item in (IEnumerable<Member>)ViewData["search"])
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserName)
-            </td>
-            <td>
-                @Html.ActionLink("Add Friend", "AddFriend", new { userName = item.User.UserName }) |
-                @Html.ActionLink("Add Family", "AddFamily", new { userName = item.User.UserName })
-            </td>
-        </tr>
-    }
-
-</table>
-}
-@if(ViewBag.found == "notFound")
-{
-    <p>
-        <h2>Nothign found</h2>
-    </p>
-}
-
-<!-- Friends List-->
-<p>
-    <h2>Friend's List</h2>
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Friendee.User.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Friendee.User.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Friendee.User.UserName)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in (IEnumerable<MutualFriendShip>)ViewData["friends"])
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Friendship.Friendee.User.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Friendship.Friendee.User.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Friendship.Friendee.User.UserName)
-            </td>
-            <td>
-                @if(item.IsMutual)
-                {
-                    @Html.ActionLink("View Wishlist", "Details", new {id = item.Friendship.FriendeeId}) 
-                }
-                
-                @Html.ActionLink("Remove", "Delete", new { id = item.Friendship.FriendeeId })
-            </td>
-        </tr>
-    }
-</table>
-
-<!-- Family List -->
-<p>
-    <h2>Family List</h2>
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Friendee.User.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Friendee.User.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Friendee.User.UserName)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in (IEnumerable<MutualFriendShip>)ViewData["family"])
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Friendship.Friendee.User.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Friendship.Friendee.User.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Friendship.Friendee.User.UserName)
-            </td>
-            <td>
-                @if(item.IsMutual)
-                {
-                    @Html.ActionLink("View Wishlist", "Details", new { id = item.Friendship.FriendeeId })
-                }
-
-                @Html.ActionLink("Remove", "Delete", new { id = item.Friendship.FriendeeId })
-            </td>
-        </tr>
-    }
-</table>

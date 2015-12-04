@@ -318,7 +318,15 @@ namespace SeaSharpe_CVGS.Controllers
             return db.Members.Where(n => n.User.FirstName.Contains(searchName)
                 || n.User.LastName.Contains(searchName)).ToList();
         }
-
+        /// <summary>
+        /// this method allows the view to navigate to the current member's wishlist via link
+        /// </summary>
+        /// <returns>Friendship details page</returns>
+        [Authorize(Roles="Member")]
+        public ActionResult DisplayCurrentMemberWishlist()
+        {
+            return RedirectToAction("Details", new { id = CurrentMember.Id });
+        }
         #endregion
     }
 
