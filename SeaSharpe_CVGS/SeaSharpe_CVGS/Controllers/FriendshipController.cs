@@ -112,7 +112,7 @@ namespace SeaSharpe_CVGS.Controllers
             var friendeeMember = db.Members.FirstOrDefault(a => a.Id == id);
 
             ViewBag.FullName = friendeeMember.User.FirstName + " " + friendeeMember.User.LastName;
-
+            ViewData["memberId"] = id;
             var wishListGames = db.WishLists.Where(w => w.MemberId == id).ToList();
             var games = PullGamesWithId(wishListGames);
 
@@ -138,11 +138,34 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("Index");
         }
 
-        //TODO move to cart
-        //id is the game id wanted to move to the cart
-        public ActionResult MoveToCart(int id)
+        /// <summary>
+        /// Moves item to users cart, if the current user owns the wishlist it will remove the item from their wishlist
+        /// </summary>
+        /// <param name="gameId">game id</param>
+        /// <param name="memberId">wishlist user id</param>
+        /// <returns></returns>
+        public ActionResult MoveToCart(int gameId, int memberId)
         {
-            return RedirectToAction("Index");
+            try
+            {                
+                WishList wishlist = db.WishLists.Find(gameId);
+                if (wishlist != null && memberId == CurrentMember.Id)
+                {
+                    //remove wishlist from database if it is the users own wishlist 
+                    db.WishLists.Remove(wishlist);
+                    db.SaveChanges();
+                }
+
+            }
+            catch (Exception e)
+            {
+                //Error removing item from wishlist, item not moved to cart
+                TempData["message"] = "Could not move to cart: " + e.Message;
+                return RedirectToAction("Details", new { id = memberId });
+            }
+
+            //Add item to cart and redirect
+            return RedirectToAction("AddToCart", "Order", new { id = gameId });
         }
 
         /// <summary>
