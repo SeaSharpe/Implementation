@@ -29,22 +29,19 @@ namespace SeaSharpe_CVGS.Models
         public decimal pricePaid;
     }
 
-    public class OrderDetails
+    public class CartViewModel
     {
-        public OrderDetails(Order order, ApplicationUser user, IEnumerable<OrderItem> items)
+        public CartViewModel(OrderItem item, bool download, bool hardCopy)
         {
-            this.order = order;
-            this.user = user;
-            this.items = items;
+            this.item = item;
+            this.download = download;
+            this.hardCopy = hardCopy;
         }
-        public int orderNumber;
 
-        public Order order;
+        public OrderItem item;
 
-        public DateTime orderPlacementDate;
+        public bool download;
 
-        public ApplicationUser user;
-
-        public IEnumerable<OrderItem> items;
+        public bool hardCopy;
     }
 }

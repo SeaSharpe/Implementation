@@ -235,7 +235,7 @@ namespace SeaSharpe_CVGS.Controllers
         {
             /* TODO:
              * Clean up view
-             * Create checkboxes and buttons*/
+             * Create checkboxes and buttons
 
             //get userid
             //var member = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
@@ -259,8 +259,39 @@ namespace SeaSharpe_CVGS.Controllers
             
             //get all games for gameIds
             IEnumerable<Game> games = db.Games.Where(g => orderItemIds.Contains(g.Id)).Include(c => c.Platform);
+            */
 
-            return View(games);
+            //get userid
+            //var member = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
+
+            //validate that the member has a cart
+            var exists = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).Any();
+
+            if (!exists)
+            {
+                //empty cart
+                TempData["message"] = "Cart is empty";
+                return View(Enumerable.Empty<Game>());
+            }
+
+            //This gets the cart order id
+            int orderId = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).First().Id;
+
+            //get all gameIds for order Id
+            IEnumerable<OrderItem> orderItems = db.OrderItems.Where(o => o.OrderId == orderId);
+
+            
+
+            List<CartViewModel> cartItems = new List<CartViewModel>();
+
+            foreach (var orderItem in orderItems)
+            {
+                CartViewModel cvm = new CartViewModel(orderItem, false, false);
+                cartItems.Add(cvm);
+            }
+
+
+            return View(cartItems);
         }
 
         /// <summary>
@@ -336,8 +367,66 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("Cart");
         }
 
-        public ActionResult Delete()
+        public ActionResult Delete(IEnumerable<CartViewModel> cart)
         {
+            foreach (var cvm in cart)
+            {
+                //remove selected items
+                if (cvm.download || cvm.download)
+                {
+                    OrderItem orderItem = cvm.item;
+                    db.OrderItems.Remove(orderItem);
+                    db.SaveChanges();
+                }
+                
+            }
+
+            return RedirectToAction("Cart");
+        }
+
+        public ActionResult Checkout(IEnumerable<CartViewModel> cart)
+        {
+            //create new order for checked items
+            Order downloads = new Order();
+            Order hardcopies = new Order();
+            int numberOfItems = cart.Count();
+
+            foreach (var cvm in cart)
+            {
+                if (cvm.download)
+                {
+                    //add new order id to orderitem, based on do
+                    cvm.item.Order = downloads;
+                    OrderItem download = cvm.item;
+                    db.OrderItems.Add(download);
+                    db.SaveChanges();
+                }
+                else if (cvm.hardCopy)
+                {
+                    cvm.item.Order = hardcopies;
+                    OrderItem hardcopy = cvm.item;
+                    db.OrderItems.Add(hardcopy);
+                    db.SaveChanges();
+                }
+            }
+
+            //downloads "ship" immediately
+            downloads.ShipDate = DateTime.Now;
+
+            db.Orders.Add(downloads);
+            db.Orders.Add(hardcopies);
+            db.SaveChanges();
+
+            //delete original cart if no orderItems remain
+            if (downloads.OrderItems.Count() + hardcopies.OrderItems.Count() == numberOfItems)
+            {
+                //find the cart orderId by looking at the order id of an orderItem in the cart...
+                Order originalOrder = db.Orders.Find(cart.First().item.OrderId);
+
+                //...and then delete the whole order
+                db.Orders.Remove(originalOrder);
+                db.SaveChanges();
+            }
             return RedirectToAction("Cart");
         }
 
