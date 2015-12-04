@@ -1,0 +1,35 @@
+﻿@using System;
+@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.Owin;
+@using Microsoft.Owin;
+@using Microsoft.Owin.Security.Cookies;
+@using Microsoft.Owin.Security.Google;
+@using Owin;
+@using SeaSharpe_CVGS.Models;
+@using Stripe;
+@using System.Configuration;
+@{
+    ViewBag.StripeApiPublicKey = ConfigurationManager.AppSettings["StripeApiPublicKey"];
+    ViewBag.Title = "Buy";
+}
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script>Stripe.setPublishableKey('@Html.Raw(HttpUtility.JavaScriptStringEncode(@ViewBag.StripeApiPublicKey))');</script>
+@using (Html.BeginForm())
+{
+@Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h2>@ViewBag.Title</h2>
+    <div class="form-group">
+        @Html.Label("Amount", new { @for = "amount", @class = "control-label col-md-2"})
+        <div class="col-md-10">
+            @Html.Editor("amount")
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default greenButton" />
+        </div>
+    </div>
+</div>
+}

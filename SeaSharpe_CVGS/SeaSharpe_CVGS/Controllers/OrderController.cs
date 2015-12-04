@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SeaSharpe_CVGS.Models;
+using System.Configuration;
 
 namespace SeaSharpe_CVGS.Controllers
 {
@@ -203,7 +204,19 @@ namespace SeaSharpe_CVGS.Controllers
         }
         
         #endregion
-       
+
+        [HttpGet]
+        public ActionResult Buy()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ActionName("Buy")]
+        public ActionResult PurchaseAThingPost(int? amount)
+        {
+            return View();
+        }
 
     }
 }
