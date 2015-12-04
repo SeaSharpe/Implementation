@@ -37,9 +37,6 @@ namespace SeaSharpe_CVGS.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        //placeholder for getting member id
-        private int memberId = 38;
-
         #region Multiple Roles
         /// <summary>
         /// checks authorization and redirects to appropriate page
@@ -48,21 +45,19 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult Index()
         {
             //validate user role
-            //if (Roles.IsUserInRole(@"employee"))
-            //{
-            //    return View(db.Orders.ToList());
-            return RedirectToAction("OrderManagement");
-            //}
-            //else if (Roles.IsUserInRole(@"member"))
-            //{
-            //    //return ViewEvents view
-            //      return RedirectToAction("OrderHistory");
-            //}
-            //else
-            //{
-            //    //return ViewEvents view
-            //      return RedirectToAction("OrderHistory");
-            //}
+            string userId = User.Identity.GetUserId();
+            var member = db.Members.FirstOrDefault(m => m.User.Id == userId);
+            var employee = db.Employees.FirstOrDefault(m => m.User.Id == userId);
+            if (member != null)
+            {
+                return RedirectToAction("OrderHistory");
+            }
+            else if(employee != null)
+            {
+                return RedirectToAction("OrderManagement");
+            }
+
+            return RedirectToAction("Index", "Home");
         }
         
         #endregion
@@ -78,6 +73,12 @@ namespace SeaSharpe_CVGS.Controllers
              * If employee
              * show all orders with IsProcessed == true
              */
+            string userId = User.Identity.GetUserId();
+            var employee = db.Employees.FirstOrDefault(m => m.User.Id == userId);
+            if (employee == null)
+            {
+                return RedirectToAction("OrderHistory");
+            }
 
             IEnumerable<Order> completedOrders = db.Orders
                 .Where(o => o.IsProcessed == true)
@@ -93,6 +94,12 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Shipping View</returns>
         public ActionResult Shipping(int id)
         {
+            string userId = User.Identity.GetUserId();
+            var employee = db.Employees.FirstOrDefault(m => m.User.Id == userId);
+            if (employee == null)
+            {
+                return RedirectToAction("OrderHistory");
+            }
             Order orderToShip = db.Orders.Find(id);
             return View(orderToShip);
         }
@@ -107,6 +114,13 @@ namespace SeaSharpe_CVGS.Controllers
              * If employee
              * show all orders with IsProcessed == false
              */
+            string userId = User.Identity.GetUserId();
+            var employee = db.Employees.FirstOrDefault(m => m.User.Id == userId);
+            if (employee == null)
+            {
+                return RedirectToAction("OrderHistory");
+            }
+
             IEnumerable<Order> outstandingOrders = db.Orders
                 .Where(o => o.OrderPlacementDate != null && o.IsProcessed == false)
                 .Include(m => m.Member.User).Include(oi => oi.OrderItems).OrderBy(d => d.OrderPlacementDate);
@@ -126,6 +140,12 @@ namespace SeaSharpe_CVGS.Controllers
              * all games where orderId == id 
              * (add param)
              */
+            string userId = User.Identity.GetUserId();
+            var employee = db.Employees.FirstOrDefault(m => m.User.Id == userId);
+            if (employee == null)
+            {
+                return RedirectToAction("OrderHistory");
+            }
 
             Order order;
             if (id == 0)
@@ -148,9 +168,12 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>OrderManagement View</returns>
         public ActionResult MarkAsProcessed(int id = 0)
         {
-            //TODO: replace (placeholder for employee)
-            int employeeId = 1;
-            
+            string userId = User.Identity.GetUserId();
+            var employee = db.Employees.FirstOrDefault(m => m.User.Id == userId);
+            if (employee == null)
+            {
+                return RedirectToAction("OrderHistory");
+            }
 
             //if no item selected
             if (id == 0)
@@ -181,11 +204,9 @@ namespace SeaSharpe_CVGS.Controllers
             //Employee employee = db.Employees.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
 
             //TODO remove (placeholder for employee)
-            Employee approver = db.Employees.Find(employeeId);
-
 
             order.IsProcessed = true;
-            order.Aprover = approver;
+            order.Aprover = employee;
             order.ShipDate = DateTime.Now;
             db.SaveChanges();
 
@@ -200,8 +221,14 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>OrderHistory view</returns>
         public ActionResult OrderHistory()
         {
-            var member = db.Members.Find(memberId);
-
+            //validate user role
+            string userId = User.Identity.GetUserId();
+            var member = db.Members.FirstOrDefault(m => m.User.Id == userId);
+            if (member == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            
             //get orders for member (not cart)
             var exists = db.Orders.Where(m => m.Member.Id == member.Id).Where(d => d.OrderPlacementDate != null).Any();
 
@@ -263,11 +290,16 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Cart view</returns>
         public ActionResult Cart()
         {
-            //get userid
-            //var member = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
+            //validate user role
+            string userId = User.Identity.GetUserId();
+            var member = db.Members.FirstOrDefault(m => m.User.Id == userId);
+            if (member == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
             //validate that the member has a cart
-            var exists = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).Any();
+            var exists = db.Orders.Where(m => m.Member.Id == member.Id).Where(d => d.OrderPlacementDate == null).Any();
 
             if (!exists)
             {
@@ -277,7 +309,7 @@ namespace SeaSharpe_CVGS.Controllers
             }
 
             //This gets the cart order id
-            int orderId = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).First().Id;
+            int orderId = db.Orders.Where(m => m.Member.Id == member.Id).Where(d => d.OrderPlacementDate == null).First().Id;
 
             //get all gameIds for order Id
             IEnumerable<OrderItem> orderItems = db.OrderItems.Where(o => o.OrderId == orderId);
@@ -300,14 +332,15 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>game details view</returns>
         public ActionResult AddToCart(int? id)
         {
-            //get userid
-            //var member = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
-            
-            //placeholder
-            var member = db.Members.Find(memberId);
-
+            //validate user role
+            string userId = User.Identity.GetUserId();
+            var member = db.Members.FirstOrDefault(m => m.User.Id == userId);
+            if (member == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             //check whether the member has a cart
-            var theCart = db.Orders.FirstOrDefault(m => m.Member.Id == memberId && m.OrderPlacementDate == null);
+            var theCart = db.Orders.FirstOrDefault(m => m.Member.Id == member.Id && m.OrderPlacementDate == null);
 
             //check that game is valid
             var game = db.Games.Find(id);
@@ -357,6 +390,19 @@ namespace SeaSharpe_CVGS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AlterCart(CartViewModel[] cart, string submit)
         {
+            //validate user role
+            string userId = User.Identity.GetUserId();
+            var member = db.Members.FirstOrDefault(m => m.User.Id == userId);
+            if (member == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (cart == null)
+            {
+                return RedirectToAction("Cart");
+            }
+
             if (submit == "Remove Selected")
             {
                 Delete(cart);
@@ -377,11 +423,11 @@ namespace SeaSharpe_CVGS.Controllers
         public void Delete(CartViewModel[] cart)
         {
             //get original order count
-            Order originalOrder = db.Orders.Where(o => o.Id == cart.First().item.OrderId).First();
+            Order originalOrder = db.Orders.Find(cart.First().item.OrderId);
 
             //check number of items removes
             int itemsRemoved = 0;
-            int originalNumberOfItems = db.Orders.Where(o => originalOrder.Id == cart.First().item.OrderId).Count();
+            int originalNumberOfItems = originalOrder.OrderItems.Count();
 
             foreach (var cvm in cart)
             {
@@ -511,11 +557,16 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Cart View</returns>
         public ActionResult DeleteCart()
         {
-            //get userid
-            //var member = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
+            //validate user role
+            string userId = User.Identity.GetUserId();
+            var member = db.Members.FirstOrDefault(m => m.User.Id == userId);
+            if (member == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
             //validate that memberId is valid
-            var exists = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).Any();
+            var exists = db.Orders.Where(m => m.Member.Id == member.Id).Where(d => d.OrderPlacementDate == null).Any();
 
             if (!exists)
             {
@@ -525,7 +576,7 @@ namespace SeaSharpe_CVGS.Controllers
             }
 
             //This gets the cart order
-            Order cart = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).First();
+            Order cart = db.Orders.Where(m => m.Member.Id == member.Id).Where(d => d.OrderPlacementDate == null).First();
 
             //delete cart
             db.Orders.Remove(cart);
