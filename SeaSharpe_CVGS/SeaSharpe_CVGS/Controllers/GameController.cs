@@ -11,6 +11,9 @@ using System;
 
 namespace SeaSharpe_CVGS.Controllers
 {
+    /// <summary>
+    /// Controller class for handling actions realted to the Game entity
+    /// </summary>
     public class GameController : Controller
     {
         //Dictionary containing ESRB ratings

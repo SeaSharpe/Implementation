@@ -16,6 +16,9 @@ using System;
 
 namespace SeaSharpe_CVGS.Controllers
 {
+    /// <summary>
+    /// Controller class for handling any actions related to the Friendship entity
+    /// </summary>
     public class FriendshipController : Controller
     {
         /// <summary>

@@ -11,6 +11,9 @@ using System.Data.Entity.Validation;
 
 namespace SeaSharpe_CVGS.Controllers
 {
+    /// <summary>
+    /// Controller for handling any action related to the Review entity
+    /// </summary>
     public class ReviewController : Controller
     {
         #region Multiple Roles
