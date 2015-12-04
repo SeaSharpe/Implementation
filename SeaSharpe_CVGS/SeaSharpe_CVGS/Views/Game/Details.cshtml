@@ -3,79 +3,87 @@
 @{
     ViewBag.Title = "Game Details";
 }
+<body>
+    <!-- Left Hand Side-->
+    <div class="col-md-6">
+        <img src="@Model.ImagePath"/>
+        <!-- Download Game-->
+        <p>
+            @Html.ActionLink("Download", "Download", new { id = Model.Id })
+        </p>
 
-<!-- Left Hand Side-->
-<div class="col-md-6">
-    <img src="@Model.ImagePath"/>
-    <!-- Download Game-->
-    <p>
-        @Html.ActionLink("Download", "Download", new { id = Model.Id })
-    </p>
+        <!-- Add To Cart-->
+        <p>
+            @Html.ActionLink("Add To Cart", "AddToCart", "Order", new { id = Model.Id }, null)
+        </p>
 
-    <!-- Add To Cart-->
-    <p>
-        @Html.ActionLink("Add To Cart", "AddToCart", "Order", new { id = Model.Id }, null)
-    </p>
+        <!-- Add To Wishlist -->
+        <p>
+            @Html.ActionLink("Add To Wishlist", "AddToWishlist", "Order", new { id = Model.Id},null)
+        </p>
 
-    <!-- Add To Wishlist -->
-    <p>
-        @Html.ActionLink("Add To Wishlist", "AddToWishlist", "Order", new { id = Model.Id},null)
-    </p>
-
-    <!-- Back To Games-->
-    <p>
-        @Html.ActionLink("Back to Games", "Index")
-    </p>
-</div>
-<!-- End Left Hand Side-->
-
-
-
-<!-- Right Hand Side-->
-<div class="col-md-6">
-    <dl class="dl-horizontal">
-        <!-- Game Name-->
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <!-- Game Publisher-->
-        <dt>
-            @Html.DisplayNameFor(model => model.Publisher)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Publisher)
-        </dd>
-
-        <!-- Game ESRB-->
-        <dt>
-            @Html.DisplayNameFor(model => model.ESRB)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ESRB)
-        </dd>
+        <!-- Back To Games-->
+        <p>
+            @Html.ActionLink("Back to Games", "Index")
+        </p>
+    </div>
+    <!-- End Left Hand Side-->
 
 
-        <!-- display create review form if review is approved, else display review details TODO: replace true with !isApproved-->
-        @if (!(Boolean)ViewData["isApproved"]) 
-        { 
-            @Html.Partial("~/Views/Review/PartialCreateReview.cshtml", ViewData["review"]); 
-        }        
+
+    <!-- Right Hand Side-->
+    <div class="col-md-6">
+        <dl class="dl-horizontal">
+            <!-- Game Name-->
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+
+            <!-- Game Publisher-->
+            <dt>
+                @Html.DisplayNameFor(model => model.Publisher)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Publisher)
+            </dd>
+
+            <!-- Game ESRB-->
+            <dt>
+                @Html.DisplayNameFor(model => model.ESRB)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ESRB)
+            </dd>
+
+
+            <!-- display create review form if review is approved, else display review details TODO: replace true with !isApproved-->
+            @if (!(Boolean)ViewData["isApproved"]) 
+            { 
+                @Html.Partial("~/Views/Review/PartialCreateReview.cshtml", ViewData["review"]);
+                @Scripts.Render("~/bundles/jqueryval")
+
+            }
+
+            else
+            {
+                @Html.Partial("~/Views/Review/PartialReviewDetails.cshtml", ViewData["review"]);    
+            }
+
         
-        else
-        {
-            @Html.Partial("~/Views/Review/PartialReviewDetails.cshtml", ViewData["review"]);    
-        }
         
-        <!-- link to other reviews for this game-->
-        @Html.ActionLink("View Reviews & Ratings", "ReviewsRating", "Review", new { id = Model.Id }, null)
+            <!-- link to other reviews for this game-->
+            @Html.ActionLink("View Reviews & Ratings", "ReviewsRating", "Review", new { id = Model.Id }, null)
         
-    </dl>
-</div>
-<!-- End Right Hand Side-->
+        </dl>
+    </div>
+    <!-- End Right Hand Side-->
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+</body>

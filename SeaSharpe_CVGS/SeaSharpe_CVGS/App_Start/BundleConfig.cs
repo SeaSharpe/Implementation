@@ -14,7 +14,8 @@ namespace SeaSharpe_CVGS
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*",
-                        "~/Scripts/datePickerReady.js"));
+                        "~/Scripts/datePickerReady.js",
+                        "~/Scripts/star-rating.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
@@ -30,7 +31,8 @@ namespace SeaSharpe_CVGS
                       "~/Content/main.css",
                       "~/Content/simple-sidebar.css",
                       "~/Content/site.css",
-                      "~/Content/themes/base/all.css"));
+                      "~/Content/themes/base/all.css",
+                      "~/Content/star-rating.css"));
         }
     }
 }
