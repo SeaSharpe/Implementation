@@ -26,6 +26,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>redirect to OrderManagement or OrderHistory methods</returns>
         public ActionResult Index()
         {
+            //validate user role
             //if (Roles.IsUserInRole(@"employee"))
             //{
             //    return View(db.Orders.ToList());
@@ -457,38 +458,6 @@ namespace SeaSharpe_CVGS.Controllers
                 db.Orders.Remove(originalOrder);
                 db.SaveChanges();
             }
-        }
-
-        /// <summary>
-        /// post back for deletion of entire cart
-        /// </summary>
-        /// <param name="id">order id</param>
-        /// <returns>Cart view</returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteCartConfirmed()
-        {
-            //get userid
-            //var member = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
-
-            //validate that memberId is valid
-            var exists = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).Any();
-
-            if (!exists)
-            {
-                //empty cart
-                TempData["message"] = "Cart is empty";
-                return View(Enumerable.Empty<Game>());
-            }
-
-            //This gets the cart order
-            Order cart = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).First();
-
-            //delete cart
-            db.Orders.Remove(cart);
-            db.SaveChanges();
-
-            return RedirectToAction("Cart");
         }
 
         public ActionResult DeleteCart()

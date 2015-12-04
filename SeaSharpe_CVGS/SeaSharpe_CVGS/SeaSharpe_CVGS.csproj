@@ -308,9 +308,6 @@
     <Content Include="Views\Review\Edit.cshtml" />
     <Content Include="Views\Review\ReviewManagement.cshtml" />
     <Content Include="Views\Review\ReviewsRating.cshtml" />
-    <Content Include="Views\Order\Create.cshtml" />
-    <Content Include="Views\Order\Delete.cshtml" />
-    <Content Include="Views\Order\Details.cshtml" />
     <Content Include="Views\Order\OrderManagement.cshtml" />
     <Content Include="Views\Order\OrderHistory.cshtml" />
     <Content Include="Views\Order\Cart.cshtml" />
