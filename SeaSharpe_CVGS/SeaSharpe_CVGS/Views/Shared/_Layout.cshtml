@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -14,6 +15,7 @@
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
+            <img src="~/Content/themes/base/images/logo.png" id="logo" />
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -22,42 +24,42 @@
                 </button>
                 @Html.ActionLink("Conestoga Video Game Store", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <!-- to be uncommented when roles are made-->
-             @*@if (Roles.IsUserInRole(@"employee"))
+             @if (User.IsInRole("Employee"))
             {
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Events", "EventManagement", "Event")</li>
                     <li>@Html.ActionLink("Reviews", "ReviewManagement", "Review")</li>
                     <li>@Html.ActionLink("Games", "GameManagement", "Game")</li>
                     <li>@Html.ActionLink("Orders", "OrderManagement", "Order")</li>
-                    <li>@Html.ActionLink("Reports", "Index", "Report")</li>
-                                <li>@Html.ActionLink("Logout", "Index", "Home")</li> @* Needs logout functionality *@
-                        @*
-                    </ul>
-                }
-                else if (Roles.IsUserInRole(@"member"))
-                {
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Friends/Family", "Index", "Friendship")</li>
-                        <li>@Html.ActionLink("Wish List", "Details", "Friendship")</li>
-                        <li>@Html.ActionLink("Library", "Index", "Home")</li> @*library page not created yet??*@@*
-                        <li>@Html.ActionLink("Profile", "Edit", "User")</li>
-                        <li>@Html.ActionLink("Cart", "Cart", "Order")</li> |
-                        <li>@Html.ActionLink("Logout", "Contact", "Home")</li>@* Needs logout functionality *@
-            @*
-                     </ul>
-                }
-                else
-                {*@
+                    <li>@Html.ActionLink("Reports", "Index", "Report")</li>   
+                    <li>@Html.Partial("_LoginPartial")</li>                            
+                </ul>
+            }
+             else if (User.IsInRole("Member"))
+             {
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Friends/Family", "Index", "Friendship")</li>
+                    <li>@Html.ActionLink("Wish List", "DisplayCurrentMemberWishlist", "Friendship")</li>
+                    <li>@Html.ActionLink("Library", "Index", "Home")</li> @*library page not created yet*@
+                    <li>@Html.ActionLink("Profile", "Edit", "User")</li>
+                    <li>@Html.ActionLink("Cart", "Cart", "Order")</li>   
+                    <li>@Html.Partial("_LoginPartial")</li>    
+                </ul>
+                
+                    
+                
+            }
+             else
+             {
                 <div class="navbar-collapse collapse">                    
-                    @Html.Partial("_LoginPartial")
+                @Html.Partial("_LoginPartial")
                 </div>
-            @*}*@
-            
+            }            
         </div>
     </div>
     <div class="container body-content">
-        <span>@TempData["message"]</span>
+        <span>@TempData["error"]</span>
+        <span>@TempData["Message"]</span>
         <div id="wrapper">
 
             <!-- Sidebar -->
@@ -67,20 +69,20 @@
                         Navigation
                     </li>
                     <!-- to be uncommented when roles are made-->
-                  @*@if ((Roles.IsUserInRole(@"employee")))
-                    {
-                        <li>
-                             @Html.ActionLink("Events", "ViewEvents", "Event")
-                        </li>
-                        <li>
-                            @Html.ActionLink("Shop", "SearchGames", "Game")
-                        </li>
-                    }
-                    else
-                    {*@ 
+                 @if (User.IsInRole("Employee"))
+                {
+                    <li>
+                            @Html.ActionLink("Events", "ViewEvents", "Event")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Shop", "SearchGames", "Game")
+                    </li>
+                }
+                else
+                { 
                     <li>
                         <!-- contact us page not created yet-->
-                        @Html.ActionLink("Contact Us", "Index", "Home")
+                        @Html.ActionLink("Contact Us", "Contact", "Home")
                     </li>
                     <li>
                         @Html.ActionLink("Events", "ViewEvents", "Event")
@@ -88,59 +90,59 @@
                     <li>
                         @Html.ActionLink("Shop", "SearchGames", "Game")
                     </li>
-                    @*}*@
+                 }
                     <li class="sidebar-brand">
                         Browse By Platform
                     </li>
                     <li>
                         <!-- need to get id for specific platform-->
-                        @Html.ActionLink("PS4", "SearchGames", "Game", new { platformSearch = new int[]{1} })
+                        @Html.ActionLink("PS4", "SearchGames", "Game", new { platformSearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific platform-->
-                        @Html.ActionLink("XBOX One", "SearchGames", "Game", new { platformSearch = new int[] { 1 } })
+                        @Html.ActionLink("XBOX One", "SearchGames", "Game", new { platformSearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific platform-->
-                        @Html.ActionLink("Wii U", "SearchGames", "Game", new { platformSearch = new int[] { 1 } })
+                        @Html.ActionLink("Wii U", "SearchGames", "Game", new { platformSearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific platform-->
-                        @Html.ActionLink("PC", "SearchGames", "Game", new { platformSearch = new int[] { 1 } })
+                        @Html.ActionLink("PC", "SearchGames", "Game", new { platformSearch = new int[] { 1 } }, null)
                     </li>
                     <li class="sidebar-brand">
                         Browse By Category
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("Action", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("Action", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("Adventure", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("Adventure", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("MMO", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("MMO", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("RPG", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("RPG", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("Strategy", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("Strategy", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                     <li>
                         <!-- need to get id for specific category-->
-                        @Html.ActionLink("Other", "SearchGames", "Game", new { categorySearch = new int[] { 1 } })
+                        @Html.ActionLink("Other", "SearchGames", "Game", new { categorySearch = new int[] { 1 } }, null)
                     </li>
                 </ul>
             </div>
             <!-- /#sidebar-wrapper -->
             <div id="page-content-wrapper">
                 <div class="container-fluid">
-                    @RenderBody()
+        @RenderBody()
                 </div>
             </div>
             <!-- /#page-content-wrapper -->
@@ -153,13 +155,13 @@
         </div>
     </div>
 
-                @Scripts.Render("~/bundles/jquery")
-                @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
 
-                <!-- Jquery UI script for datepicker-->
-                @Scripts.Render("~/Scripts/jquery-ui-1.11.4.js")
-                @Scripts.Render("~/Scripts/datePickerReady.js")
+    <!-- Jquery UI script for datepicker-->
+    @Scripts.Render("~/Scripts/jquery-ui-1.11.4.js")
+    @Scripts.Render("~/Scripts/datePickerReady.js")
 
-                @RenderSection("scripts", required: false)
+    @RenderSection("scripts", required: false)
 </body>
 </html>

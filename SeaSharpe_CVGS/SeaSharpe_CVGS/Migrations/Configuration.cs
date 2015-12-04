@@ -55,7 +55,7 @@ namespace SeaSharpe_CVGS.Migrations
             }
 
             var mockUsers = new ApplicationUser[] { // GUID             EMAIL                                       SALTED PASSWORD HASH                                        USERNAME            GENDER  FIRST NAME         LAST NAME       DATE OF BIRTH           DATE REGISTERED
-                MakeUser(@"03ec4e30-6ba2-48b0-ae82-3d8e30d6307b", @"abaswell@arachnet.ca",     @"APXQhbnuJfhSBojKarJ0a9m6/imzNjs77rmVEoTZf7F8MqnMwiGU//EA9Y9GVOfw3A==",   @"AYSEBASWELL622782",      @"O",  @"AYSE",         @"BASWELL",    @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
+                MakeUser(@"03ec4e30-6ba2-48b0-ae82-3d8e30d6307b", @"abaswell@arachnet.ca",     @"APXQhbnuJfhSBojKarJ0a9m6/imzNjs77rmVEoTZf7F8MqnMwiGU//EA9Y9GVOfw3A==",   @"CVGSEMPLOYEE",           @"O",  @"AYSE",         @"BASWELL",    @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
                 MakeUser(@"0bc70e50-6ed5-49f1-a1f0-a8d262dea2fa", @"plalovic@cheapnfast.com",  @"AAxhW7ZHYubxVSiMREe+PDHyZMUU+2uhriBEVECzzeUBhWaHzR78dPL969/J9S5jCQ==",   @"PAMELALALOVIC475670",    @"O",  @"PAMELA",       @"LALOVIC",    @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
                 MakeUser(@"0fedaad9-325a-46c3-8295-fdf78fe2e09d", @"nlee@netnutz.biz",         @"AFFcvX/d/E7tFvSiCfaNMxXok89R2AyCgonpP6Np9qmSlYULEvrA9vcYO/83kRnBjw==",   @"NELLIELEE361672",        @"O",  @"NELLIE",       @"LEE",        @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
                 MakeUser(@"12482d3e-67e9-4d73-9e17-42a690c8581c", @"mbrookins@funnet.ca",      @"AM3YMJEEoRF5MUJYECV5vpMh/FTWt/Bmpmy6vxhXNyrnTqmr4WpqCuej9GbnzBH50g==",   @"MELISSABROOKINS141879",  @"O",  @"MELISSA",      @"BROOKINS",   @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
@@ -182,9 +182,17 @@ namespace SeaSharpe_CVGS.Migrations
                 MakeOrder(@"HEATHERLUNTERKOFLER5",  @"AYSEBASWELL622782",    "2015-11-11 04:00:00",  null,                   2,          3,          true,           "Skyrim", "rwar")
             };
             
+            var mockFriendships = new Friendship[]
+            {
+                MakeFriendShip("JOHNESTIS244358", "HEATHERLUNTERKOFLER5", false),
+                MakeFriendShip("JOHNESTIS244358", "CRITKUBICKI272730", false),
+                MakeFriendShip("JOHNESTIS244358", "PAULACOSTAIN1188335", true),
+                MakeFriendShip("JOHNESTIS244358", "RICHARD M.TURNER473", true)
+            };
+
             // Fill the tables
             context.Users.AddOrUpdate(mockUsers);
-            context.Friendships.AddOrUpdate(new Friendship[] { }); // TODO: Update this placeholder
+            context.Friendships.AddOrUpdate(mockFriendships);
             context.Events.AddOrUpdate(new Event[] { });           // TODO: Update this placeholder
             context.Orders.AddOrUpdate(mockOrders);           
             context.OrderItems.AddOrUpdate(new OrderItem[] { });   // TODO: Update this placeholder
@@ -193,6 +201,8 @@ namespace SeaSharpe_CVGS.Migrations
             context.Reviews.AddOrUpdate(new Review[] { });         // TODO: Update this placeholder
             context.SaveChanges();
         }
+
+
 
         /// <summary>
         /// Use this method to create a mock addresses
@@ -298,13 +308,16 @@ namespace SeaSharpe_CVGS.Migrations
         /// <returns>A game object with category relationships in place</returns>
         private Game MakeGame(string name, string releaseDate, decimal price, PlatformEnum platform, string image, string publisher, RatingEnum esrb, params CategoryEnum[] categories)
         {
+            Platform platformObj = mockPlatforms[platform];
+
             // Create game object
-            Game game = new Game
+            Game game = db.Games.FirstOrDefault(g => g.Name == name && g.Platform.Id == platformObj.Id) ??
+                new Game
             {
                 Name                 = name,
                 ReleaseDate          = DateTime.Parse(releaseDate),
                 SuggestedRetailPrice = price,
-                Platform             = mockPlatforms[platform],
+                Platform             = platformObj,
                 ImagePath            = image,
                 Publisher            = publisher,
                 ESRB                 = Enum.GetName(typeof(RatingEnum), esrb)
@@ -318,6 +331,29 @@ namespace SeaSharpe_CVGS.Migrations
             }
 
             return game;
+        }
+
+
+        private Friendship MakeFriendShip(string userNameFriender, string userNameFriendee, bool isFamily)
+        {
+            var checkIfExist = db.Friendships.FirstOrDefault(a => a.Friender.User.UserName == userNameFriender && a.Friendee.User.UserName == userNameFriendee);
+
+            //if the Frienship exist will return the existing friendShip
+            //this is to avoid duplicate mockData
+            if (checkIfExist != null)
+            {
+                return checkIfExist;
+            }
+
+            Member memberFriender = db.Members.FirstOrDefault(f => f.User.UserName == userNameFriender);
+            Member memberFriendee = db.Members.FirstOrDefault(f => f.User.UserName == userNameFriendee);
+
+            Friendship res = new Friendship();
+            res.Friender = memberFriender;
+            res.Friendee = memberFriendee;
+            res.IsFamilyMember = isFamily;
+
+            return res;
         }
 
         /// <summary>

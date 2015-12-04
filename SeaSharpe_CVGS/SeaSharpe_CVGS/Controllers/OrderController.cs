@@ -7,8 +7,6 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SeaSharpe_CVGS.Models;
-using SeaSharpe_CVGS.Migrations;
-using Microsoft.AspNet.Identity;
 
 /*
  * This Controller tracks orders for site members and employees.
@@ -35,8 +33,6 @@ namespace SeaSharpe_CVGS.Controllers
 {
     public class OrderController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
         #region Multiple Roles
         /// <summary>
         /// checks authorization and redirects to appropriate page
@@ -45,7 +41,7 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult Index()
         {
             //validate user role
-            string userId = User.Identity.GetUserId();
+            string userId = CurrentUser.Id;
             var member = db.Members.FirstOrDefault(m => m.User.Id == userId);
             var employee = db.Employees.FirstOrDefault(m => m.User.Id == userId);
             if (member != null)
@@ -54,9 +50,9 @@ namespace SeaSharpe_CVGS.Controllers
             }
             else if(employee != null)
             {
-                return RedirectToAction("OrderManagement");
-            }
-
+            return RedirectToAction("OrderManagement");
+        }
+        
             return RedirectToAction("Index", "Home");
         }
         
@@ -73,12 +69,12 @@ namespace SeaSharpe_CVGS.Controllers
              * If employee
              * show all orders with IsProcessed == true
              */
-            string userId = User.Identity.GetUserId();
+            string userId = CurrentUser.Id;
             var employee = db.Employees.FirstOrDefault(m => m.User.Id == userId);
             if (employee == null)
             {
                 return RedirectToAction("OrderHistory");
-            }
+        }
 
             IEnumerable<Order> completedOrders = db.Orders
                 .Where(o => o.IsProcessed == true)
@@ -94,7 +90,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Shipping View</returns>
         public ActionResult Shipping(int id)
         {
-            string userId = User.Identity.GetUserId();
+            string userId = CurrentUser.Id;
             var employee = db.Employees.FirstOrDefault(m => m.User.Id == userId);
             if (employee == null)
             {
@@ -114,12 +110,12 @@ namespace SeaSharpe_CVGS.Controllers
              * If employee
              * show all orders with IsProcessed == false
              */
-            string userId = User.Identity.GetUserId();
+            string userId = CurrentUser.Id;
             var employee = db.Employees.FirstOrDefault(m => m.User.Id == userId);
             if (employee == null)
             {
                 return RedirectToAction("OrderHistory");
-            }
+        }
 
             IEnumerable<Order> outstandingOrders = db.Orders
                 .Where(o => o.OrderPlacementDate != null && o.IsProcessed == false)
@@ -140,12 +136,12 @@ namespace SeaSharpe_CVGS.Controllers
              * all games where orderId == id 
              * (add param)
              */
-            string userId = User.Identity.GetUserId();
+            string userId = CurrentUser.Id;
             var employee = db.Employees.FirstOrDefault(m => m.User.Id == userId);
             if (employee == null)
             {
                 return RedirectToAction("OrderHistory");
-            }
+        }
 
             Order order;
             if (id == 0)
@@ -168,7 +164,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>OrderManagement View</returns>
         public ActionResult MarkAsProcessed(int id = 0)
         {
-            string userId = User.Identity.GetUserId();
+            string userId = CurrentUser.Id;
             var employee = db.Employees.FirstOrDefault(m => m.User.Id == userId);
             if (employee == null)
             {
@@ -190,7 +186,7 @@ namespace SeaSharpe_CVGS.Controllers
                 //Message should only appear in SelectedOrderPartialView, so unique TempData key is given
                 TempData["messageDan1"] = "Please select a valid game";
                 return RedirectToAction("OrderManagement");
-            }
+        }
 
             //if order is already processed
             if (order.IsProcessed == true)
@@ -201,7 +197,7 @@ namespace SeaSharpe_CVGS.Controllers
             }
 
             //get approver
-            //Employee employee = db.Employees.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
+            //Employee employee = db.Employees.FirstOrDefault(m => m.User.Id == CurrentUser.Id);
 
             //TODO remove (placeholder for employee)
 
@@ -222,13 +218,13 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult OrderHistory()
         {
             //validate user role
-            string userId = User.Identity.GetUserId();
+            string userId = CurrentUser.Id;
             var member = db.Members.FirstOrDefault(m => m.User.Id == userId);
             if (member == null)
             {
                 return RedirectToAction("Index", "Home");
-            }
-            
+        }
+
             //get orders for member (not cart)
             var exists = db.Orders.Where(m => m.Member.Id == member.Id).Where(d => d.OrderPlacementDate != null).Any();
 
@@ -286,12 +282,12 @@ namespace SeaSharpe_CVGS.Controllers
         /// <summary>
         /// Show order items in cart order
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">member id</param>
         /// <returns>Cart view</returns>
-        public ActionResult Cart()
+        public ActionResult Cart(int? id)
         {
             //validate user role
-            string userId = User.Identity.GetUserId();
+            string userId = CurrentUser.Id;
             var member = db.Members.FirstOrDefault(m => m.User.Id == userId);
             if (member == null)
             {
@@ -333,7 +329,7 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult AddToCart(int? id)
         {
             //validate user role
-            string userId = User.Identity.GetUserId();
+            string userId = CurrentUser.Id;
             var member = db.Members.FirstOrDefault(m => m.User.Id == userId);
             if (member == null)
             {
@@ -363,7 +359,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             //check if game already exists
             if (db.OrderItems.Where(m => m.OrderId == theCart.Id && m.GameId == game.Id).FirstOrDefault() != null)
-            {
+        {
                 //currently this stops the addToCart, if we add a quantity column to the orderItems table, it could increment the quantity instead
                 TempData["message"] = game.Name + " already exists in cart";
                 return RedirectToAction("details", "Game", new { id });
@@ -391,10 +387,10 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult AlterCart(CartViewModel[] cart, string submit)
         {
             //validate user role
-            string userId = User.Identity.GetUserId();
+            string userId = CurrentUser.Id;
             var member = db.Members.FirstOrDefault(m => m.User.Id == userId);
             if (member == null)
-            {
+        {
                 return RedirectToAction("Index", "Home");
             }
 
@@ -445,7 +441,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             //if order is now empty
             if (originalOrder.OrderItems.Count == itemsRemoved)
-            {
+        {
                 //delete the now empty order
                 db.Orders.Remove(originalOrder);
                 db.SaveChanges();
@@ -507,7 +503,7 @@ namespace SeaSharpe_CVGS.Controllers
             foreach (var cvm in cart)
             {
                 if (cvm.download)
-                {
+        {
                     numberOfPurchasedItems++;
                     //add new order id to orderitem, based on do
                     cvm.item.Order = downloads;
@@ -523,7 +519,7 @@ namespace SeaSharpe_CVGS.Controllers
                     db.SaveChanges();
                 }
                 else if (cvm.hardCopy)
-                {
+            {
                     numberOfPurchasedItems++;
                     cvm.item.Order = hardcopies;
                     OrderItem originalHardcopy = db.OrderItems.Where(oi => oi.OrderId == originalOrder.Id && oi.GameId == cvm.item.GameId).First();
@@ -535,19 +531,19 @@ namespace SeaSharpe_CVGS.Controllers
                     newHardcopy.OrderId = hardcopies.Id;
                     db.OrderItems.Remove(originalHardcopy);
                     db.OrderItems.Add(newHardcopy);
-                    db.SaveChanges();
-                }
+                db.SaveChanges();
             }
+        }
 
             db.SaveChanges();
             
 
             //delete original cart if no orderItems remain
             if (numberOfPurchasedItems == numberOfItems)
-            {
+        {
                 //delete the original order
                 db.Orders.Remove(originalOrder);
-                db.SaveChanges();
+            db.SaveChanges();
             }
         }
 
@@ -558,7 +554,7 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult DeleteCart()
         {
             //validate user role
-            string userId = User.Identity.GetUserId();
+            string userId = CurrentUser.Id;
             var member = db.Members.FirstOrDefault(m => m.User.Id == userId);
             if (member == null)
             {
@@ -569,7 +565,7 @@ namespace SeaSharpe_CVGS.Controllers
             var exists = db.Orders.Where(m => m.Member.Id == member.Id).Where(d => d.OrderPlacementDate == null).Any();
 
             if (!exists)
-            {
+        {
                 //empty cart
                 TempData["message"] = "Cart is empty";
                 return RedirectToAction("Cart");
@@ -588,17 +584,5 @@ namespace SeaSharpe_CVGS.Controllers
         #endregion
        
 
-        /// <summary>
-        /// garbage collection
-        /// </summary>
-        /// <param name="disposing">garbage</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

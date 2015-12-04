@@ -4,10 +4,14 @@
     ViewBag.Title = "Game Management";
 }
 
-<h2>@ViewBag.Title</h2>
-
+<head>
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Content/game.css" type="text/css">
+</head>
+<h1>@ViewBag.Title</h1>
+<hr />
 <p>
-    @Html.ActionLink("Add New Game", "Create")
+    @Html.ActionLink("Add New Game", "Create", null, new { @class = "btn greenButton" })
 </p>
 <table class="table">
     <tr>

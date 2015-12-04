@@ -50,7 +50,7 @@ namespace SeaSharpe_CVGS.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Username")]
+        [Display(Name = "User Name")]
         public string Username { get; set; }
 
         [Required]
