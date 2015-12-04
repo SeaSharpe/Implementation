@@ -6,7 +6,10 @@
 <!-- Left Hand Side-->
 <div class="col-md-6">
     <h2>@ViewBag.Title</h2>
-    <h4>Average Rating: @ViewData["averageRating"]</h4>
+    <!-- average rating-->
+    <h4>Average Rating: 
+        <input value="@ViewData["averageRating"]" type="number" class="rating" min="0" max="5" data-showClear="true" data-readonly="true" data-show-caption="false" data-size="xs" />
+    </h4>
     <table class="table">
         <tr>
             <!-- Author heading-->

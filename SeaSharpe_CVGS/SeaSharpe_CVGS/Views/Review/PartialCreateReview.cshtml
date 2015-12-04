@@ -46,7 +46,8 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Rating, new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    <input value="@Model.Rating" type="number" id="Rating" name="Rating" class="rating" min="0" max="5" data-size="xs" />
+                    <input value="@Model.Rating" type="number" id="Rating" name="Rating" class="rating" min="0" max="5" data-show-Caption="false" data-size="xs" />
+                    <script type="text/javascript">$("#Rating").rating()</script>
                     @Html.ValidationMessageFor(model => model.Rating)
                 </div>
             </div>
@@ -54,7 +55,7 @@
             {
                 <span>Your review was not approved by our employees.</span>
             }
-            @if (Model.Aprover == null && Model.Author != null)
+            @if (Model.Aprover == null && Model.Subject != null)
             {
                 <span>Your review is pending approval from our employees.</span>
             }

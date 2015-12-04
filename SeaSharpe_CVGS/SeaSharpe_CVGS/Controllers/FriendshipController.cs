@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using SeaSharpe_CVGS.Models;
+using System;
 
 namespace SeaSharpe_CVGS.Controllers
 {
@@ -134,11 +135,38 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("Index");
         }
 
-        //TODO move to cart
-        //id is the game id wanted to move to the cart
-        public ActionResult MoveToCart(int id)
+        /// <summary>
+        /// Member side - Add a specific game to wish list
+        /// ****No view required****
+        /// </summary>
+        /// <param name="id">game id</param>
+        [Authorize(Roles = "Member")]
+        public void AddToWishList(int id)
         {
-            return RedirectToAction("Index");
+            try
+            {
+                //Default message to user
+                TempData["message"] = "This game is already on your wishlist!";
+
+                //Check if game is already in user's wishlist
+                IQueryable<WishList> wishList = db.WishLists.Where(w => w.MemberId == CurrentMember.Id && w.GameId == id);
+                if(wishList.Count() == 0)
+                {
+                    //Add new wishlist item if user does not have one for this game
+                    TempData["message"] = "Game was added to your wishlist!";
+                    WishList newWishList = new WishList();
+                    newWishList.GameId = id;
+                    newWishList.MemberId = CurrentMember.Id;
+
+                    db.WishLists.Add(newWishList);
+                    db.SaveChanges();
+                }              
+            }
+            catch (Exception e)
+            {
+                TempData["message"] = "Could not add to wish list: " + e.Message;
+            }
+            
         }
 
         #endregion

@@ -41,15 +41,14 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult ReviewsRating(int id)
         {            
             //Get list of all reviews/ratings for selected game
-            IQueryable<Review> gameReviews = db.Reviews.Where(r => r.Game_Id == id && r.IsApproved);
-            ViewData["averageRating"] = "No ratings for this game.";
+            IQueryable<Review> gameReviews = db.Reviews.Where(r => r.Game_Id == id);
             if(gameReviews.Count() > 0)
             {
                 //Calculate average based on all reviews and ratings
                 ViewData["averageRating"] = gameReviews.Average(r => r.Rating);
             }
-            //TODO: only show approved reviews
-            return View(gameReviews.ToList());
+
+            return View(gameReviews.Where(r=> r.IsApproved).ToList());
         }
 
         /// <summary>
@@ -212,27 +211,6 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("Details", "Game", new { id = review.Game_Id });
         }
 
-        /// <summary>
-        /// post back for review creation
-        /// **** review must be validated by employee before appears in Reviews/Rating list ****
-        /// </summary>
-        /// <param name="review">Review object</param>
-        /// <returns></returns>
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Member")]
-        //public ActionResult Create([Bind(Include = "Id,Rating,Subject,Body")] Review review)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Reviews.Add(review);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Game/Details");
-        //    }
-
-        //    return View(review);
-        //}
-        // NOTE: I do not think we need this method/view anymore as it is being handle by PartialCreateReview
         #endregion
         
     }

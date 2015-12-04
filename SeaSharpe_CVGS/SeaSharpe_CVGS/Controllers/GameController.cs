@@ -325,18 +325,7 @@ namespace SeaSharpe_CVGS.Controllers
             
             return RedirectToAction("GameManagement");
         }
-        
-        /// <summary>
-        /// Member side - Add a specific game to wish list
-        /// ****No view required****
-        /// </summary>
-        /// <param name="id">game id</param>
-        /// <returns>game details view</returns>
-        [Authorize(Roles = "Member")]
-        public ActionResult AddToWishList(int? id)
-        {
-            return RedirectToAction("Details");
-        }
+                
         /// <summary>
         /// Member side - Download a specific game
         /// ****No view required****
