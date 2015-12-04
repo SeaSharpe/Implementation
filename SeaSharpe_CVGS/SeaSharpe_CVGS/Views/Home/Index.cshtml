@@ -14,16 +14,16 @@
 {
     <div class="row">
         <div class="col-md-3">
-            <a href="/Game/Details/@Model.ElementAtOrDefault(i).Id"><img src="@Model.First().ImagePath" class="img-game" /></a>
+            <a href="/Game/Details/@Model.ElementAtOrDefault(i).Id"><img src="@Model.ElementAtOrDefault(i).ImagePath" class="img-game" /></a>
         </div>
         <div class="col-md-3">
-            <a href="/Game/Details/@Model.ElementAtOrDefault(i+1).Id"><img src="@Model.First().ImagePath" class="img-game" /></a>
+            <a href="/Game/Details/@Model.ElementAtOrDefault(i+1).Id"><img src="@Model.ElementAtOrDefault(i + 1).ImagePath" class="img-game" /></a>
         </div>
         <div class="col-md-3">
-            <a href="/Game/Details/@Model.ElementAtOrDefault(i+2).Id"><img src="@Model.First().ImagePath" class="img-game" /></a>
+            <a href="/Game/Details/@Model.ElementAtOrDefault(i+2).Id"><img src="@Model.ElementAtOrDefault(i + 2).ImagePath" class="img-game" /></a>
         </div>
         <div class="col-md-3">
-            <a href="/Game/Details/@Model.ElementAtOrDefault(i+3).Id"><img src="@Model.First().ImagePath" class="img-game" /></a>
+            <a href="/Game/Details/@Model.ElementAtOrDefault(i+3).Id"><img src="@Model.ElementAtOrDefault(i + 3).ImagePath" class="img-game" /></a>
         </div>
     </div>
 }
