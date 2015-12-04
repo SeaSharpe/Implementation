@@ -31,7 +31,12 @@
                     <th>
                         <p>Move to Cart</p>
                     </th>
-                    <th></th>
+                    @if ((int)ViewData["memberId"] == (int)ViewData["currentMemberId"])
+                    {
+                        <th>
+                            <p>Remove</p>
+                        </th>
+                    }                    
                 </tr>
 
                 @foreach (var item in Model)
@@ -50,8 +55,14 @@
                             @Html.DisplayFor(modelItem => item.SuggestedRetailPrice)
                         </td>
                         <td>
-                            @Html.ActionLink("Move to Cart", "MoveToCart", new { id = item.Id }, new { @class = "btn greenButton" })
+                            @Html.ActionLink("Add To Cart", "MoveToCart", new { gameId = item.Id, memberId = ViewData["memberId"] }, new { @class = "btn greenButton" })
                         </td>
+                        @if ((int)ViewData["memberId"] == (int)ViewData["currentMemberId"])
+                        {
+                            <td>
+                                @Html.ActionLink("Remove", "RemoveFromWishlist", new { gameId = item.Id, memberId = ViewData["memberId"] }, new { @class = "btn greenButton" })
+                            </td>
+                        }    
                     </tr>
                 }
             </table>

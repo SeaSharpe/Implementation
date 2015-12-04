@@ -35,6 +35,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// and if a search was done will include a list with the search results
         /// <param name="nameSearch">Name to search. Will search first and last name</param>
         /// <returns>Search/Show Friends view</returns>
+        [Authorize(Roles = "Member")]
         public ActionResult Index(string nameSearch)
         {
             //Friender: Requester
@@ -63,6 +64,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// Add a Friend to CurrentMember FriendShip
         /// </summary>
         /// <returns>Index view</returns>
+        [Authorize(Roles = "Member")]
         public ActionResult AddFriend(string userName)
         {
             Friendship newFriendship = new Friendship();
@@ -84,6 +86,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// Add a Friend to CurrentMember FriendShip as a family
         /// </summary>
         /// <returns>Index view</returns>
+        [Authorize(Roles="Member")]
         public ActionResult AddFamily(string userName)
             {
             Friendship newFriendship = new Friendship();
@@ -107,23 +110,27 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <param name="id">friendee id</param>
         /// <returns>Wishlist view</returns>
+        [Authorize(Roles="Member")]
         public ActionResult Details(int id)
         {
             var friendeeMember = db.Members.FirstOrDefault(a => a.Id == id);
 
-            ViewBag.FullName = friendeeMember.User.FirstName + " " + friendeeMember.User.LastName;
-
+            ViewBag.FullName = friendeeMember.User.FirstName + " " + friendeeMember.User.LastName;            
             var wishListGames = db.WishLists.Where(w => w.MemberId == id).ToList();
             var games = PullGamesWithId(wishListGames);
+
+            ViewData["memberId"] = id;
+            ViewData["currentMemberId"] = CurrentMember.Id;
 
             return View(games);
         }
 
-       /// <summary>
+        /// <summary>
         /// Post back for delete friendship
-       /// </summary>
+        /// </summary>
         /// <param name="id">FrienderId</param>
-       /// <returns>Search/Show Friends view</returns>
+        /// <returns>Search/Show Friends view</returns>
+        [Authorize(Roles = "Member")]
         public ActionResult Delete(int id)
         {
             Friendship friendship = db.Friendships.FirstOrDefault
@@ -138,11 +145,36 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("Index");
         }
 
-        //TODO move to cart
-        //id is the game id wanted to move to the cart
-        public ActionResult MoveToCart(int id)
+        /// <summary>
+        /// Moves item to users cart, if the current user owns the wishlist it will remove the item from their wishlist
+        /// </summary>
+        /// <param name="gameId">game id</param>
+        /// <param name="memberId">wishlist user id</param>
+        /// <returns></returns>
+        [Authorize(Roles="Member")]
+        public ActionResult MoveToCart(int gameId, int memberId)
         {
-            return RedirectToAction("Index");
+            //Remove item from wishlist if the current member is on their own wishlist
+            RemoveFromWishlist(gameId, memberId);
+
+            //Add item to cart and redirect
+            return RedirectToAction("AddToCart", "Order", new { id = gameId });
+        }
+
+        /// <summary>
+        /// Removes item from users wishlist
+        /// </summary>
+        /// <param name="gameId">game id</param>
+        /// <param name="memberId">wishlist user id</param>
+        /// <returns></returns>
+        [Authorize(Roles = "Member")]
+        public ActionResult RemoveFromWishlist(int gameId, int memberId)
+        {
+            //Delete wishlist
+            DeleteWishlist(gameId, memberId);
+
+            //Redirect to wishlist page
+            return RedirectToAction("Details", new { id = memberId });
         }
 
         /// <summary>
@@ -326,6 +358,32 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult DisplayCurrentMemberWishlist()
         {
             return RedirectToAction("Details", new { id = CurrentMember.Id });
+        }
+
+        /// <summary>
+        /// Helper method for deleting a wishlist item
+        /// </summary>
+        /// <param name="gameId">game id</param>
+        /// <param name="memberId">member id</param>
+        public void DeleteWishlist(int gameId, int memberId)
+        {
+            try
+            {
+                WishList wishlist = db.WishLists.First(w => w.GameId == gameId && w.MemberId == memberId);
+                if (wishlist != null && memberId == CurrentMember.Id)
+                {
+                    //remove wishlist from database if it is the users own wishlist 
+                    db.WishLists.Remove(wishlist);
+                    db.SaveChanges();
+                    TempData["message"] = "Item removed from wishlist!";
+                }
+
+            }
+            catch (Exception e)
+            {
+                //Error removing item from wishlist, item not moved to cart
+                TempData["message"] = "Could not remove from wishlist: " + e.Message;
+            }
         }
         #endregion
     }
