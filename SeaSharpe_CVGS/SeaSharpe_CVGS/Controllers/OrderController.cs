@@ -236,30 +236,7 @@ namespace SeaSharpe_CVGS.Controllers
             /* TODO:
              * Clean up view
              * Create checkboxes and buttons
-
-            //get userid
-            //var member = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
-
-            //validate that memberId is valid
-            var exists = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).Any();
-
-            if (!exists)
-            {
-                //empty cart
-                TempData["message"] = "Cart is empty";
-                return View(Enumerable.Empty<Game>());
-            }
-
-            //This gets the cart order id
-            int orderId = db.Orders.Where(m => m.Member.Id == memberId).Where(d => d.OrderPlacementDate == null).First().Id;
-
-            //get all gameIds for order Id
-            var orderItemIds = db.OrderItems.Where(o => o.OrderId == orderId).Select(i => i.GameId);
-
-            
-            //get all games for gameIds
-            IEnumerable<Game> games = db.Games.Where(g => orderItemIds.Contains(g.Id)).Include(c => c.Platform);
-            */
+             */ 
 
             //get userid
             //var member = db.Members.FirstOrDefault(m => m.User.Id == User.Identity.GetUserId());
@@ -280,8 +257,6 @@ namespace SeaSharpe_CVGS.Controllers
             //get all gameIds for order Id
             IEnumerable<OrderItem> orderItems = db.OrderItems.Where(o => o.OrderId == orderId);
 
-            
-
             List<CartViewModel> cartItems = new List<CartViewModel>();
 
             foreach (var orderItem in orderItems)
@@ -289,7 +264,6 @@ namespace SeaSharpe_CVGS.Controllers
                 CartViewModel cvm = new CartViewModel(orderItem, false, false);
                 cartItems.Add(cvm);
             }
-
 
             return View(cartItems);
         }
@@ -369,6 +343,8 @@ namespace SeaSharpe_CVGS.Controllers
 
         public ActionResult Delete(IEnumerable<CartViewModel> cart)
         {
+            bool test = cart.First().download;
+
             foreach (var cvm in cart)
             {
                 //remove selected items
@@ -413,9 +389,18 @@ namespace SeaSharpe_CVGS.Controllers
             //downloads "ship" immediately
             downloads.ShipDate = DateTime.Now;
 
-            db.Orders.Add(downloads);
-            db.Orders.Add(hardcopies);
-            db.SaveChanges();
+            if (downloads.OrderItems.Count() > 0)
+            {
+                db.Orders.Add(downloads);
+                db.SaveChanges();
+            }
+
+            if (hardcopies.OrderItems.Count() > 0)
+            {
+                db.Orders.Add(hardcopies);
+                db.SaveChanges();
+            }
+            
 
             //delete original cart if no orderItems remain
             if (downloads.OrderItems.Count() + hardcopies.OrderItems.Count() == numberOfItems)

@@ -1,14 +1,10 @@
-﻿@model IEnumerable<SeaSharpe_CVGS.Models.CartViewModel>
+﻿@model List<SeaSharpe_CVGS.Models.CartViewModel>
 
 @{
     ViewBag.Title = "Cart";
 }
 
 <h2>Cart</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -18,41 +14,57 @@
             Hard Copy
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.item.Game.Name)
+            @Html.DisplayNameFor(model => model.First().item.Game.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.item.Game.Platform.Name)
+            @Html.DisplayNameFor(model => model.First().item.Game.Platform.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.item.Game.ESRB)
+            @Html.DisplayNameFor(model => model.First().item.Game.ESRB)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.item.Game.SuggestedRetailPrice)
+            @Html.DisplayNameFor(model => model.First().item.Game.SuggestedRetailPrice)
         </th>
     </tr>
 
-@foreach (var orderItem in Model) {
+@for (int i = 0; i < Model.Count(); i++)
+{
     <tr>
+        
+            @if (Model[i].item.Game.SuggestedRetailPrice > 0.01m)
+            {
+                <td>
+                    N/A
+                </td>
+                <td>
+                    @Html.EditorFor(model => model[i].hardCopy)
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.EditorFor(model => model[i].download)
+                    
+                </td>
+                <td>
+                    N/A
+                </td>
+            }
         <td>
-            @Html.EditorFor(modelItem => orderItem.download)
+            @Html.DisplayFor(model => model[i].item.Game.Name)
         </td>
         <td>
-            @Html.EditorFor(modelItem => orderItem.hardCopy)
+            @Html.DisplayFor(model => model[i].item.Game.Platform.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => orderItem.item.Game.Name)
+            @Html.DisplayFor(model => model[i].item.Game.ESRB)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => orderItem.item.Game.Platform.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => orderItem.item.Game.ESRB)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => orderItem.item.Game.SuggestedRetailPrice)
+            @Html.DisplayFor(model => model[i].item.Game.SuggestedRetailPrice)
         </td>
     </tr>
 }
+
 </table>
 @if (TempData["EmptyCart"] != null)
 {
