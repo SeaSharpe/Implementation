@@ -3,7 +3,9 @@
 @{
     ViewBag.Title = "Cart";
 }
-
+@using (Html.BeginForm("AlterCart", "Order", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
 <h2>Cart</h2>
 <table class="table">
     <tr>
@@ -17,7 +19,7 @@
             @Html.DisplayNameFor(model => model.First().item.Game.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().item.Game.Platform.Name)
+            @Html.LabelFor(model => model.First().item.Game.Platform.Name, "Platform")
         </th>
         <th>
             @Html.DisplayNameFor(model => model.First().item.Game.ESRB)
@@ -27,14 +29,15 @@
         </th>
     </tr>
 
-@for (int i = 0; i < Model.Count(); i++)
-{
-    <tr>
-        
+
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+        <tr>
             @if (Model[i].item.Game.SuggestedRetailPrice > 0.01m)
             {
                 <td>
                     N/A
+                    @Html.HiddenFor(model => model[i].download)
                 </td>
                 <td>
                     @Html.EditorFor(model => model[i].hardCopy)
@@ -44,37 +47,38 @@
             {
                 <td>
                     @Html.EditorFor(model => model[i].download)
-                    
                 </td>
                 <td>
                     N/A
+                    @Html.HiddenFor(model => model[i].hardCopy)
                 </td>
             }
-        <td>
-            @Html.DisplayFor(model => model[i].item.Game.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model[i].item.Game.Platform.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model[i].item.Game.ESRB)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model[i].item.Game.SuggestedRetailPrice)
-        </td>
-    </tr>
-}
+            <td>
+                @Html.DisplayFor(model => model[i].item.Game.Name)
+                @Html.HiddenFor(model => model[i].item.OrderId)
+                @Html.HiddenFor(model => model[i].item.GameId)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model[i].item.Game.Platform.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model[i].item.Game.ESRB)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model[i].item.Game.SuggestedRetailPrice)
+            </td>
+        </tr>
+    }
 
 </table>
-@if (TempData["EmptyCart"] != null)
+if (TempData["EmptyCart"] != null)
 {
     <p>@TempData["EmptyCart"]</p>
     <br/>
 }
-
-@(Html.ActionLink("Remove Selected", "Delete", "order", null, new { @class = "btn btn-primary" }))
+<input type="submit" name="submit" value="Remove Selected" class="btn btn-primary" />
 @(Html.ActionLink("Empty Cart", "DeleteCart", "order", null, new { @class = "btn btn-primary" }))
 <br/>
 @(Html.ActionLink("Continue Shopping", "Index", "Game", null, new { @class = "btn btn-primary" }))
-@(Html.ActionLink("Checkout Now", "Index", "Home", null, new { @class = "btn btn-primary" }))
-
+<input type="submit" name="submit" value="Checkout Now" class="btn btn-primary" />
+}

@@ -30,7 +30,7 @@
             @Html.DisplayNameFor(model => model.ShipDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Aprover.User.FirstName)
+            @Html.LabelFor(model => model.First().Aprover.User.FirstName, "Approver")
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Member.Id)

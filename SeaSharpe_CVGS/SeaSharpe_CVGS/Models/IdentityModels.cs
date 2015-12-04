@@ -38,6 +38,7 @@ namespace SeaSharpe_CVGS.Models
     public partial class Member
     {
         public virtual ApplicationUser User { get; set; }
+        [Display(Name = "Member Id")]
         public int Id { get; set; }
         public bool IsEmailVerified { get; set; }
         public bool IsEmailMarketingAllowed { get; set; }
@@ -56,7 +57,6 @@ namespace SeaSharpe_CVGS.Models
     {
         public int Id { get; set; }
         public virtual Member Member { get; set; }
-        [Display(Name = "Street Address")]
         public string StreetAddress { get; set; }
         public string City { get; set; }
         public string Region { get; set; }

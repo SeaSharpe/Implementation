@@ -248,7 +248,7 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 //empty cart
                 TempData["message"] = "Cart is empty";
-                return View(Enumerable.Empty<Game>());
+                return View(Enumerable.Empty<CartViewModel>().ToList());
             }
 
             //This gets the cart order id
@@ -322,97 +322,141 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("details", "Game", new { id });
         }
 
-        /// <summary>
-        /// post back for deletion of cart item
-        /// </summary>
-        /// <param name="id">orderItem id</param>
-        /// <returns>Cart view</returns>
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int itemId)
+        public ActionResult AlterCart(CartViewModel[] cart, string submit)
         {
-            /*
-             * 
-             */
-            
-            Order order = db.Orders.Find(itemId);
-            db.Orders.Remove(order);
-            db.SaveChanges();
+            if (submit == "Remove Selected")
+            {
+                Delete(cart);
+            }
+            else if (submit == "Checkout Now")
+            {
+                Checkout(cart);
+            }
             return RedirectToAction("Cart");
         }
 
-        public ActionResult Delete(IEnumerable<CartViewModel> cart)
+        public void Delete(CartViewModel[] cart)
         {
-            bool test = cart.First().download;
+            //get original order count
+            Order originalOrder = db.Orders.Where(o => o.Id == cart.First().item.OrderId).First();
+
+            //check number of items removes
+            int itemsRemoved = 0;
+            int originalNumberOfItems = db.Orders.Where(o => originalOrder.Id == cart.First().item.OrderId).Count();
 
             foreach (var cvm in cart)
             {
                 //remove selected items
-                if (cvm.download || cvm.download)
+                if (cvm.download || cvm.hardCopy)
                 {
-                    OrderItem orderItem = cvm.item;
+                    itemsRemoved++;
+                    OrderItem orderItem = db.OrderItems.Where(g => g.GameId == cvm.item.GameId && g.OrderId == cvm.item.OrderId).First();
                     db.OrderItems.Remove(orderItem);
                     db.SaveChanges();
                 }
-                
             }
 
-            return RedirectToAction("Cart");
+            db.SaveChanges();
+
+            //if order is now empty
+            if (originalOrder.OrderItems.Count == itemsRemoved)
+            {
+                //delete the now empty order
+                db.Orders.Remove(originalOrder);
+                db.SaveChanges();
+            }
         }
 
-        public ActionResult Checkout(IEnumerable<CartViewModel> cart)
+        public void Checkout(CartViewModel[] cart)
         {
+            //find if there are any downloads or hardcopies
+            bool hasDownloads = cart.Where(a => a.download).Any();
+            bool hasHardcopies = cart.Where(a => a.hardCopy).Any();
+
+            Order originalOrder = db.Orders.Find(cart.First().item.OrderId);
+
+            int numberOfPurchasedItems = 0;
+
             //create new order for checked items
             Order downloads = new Order();
             Order hardcopies = new Order();
+
             int numberOfItems = cart.Count();
+
+            if (hasDownloads)
+            {
+                downloads.BillingAddress = originalOrder.BillingAddress;
+                downloads.Member = originalOrder.Member;
+                downloads.ShippingAddress = originalOrder.ShippingAddress;
+
+                //downloads "ship" immediately
+                downloads.OrderPlacementDate = DateTime.Now;
+                downloads.ShipDate = DateTime.Now;
+
+                //add to the db to generate valid id
+                db.Orders.Add(downloads);
+                db.SaveChanges();
+            }
+
+            if (hasHardcopies)
+            {
+                hardcopies.BillingAddress = originalOrder.BillingAddress;
+                hardcopies.Member = originalOrder.Member;
+                hardcopies.ShippingAddress = originalOrder.ShippingAddress;
+                hardcopies.OrderPlacementDate = DateTime.Now;
+
+                //add to the db to generate valid id
+                db.Orders.Add(hardcopies);
+                db.SaveChanges();
+            }
 
             foreach (var cvm in cart)
             {
                 if (cvm.download)
                 {
+                    numberOfPurchasedItems++;
                     //add new order id to orderitem, based on do
                     cvm.item.Order = downloads;
-                    OrderItem download = cvm.item;
-                    db.OrderItems.Add(download);
+                    OrderItem originalDownload = db.OrderItems.Where(oi => oi.OrderId == originalOrder.Id && oi.GameId == cvm.item.GameId).First();
+                    OrderItem newDownload = new OrderItem();
+                    newDownload.Game = originalDownload.Game;
+                    newDownload.GameId = originalDownload.GameId;
+                    newDownload.SalePrice = originalDownload.SalePrice;
+                    newDownload.Order = downloads;
+                    newDownload.OrderId = downloads.Id;
+                    db.OrderItems.Add(newDownload);
+                    db.OrderItems.Remove(originalDownload);
                     db.SaveChanges();
                 }
                 else if (cvm.hardCopy)
                 {
+                    numberOfPurchasedItems++;
                     cvm.item.Order = hardcopies;
-                    OrderItem hardcopy = cvm.item;
-                    db.OrderItems.Add(hardcopy);
+                    OrderItem originalHardcopy = db.OrderItems.Where(oi => oi.OrderId == originalOrder.Id && oi.GameId == cvm.item.GameId).First();
+                    OrderItem newHardcopy = new OrderItem();
+                    newHardcopy.Game = originalHardcopy.Game;
+                    newHardcopy.GameId = originalHardcopy.GameId;
+                    newHardcopy.SalePrice = originalHardcopy.SalePrice;
+                    newHardcopy.Order = hardcopies;
+                    newHardcopy.OrderId = hardcopies.Id;
+                    db.OrderItems.Remove(originalHardcopy);
+                    db.OrderItems.Add(newHardcopy);
                     db.SaveChanges();
                 }
             }
 
-            //downloads "ship" immediately
-            downloads.ShipDate = DateTime.Now;
-
-            if (downloads.OrderItems.Count() > 0)
-            {
-                db.Orders.Add(downloads);
-                db.SaveChanges();
-            }
-
-            if (hardcopies.OrderItems.Count() > 0)
-            {
-                db.Orders.Add(hardcopies);
-                db.SaveChanges();
-            }
+            db.SaveChanges();
             
 
             //delete original cart if no orderItems remain
-            if (downloads.OrderItems.Count() + hardcopies.OrderItems.Count() == numberOfItems)
+            if (numberOfPurchasedItems == numberOfItems)
             {
-                //find the cart orderId by looking at the order id of an orderItem in the cart...
-                Order originalOrder = db.Orders.Find(cart.First().item.OrderId);
-
-                //...and then delete the whole order
+                //delete the original order
                 db.Orders.Remove(originalOrder);
                 db.SaveChanges();
             }
-            return RedirectToAction("Cart");
         }
 
         /// <summary>

@@ -9,6 +9,10 @@ namespace SeaSharpe_CVGS.Models
 {
     public class OrderHistoryViewModel
     {
+        public OrderHistoryViewModel()
+        {
+
+        }
         public OrderHistoryViewModel(DateTime opd, DateTime sd, string gn, string pn, decimal pp)
         {
             this.orderPlacementDate = opd;
@@ -17,20 +21,25 @@ namespace SeaSharpe_CVGS.Models
             this.platform = pn;
             this.pricePaid = pp;
         }
-        
-        public DateTime orderPlacementDate;
-
-        public DateTime shipDate;
-
-        public string gameName;
-
-        public string platform;
-
-        public decimal pricePaid;
+        [Display(Name = "Order Date")]
+        public DateTime orderPlacementDate { get; set; }
+        [Display(Name = "Ship Date")]
+        public DateTime shipDate { get; set; }
+        [Display(Name = "Name")]
+        public string gameName { get; set; }
+        [Display(Name = "Platform")]
+        public string platform { get; set; }
+        [Display(Name = "Price")]
+        [DisplayFormat(DataFormatString = "{0:c}")]
+        public decimal pricePaid { get; set; }
     }
 
     public class CartViewModel
     {
+        public CartViewModel() 
+        { 
+        
+        }
         public CartViewModel(OrderItem item, bool download, bool hardCopy)
         {
             this.item = item;
@@ -38,10 +47,10 @@ namespace SeaSharpe_CVGS.Models
             this.hardCopy = hardCopy;
         }
 
-        public OrderItem item;
+        public OrderItem item { get; set; }
 
-        public bool download;
+        public bool download { get; set; }
 
-        public bool hardCopy;
+        public bool hardCopy { get; set; }
     }
 }
