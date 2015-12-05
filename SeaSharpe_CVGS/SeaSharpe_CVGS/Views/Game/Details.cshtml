@@ -13,6 +13,11 @@
 <!-- Left Hand Side-->
     <div class="col-md-3 col-md-offset-2">
         <img src="@Model.ImagePath" class="img-details"/>
+    <!-- link to other reviews for this game -->
+    <p>
+        @Html.ActionLink("View Reviews & Ratings", "ReviewsRating", "Review", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
+    </p>
+
     <!-- Download Game-->
     <p>
             @Html.ActionLink("Download", "Download", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
@@ -32,6 +37,7 @@
     <p>
             @Html.ActionLink("Back to Games", "Index", null, new { @class = "btn greenButton btn-details" })
     </p>
+
 </div>
 <!-- End Left Hand Side-->
 <!-- Right Hand Side-->
@@ -77,9 +83,7 @@
             @Html.Partial("~/Views/Review/PartialReviewDetails.cshtml", ViewData["review"]);    
         }
         
-            <!-- link to other reviews for this game -->
-            @Html.ActionLink("View Reviews & Ratings", "ReviewsRating", "Review", new { id = Model.Id }, new { @class = "btn greenButton", @id = "btnViewReview" })
-        
+            
     </dl>
 </div>
 </div>

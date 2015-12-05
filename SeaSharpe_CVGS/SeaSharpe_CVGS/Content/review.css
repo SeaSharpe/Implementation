@@ -5,3 +5,7 @@
     resize:none !important;
     border: 2px inset;
 }
+.reviewBorder {
+    border: 4px outset;
+    padding: 10px 10px 10px 30px;
+}

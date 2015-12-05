@@ -29,7 +29,9 @@ a:hover {
     text-align:center;
     padding-bottom: 4px;
 }
-
+.dl-horizontal {
+    margin-top: 0;
+}
 @media (min-width: 768px) {
     .dl-horizontal dd {
         margin-left: 85px;

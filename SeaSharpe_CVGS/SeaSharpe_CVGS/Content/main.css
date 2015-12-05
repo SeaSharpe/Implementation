@@ -26,11 +26,15 @@ select {
     height: 31px;
 }
 
-.tempMessage {
+.tempMessage, #tempData {
     font-weight:bold;
     color:red;
 }
 
+.tempMessage {
+    margin: -10px 0 0 0;
+    padding-bottom: 10px;
+}
 /* Footer */
 footer {
     z-index:1111;
