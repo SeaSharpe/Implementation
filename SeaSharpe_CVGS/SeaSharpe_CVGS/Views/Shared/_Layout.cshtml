@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -40,14 +39,11 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Friends/Family", "Index", "Friendship")</li>
                     <li>@Html.ActionLink("Wish List", "DisplayCurrentMemberWishlist", "Friendship")</li>
-                    <li>@Html.ActionLink("Library", "Index", "Home")</li> @*library page not created yet*@
+                    <li>@Html.ActionLink("Library", "Index", "Home")</li> <!--library page not created yet-->
                     <li>@Html.ActionLink("Profile", "Edit", "User")</li>
                     <li>@Html.ActionLink("Cart", "Cart", "Order")</li>   
                     <li>@Html.Partial("_LoginPartial")</li>    
-                </ul>
-                
-                    
-                
+                </ul>                            
             }
              else
              {
@@ -58,8 +54,7 @@
         </div>
     </div>
     <div class="container body-content">
-        <span>@TempData["error"]</span>
-        <span>@TempData["Message"]</span>
+        <span>@TempData["message"]</span>
         <div id="wrapper">
 
             <!-- Sidebar -->
@@ -82,7 +77,7 @@
                 { 
                     <li>
                         <!-- contact us page not created yet-->
-                        @Html.ActionLink("Contact Us", "Contact", "Home")
+                        @Html.ActionLink("Contact Us", "Index", "Home")
                     </li>
                     <li>
                         @Html.ActionLink("Events", "ViewEvents", "Event")
@@ -157,10 +152,6 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-
-    <!-- Jquery UI script for datepicker-->
-    @Scripts.Render("~/Scripts/jquery-ui-1.11.4.js")
-    @Scripts.Render("~/Scripts/datePickerReady.js")
 
     @RenderSection("scripts", required: false)
 </body>
