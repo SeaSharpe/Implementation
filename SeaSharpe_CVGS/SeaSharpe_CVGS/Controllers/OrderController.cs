@@ -211,6 +211,19 @@ namespace SeaSharpe_CVGS.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Buy's postback action
+        /// </summary>
+        /// <param name="stripeToken">
+        ///     The token provided to the client to track this purchase
+        /// </param>
+        /// <param name="stripeTokenType">The type of token, usualy "card"</param>
+        /// <param name="stripeEmail">
+        ///     The email the customer provided in the stripe payment dialogue box
+        /// </param>
+        /// <returns>
+        ///     Returns a view displaying the status of the payment to the user.
+        /// </returns>
         [HttpPost]
         public ActionResult Buy(string stripeToken, string stripeTokenType, string stripeEmail)
         {
