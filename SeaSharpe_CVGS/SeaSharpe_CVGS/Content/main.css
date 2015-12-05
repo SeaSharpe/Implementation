@@ -35,6 +35,12 @@ select {
     margin: -10px 0 0 0;
     padding-bottom: 10px;
 }
+
+h1, h2, h3 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
 /* Footer */
 footer {
     z-index:1111;
@@ -53,7 +59,7 @@ footer p {
 
 }
 
-input[type="text"]{
+input[type="text"], input[type="password"]{
     border-radius: 10px;
 }
 
@@ -204,11 +210,11 @@ select[multiple] option:hover
 .form-horizontal .control-label {
     padding-top: 2px;
 }
-
-h1, h2, h3 {
-    margin-top: 10px;
-    margin-bottom: 5px;
+.jumbotron {
+    width: 50%;
+    margin-left: 25%;
 }
+
 
 /* errors */
 

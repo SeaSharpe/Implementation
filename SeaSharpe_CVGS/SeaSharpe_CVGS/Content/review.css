@@ -5,7 +5,38 @@
     resize:none !important;
     border: 2px inset;
 }
+
 .reviewBorder {
     border: 4px outset;
     padding: 10px 10px 10px 30px;
+}
+
+#reviewReview {
+    padding-right: 30px;
+}
+
+input, textarea {
+    margin-left: 10px;
+}
+
+#btnApproveReview {
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    #selectedReview dt {
+        width: 40%;
+    }
+    #selectedReview dd {
+        padding-bottom: 10px;
+        width: 60%;
+    }
+    #selectedReview dd {
+        margin-left: 110px;
+    }
+
+    #selectedReview dl {
+        width: 30px;
+        overflow-wrap:break-word;
+    }
 }

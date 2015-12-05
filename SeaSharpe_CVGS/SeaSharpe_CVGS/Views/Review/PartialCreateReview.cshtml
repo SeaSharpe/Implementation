@@ -26,7 +26,7 @@
             <!-- Review Subject -->
             <div class="form-group">
                 @Html.LabelFor(model => model.Subject, new { @class = "control-label col-md-2 col-md-offset-1" })
-                <div class="col-md-8">
+                <div class="col-md-9">
                     @Html.TextBoxFor(model => model.Subject)<br />
                     @Html.ValidationMessageFor(model => model.Subject)
                 </div>
@@ -35,7 +35,7 @@
             <!-- Review Body -->
             <div class="form-group">
                 @Html.LabelFor(model => model.Body, new { @class = "control-label col-md-2 col-md-offset-1" })
-                <div class="col-md-8">
+                <div class="col-md-9">
                     @Html.EditorFor(model => model.Body)<br />
                     @Html.ValidationMessageFor(model => model.Body)
                 </div>
@@ -45,7 +45,7 @@
             <!-- Rating -->
             <div class="form-group">
                 @Html.LabelFor(model => model.Rating, new { @class = "control-label col-md-2 col-md-offset-1" })
-                <div class="col-md-8">
+                <div class="col-md-9">
                     <input value="@Model.Rating" type="number" id="Rating" name="Rating" class="rating" min="0" max="5" data-show-caption="false" data-size="xs" />
                     <script type="text/javascript">$("#Rating").rating()</script><br />
                     @Html.ValidationMessageFor(model => model.Rating)

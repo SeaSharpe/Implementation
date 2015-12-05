@@ -1,54 +1,64 @@
 ﻿@model SeaSharpe_CVGS.Models.Review
  
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+<div class="reviewBorder" id="reviewReview">
+    
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <!-- Subject Label -->
-        <dt>
-            @Html.DisplayNameFor(model => model.Subject)
-        </dt>
+        <div class="form-horizontal">
+            <h3 style="font-weight:bold;text-align:center;">Game Reviewed:</h3>
+            <p style="text-align:center;">@Html.DisplayFor(model => model.Game.Name)</p>
+            <h3 style ="font-weight:bold;text-align:center;">Review By:</h3>
+            <p style="text-align:center;">@Html.DisplayFor(model => model.Author.User.FirstName) @Html.DisplayFor(model => model.Author.User.LastName)</p>
+            <hr />
+            <dl class="dl-horizontal" id="selectedReview">
+                <!-- Subject Label -->
+                <dt>
+                    @Html.DisplayNameFor(model => model.Subject)
+                </dt>
 
-        <!-- Subject text-->
-        <dd>
-            @Html.DisplayFor(model => model.Subject)
-        </dd>
+                <!-- Subject text-->
+                <dd>
+                    @Html.DisplayFor(model => model.Subject)
+                </dd>
 
-        <!-- Body Label -->
-        <dt>
-            @Html.DisplayNameFor(model => model.Body)
-        </dt>
+                <!-- Body Label -->
+                <dt>
+                    @Html.DisplayNameFor(model => model.Body)
+                </dt>
 
-        <!-- Body Text -->
-        <dd>
-            @Html.DisplayFor(model => model.Body)
-        </dd>
+                <!-- Body Text -->
+                <dd>
+                    @Html.DisplayFor(model => model.Body)
+                </dd>
 
-        <!-- Rating Label-->
-        <dt>
-            @Html.DisplayNameFor(model => model.Rating)
-        </dt>
+                <!-- Rating Label-->
+                <dt>
+                    @Html.DisplayNameFor(model => model.Rating)
+                </dt>
 
-        <!-- Rating Text-->
-        <dd>
-            @Html.DisplayFor(model => model.Rating)
-        </dd>
+                <!-- Rating Text-->
+                <dd>
+                    @Html.DisplayFor(model => model.Rating)
+                </dd>
 
-        <!-- Approval Label-->
-        <dt>
-            @Html.DisplayNameFor(model => model.IsApproved)
-        </dt>
+                <!-- Approval Label-->
+                <dt>
+                    @Html.DisplayNameFor(model => model.IsApproved)
+                </dt>
 
-        <!-- Approval Checkbox-->
-        <dd>
-            @Html.CheckBoxFor(model => model.IsApproved)
-        </dd>
+                <!-- Approval Checkbox-->
+                <dd>
+                    @Html.CheckBoxFor(model => model.IsApproved)
+                </dd>
+            </dl>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Submit" class="btn btn-default" />
+            <div class="form-group">
+                <div class="col-md-11">
+                    <input type="submit" value="Submit" class="btn greenButton" id="btnApproveReview" />
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
+</div>

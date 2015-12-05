@@ -146,6 +146,7 @@ namespace SeaSharpe_CVGS.Models
         [ForeignKey("Game")]
         public int Game_Id { get; set; }
         public string Body { get; set; }
+        [Display(Name = "Approved")]
         public bool IsApproved { get; set; }
     }
 
