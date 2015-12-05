@@ -54,7 +54,7 @@
         </div>
     </div>
     <div class="container body-content">
-        <span>@TempData["message"]</span>
+        
         <div id="wrapper">
 
             <!-- Sidebar -->
@@ -77,7 +77,7 @@
                 { 
                     <li>
                         <!-- contact us page not created yet-->
-                        @Html.ActionLink("Contact Us", "Index", "Home")
+                        @Html.ActionLink("Contact Us", "Contact", "Home")
                     </li>
                     <li>
                         @Html.ActionLink("Events", "ViewEvents", "Event")
@@ -137,6 +137,7 @@
             <!-- /#sidebar-wrapper -->
             <div id="page-content-wrapper">
                 <div class="container-fluid">
+                    <span>@TempData["message"]</span>
         @RenderBody()
                 </div>
             </div>

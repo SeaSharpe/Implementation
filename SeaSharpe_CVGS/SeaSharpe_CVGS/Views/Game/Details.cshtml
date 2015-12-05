@@ -78,7 +78,7 @@
         }
         
             <!-- link to other reviews for this game -->
-            @Html.ActionLink("View Reviews & Ratings", "ReviewsRating", "Review", new { id = Model.Id }, null)
+            @Html.ActionLink("View Reviews & Ratings", "ReviewsRating", "Review", new { id = Model.Id }, new { @class = "btn greenButton", @id = "btnViewReview" })
         
     </dl>
 </div>

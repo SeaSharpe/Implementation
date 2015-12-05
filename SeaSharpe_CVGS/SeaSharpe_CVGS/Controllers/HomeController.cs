@@ -15,17 +15,8 @@ namespace SeaSharpe_CVGS.Controllers
             return View(listOfGames.ToList());
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
         public ActionResult Contact()
         {
-            ViewBag.Message = "Contact Us";
-
             return View();
         }
 

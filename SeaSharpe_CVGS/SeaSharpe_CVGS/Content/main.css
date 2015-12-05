@@ -5,6 +5,7 @@
     font-size:18px;
 }
 
+
 #logo {
     height: 3em;
     width: 60px;
@@ -23,6 +24,11 @@ hr {
 
 select {
     height: 31px;
+}
+
+.tempMessage {
+    font-weight:bold;
+    color:red;
 }
 
 /* Footer */
@@ -198,4 +204,12 @@ select[multiple] option:hover
 h1, h2, h3 {
     margin-top: 10px;
     margin-bottom: 5px;
+}
+
+/* errors */
+
+.field-validation-error {
+    color: red;
+    font-weight:bold;
+    font-size: 12px;
 }

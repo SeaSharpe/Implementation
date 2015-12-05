@@ -41,3 +41,7 @@ a:hover {
         padding: 0 0 10px 10px;
     }
 }
+
+#btnViewReview {
+    margin-left: 45px;
+}
