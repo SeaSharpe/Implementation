@@ -247,8 +247,8 @@ namespace SeaSharpe_CVGS.Migrations
             {
                 Member = db.Members.First(m => m.User.UserName == member),
                 Aprover = db.Employees.FirstOrDefault(e => e.User.UserName == aprover),
-                BillingAddress = db.Addresses.First(b => b.Id == billingAddressIndex),
-                ShippingAddress = db.Addresses.First(b => b.Id == shippingAddressIndex),
+                BillingAddress = db.Addresses.OrderBy(c => c.City).Skip(billingAddressIndex).FirstOrDefault(),
+                ShippingAddress = db.Addresses.OrderBy(c => c.City).Skip(shippingAddressIndex).FirstOrDefault(),
                 IsProcessed = isProcessed
             };
 
