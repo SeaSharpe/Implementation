@@ -34,22 +34,21 @@ namespace SeaSharpe_CVGS.Controllers
                 Member = db.Members.FirstOrDefault(m => m.Id == id || m.User.UserName == User.Identity.Name)
             };
 
+            if (model.Member == null)
+            {
+                return HttpNotFound();
+            }
+
             var memberAddresses = db.
                 Addresses.
                 Where(a => a.Member.Id == model.Member.Id).
                 OrderBy(a => a.Id);
 
-            // Shipping address is the first address Billing adddress is the second address or a new adress
-            model.ShippingAddress = memberAddresses.FirstOrDefault() 
+            // Billing address is the first address Shipping adddress is the second address or a new adress
+            model.BillingAddress = memberAddresses.FirstOrDefault() 
                 ?? new Address { Member = model.Member };
-            model.BillingAddress = memberAddresses.Skip(1).FirstOrDefault() 
+            model.ShippingAddress = memberAddresses.Skip(1).FirstOrDefault() 
                 ?? new Address { Member = model.Member };
-
-
-            if (model.Member == null)
-            {
-                return HttpNotFound();
-            }
 
             if ( User.IsInRole("Employee") || model.Member.User.UserName == User.Identity.Name )
             {
@@ -69,41 +68,39 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult Edit(
             [Bind(Prefix = "Member")] Member member, 
             [Bind(Prefix = "BillingAddress")] Address billingAddress, 
-            [Bind(Prefix = "ShippingAddress")] Address shippingAddress) {
-            var dbMember = db.Members.Find(member.Id);
-            var dbBillingAddress = db.Addresses.Find(billingAddress.Id);
-            var dbShippingAddress = db.Addresses.Find(billingAddress.Id);
+            [Bind(Prefix = "ShippingAddress")] Address shippingAddress)
+        {
+            var model = new ProfileViewModel { Member = member, BillingAddress = billingAddress, ShippingAddress = shippingAddress };
+            var sqlLog = new StringBuilder("");
+            db.Database.Log = x => sqlLog.Append(x);
 
-            if (dbMember == null)
+            foreach (var address in new Address[] { billingAddress, shippingAddress })
             {
-                TempData["Message"] = "Warning: Member not found.";
-            }
-            else
-            {
-                UpdateMember(member, dbMember);
-            }
-
-            if (dbBillingAddress == null)
-            {
-                billingAddress.Member = member;
-                db.Addresses.Add(billingAddress);
-            }
-            else
-            {
-                UpdateAddress(billingAddress, dbBillingAddress);
-            }
-
-            if (dbShippingAddress == null)
-            {
-                shippingAddress.Member = member;
-                db.Addresses.Add(shippingAddress);
-            }
-            else
-            {
-                UpdateAddress(shippingAddress, dbShippingAddress);
+                if (address != null) 
+                {
+                    address.Member = member;
+                    if (address.Id == 0)
+                    {
+                        if (!String.IsNullOrWhiteSpace(address.StreetAddress) &&
+                            !String.IsNullOrWhiteSpace(address.Region) &&
+                            !String.IsNullOrWhiteSpace(address.City) &&
+                            !String.IsNullOrWhiteSpace(address.Country) &&
+                            !String.IsNullOrWhiteSpace(address.PostalCode))
+                        {
+                            db.Addresses.Add(address);
+                        }
+                    }
+                    else
+                    {
+                        db.Addresses.Attach(address);
+                        db.Entry<Address>(address).State = EntityState.Modified;
+                    }
+                }
             }
 
-            if (ModelState.IsValid || true)
+            db.Members.Attach(member);
+
+            if (TryValidateModel(model))
             {
                 try
                 {
@@ -121,9 +118,9 @@ namespace SeaSharpe_CVGS.Controllers
                     }
                     TempData["Message"] = sb.ToString();
                 }
-                //return RedirectToAction("SearchGames", "Game");
             }
-            return View(new ProfileViewModel { Member = member, BillingAddress = billingAddress, ShippingAddress = shippingAddress });
+
+            return View(model);
         }
 
         void UpdateMember(Member updateFrom, Member updateTo)

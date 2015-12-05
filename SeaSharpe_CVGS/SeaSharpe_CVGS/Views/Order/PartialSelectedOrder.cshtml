@@ -1,1 +1,76 @@
-﻿
+﻿@model SeaSharpe_CVGS.Models.Order
+
+<div>
+    <h4>Selected Order</h4>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Member.Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Member.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderPlacementDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderPlacementDate)
+        </dd>
+    </dl>
+    <table class="table">
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Platform
+            </th>
+            <th>
+                Price
+            </th>
+        </tr>
+        @if (Model.Id == -1)
+        {
+            <tr>
+                
+                    @if (TempData["messageDan1"] == "")
+	                {
+                        <td>
+                            No Order Selected
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @TempData["messageDan1"]
+                        </td>
+                    }
+
+                            
+                <td>
+                </td>
+                <td>
+                </td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => item.Game.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Game.Platform.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.SalePrice)
+                    </td>
+                </tr>
+            }
+        }
+        
+    </table>
+    @Html.ActionLink("Mark as Processed", "MarkAsProcessed", new { id = Model.Id }) | 
+    @Html.ActionLink("Print Shipping Label", "Shipping", new { id = Model.Id })
+</div>
