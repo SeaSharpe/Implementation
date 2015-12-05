@@ -127,6 +127,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>game details view</returns>
         public ActionResult Details(int? id)
         {
+            int? userAge = (int?)Session["userAge"];
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -136,6 +137,35 @@ namespace SeaSharpe_CVGS.Controllers
             if (game == null)
             {
                 return HttpNotFound();
+            }
+
+            //ESRB struct for the current games esrb rating
+            ESRB esrbRating = esrbList.FirstOrDefault(e => e.Abbreviation == game.ESRB);
+            
+            //User age not set in session variable
+            if(userAge == null)
+            {
+                //Get members age
+                if(IsEmployee || IsMember)
+                {
+                    TimeSpan ageDifference = DateTime.Now.Subtract(CurrentUser.DateOfBirth);
+                    userAge = ageDifference.Days / 365;
+                }
+
+                //Get age from visitor using jquery?
+                else
+                {
+
+                }
+
+                Session["UserAge"] = userAge;
+            }
+
+            //Redirect to search games if user not old enough
+            if(userAge < esrbRating.MinAge)
+            {
+                TempData["message"] = "You must be " + esrbRating.MinAge + " years old to view the game: " + game.Name;
+                return RedirectToAction("SearchGames");
             }
 
             //Get tempData message from postback
@@ -160,7 +190,7 @@ namespace SeaSharpe_CVGS.Controllers
                 }               
 
                 //Set gameReview game id to current game
-            gameReview.Game_Id = game.Id;            
+                gameReview.Game_Id = game.Id;            
             }
 
             //Push game review to view so it can be passed to the partial view for review
