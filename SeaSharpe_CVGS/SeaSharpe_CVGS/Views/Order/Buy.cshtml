@@ -1,15 +1,6 @@
-﻿@using System;
-@using Microsoft.AspNet.Identity;
-@using Microsoft.AspNet.Identity.Owin;
-@using Microsoft.Owin;
-@using Microsoft.Owin.Security.Cookies;
-@using Microsoft.Owin.Security.Google;
-@using Owin;
-@using SeaSharpe_CVGS.Models;
-@using Stripe;
-@using System.Configuration;
+﻿@model Stripe.StripeCharge
 @{
-    ViewBag.StripeApiPublicKey = ConfigurationManager.AppSettings["StripeApiPublicKey"];
+    ViewBag.StripeApiPublicKey = System.Configuration.ConfigurationManager.AppSettings["StripeApiPublicKey"];
     ViewBag.Title = "Buy";
 }
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
@@ -25,11 +16,13 @@
         <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="pk_test_MhISt2d76yJREej8MvfLNdfX"
                 data-amount="5153"
-                data-name="Conestoga Video Game Store"
+                data-name="ConestogaVideoGameStore"
                 data-description="Fallout 4 + Tax ($51.53)"
                 data-image="/Content/themes/base/images/logo.png"
                 data-locale="auto">
         </script>
     </form>
+    @Html.Display("model")
+    
 </div>
 }

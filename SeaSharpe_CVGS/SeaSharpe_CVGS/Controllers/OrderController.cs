@@ -234,14 +234,20 @@ namespace SeaSharpe_CVGS.Controllers
                 Description = "Charge it like it's hot",
                 Source = new StripeSourceOptions
                 {
-                    Object = stripeTokenType,
-                    TokenId = stripeToken,
-                    ReceiptEmail = stripeEmail
+                    TokenId = stripeToken
                 }
             };
             var chargeService = new StripeChargeService();
-            var stripeCharge = chargeService.Create(chargeOptions);
-            return View(stripeCharge);
+            try
+            {
+                var stripeCharge = chargeService.Create(chargeOptions);
+                return View(stripeCharge);
+            }
+            catch (StripeException se)
+            {
+                TempData["message"] = se.Message;
+                return View();
+            }
         }
 
     }
