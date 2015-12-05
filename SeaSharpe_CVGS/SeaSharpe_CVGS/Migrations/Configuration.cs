@@ -65,7 +65,10 @@ namespace SeaSharpe_CVGS.Migrations
                 MakeUser(@"21f2a613-df08-44cb-b71c-db254085c074", @"drisatti@netnutz.biz",     @"APoNKqUpjcH+C4HIv1pThV9cWSfXmQBK6S8DhMKgYswcUm4WgkDpDBh95zpfc144pg==",   @"DOMONIQUERISATTI37874",  @"O",  @"DOMONIQUE",    @"RISATTI",    @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
                 MakeUser(@"25c8b5e0-ee1a-46b4-a9f1-8e543a6f555d", @"ecastenada@nolimits.com",  @"AD8X968nrxv+eoYvC6niKRg+FyS+hpsjHWHniYQL7jrF9/U3nYUknjHSwZch1BuQWA==",   @"EFFIECASTENADA664232",   @"O",  @"EFFIE",        @"CASTENADA",  @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
                 MakeUser(@"29a3e51c-d9d8-4359-83ba-57b74a1f9c5f", @"kperry@maplenet.ca",       @"AINwnT84pRS9uakp9pkPUerK8ZN0VXasxxmMZqvBIFwXM0UIfyg2Jv6gvGSVkqEp3w==",   @"KIMPERRY883536",         @"O",  @"KIM",          @"PERRY",      @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
-                MakeUser(@"2dec193e-7f24-4584-924d-36f32c23b548", @"lyokley@wired.biz",        @"AF2BuroNlwlHstJnQt8fGxVUSE8dgME/UZpONaq2GuWMOX7S/sqCZ5hgz5Z9YbKPYw==",   @"CVGSUSER",               @"O",  @"LEWIS",        @"YOKLEY",     @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
+                //All above applicationUsers are employees
+
+                //All below applicationUsers are members
+                MakeUser(@"2dec193e-7f24-4584-924d-36f32c23b548", @"lyokley@wired.biz",        @"AF2BuroNlwlHstJnQt8fGxVUSE8dgME/UZpONaq2GuWMOX7S/sqCZ5hgz5Z9YbKPYw==",   @"LEWISYOKLEY438432",      @"O",  @"LEWIS",        @"YOKLEY",     @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
                 MakeUser(@"2e6000ef-07a1-4b54-b012-c17c8738060f", @"rbrangan@webworks.com",    @"AHTwDr2x2aiDNX+mTMQtykFQgqvRWL0ev831AMXTkyriX2L2H0Lb9sFH+Vu3K4SWzg==",   @"ROSEBRANGAN283330",      @"O",  @"ROSE",         @"BRANGAN",    @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
                 MakeUser(@"32d53f96-6115-4f08-9942-4ceb9f1e2ec4", @"rsnow@wired.biz",          @"AH/IPfKGZzCOu/LxPOk2LpfuuohTE4VHM8KuW6ZkXkmctBfyPYkaIbOjN7ACfTcSyA==",   @"RSNOW726575",            @"O",  @"R",            @"SNOW",       @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
                 MakeUser(@"33ed6601-6173-4608-95ea-5f483cb11479", @"wmillian@wired.biz",       @"AFUmdg+m1k+fE7NFPDsYigJzH3hWhv4mfuNe62OeJ3dtTc8kd6NRJip7/f8aRle6XQ==",   @"WILLIAMAMILLIAN788469",  @"O",  @"WILLIAM A.",   @"MILLIAN",    @"2015-11-19 22:46:38",  @"2015-11-19 22:46:38"),
@@ -178,6 +181,8 @@ namespace SeaSharpe_CVGS.Migrations
                          //UserName                 ApproverId                  orderPlacementDate      shipDate                billAddr    shippAddr   IsProcessed     Games
                 //order shipped
                 MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-11 00:00:00",  1,          1,          true,           "Fallout 4" ),
+                //order shipped
+                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-04-07 00:00:00",  1,          1,          true,           "Footbal Manager 2016" ),
                 //cart made with games, not paid for, not processed, not shipped
                 MakeOrder(@"JOHNESTIS244358",       null,                       null,                   null,                   4,          4,          false,          "Footbal Manager 2016", "Counter-Strike"),
                 //order shipped
@@ -185,7 +190,7 @@ namespace SeaSharpe_CVGS.Migrations
                 //order paid for, not processed, not shipped
                 MakeOrder(@"JAMES P.FAIRWTHR39",    null,                       "2015-11-11 04:00:00",  null,                   5,          5,          false,          "Skyrim", "rwar"),
                 //order paid for, order has been processed, not shipped
-                MakeOrder(@"HEATHERLUNTERKOFLER5",  @"abaswell@arachnet.ca",    "2015-11-11 04:00:00",  null,                   2,          3,          true,           "Skyrim", "rwar")
+                MakeOrder(@"HEATHERLUNTERKOFLER5",  @"AYSEBASWELL622782",       "2015-11-11 04:00:00",  null,                   2,          3,          true,           "Skyrim", "rwar")
             };
             
             var mockFriendships = new Friendship[]
@@ -253,8 +258,8 @@ namespace SeaSharpe_CVGS.Migrations
             {
                 Member = db.Members.First(m => m.User.UserName == member),
                 Aprover = db.Employees.FirstOrDefault(e => e.User.UserName == aprover),
-                BillingAddress = null, //db.Addresses.First(b => b.Id == billingAddressIndex),
-                ShippingAddress = null, //db.Addresses.First(b => b.Id == shippingAddressIndex),
+                BillingAddress = db.Addresses.OrderBy(c => c.City).Skip(billingAddressIndex).FirstOrDefault(),
+                ShippingAddress = db.Addresses.OrderBy(c => c.City).Skip(shippingAddressIndex).FirstOrDefault(),
                 IsProcessed = isProcessed
             };
 

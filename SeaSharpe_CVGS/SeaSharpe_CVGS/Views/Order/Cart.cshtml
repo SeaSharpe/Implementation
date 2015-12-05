@@ -1,45 +1,84 @@
-﻿@model IEnumerable<SeaSharpe_CVGS.Models.Order>
+﻿@model List<SeaSharpe_CVGS.Models.CartViewModel>
 
 @{
     ViewBag.Title = "Cart";
 }
-
+@using (Html.BeginForm("AlterCart", "Order", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
 <h2>Cart</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.OrderPlacementDate)
+            Download
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ShipDate)
+            Hard Copy
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsProcessed)
+            @Html.DisplayNameFor(model => model.First().item.Game.Name)
         </th>
-        <th></th>
+        <th>
+            @Html.LabelFor(model => model.First().item.Game.Platform.Name, "Platform")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().item.Game.ESRB)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().item.Game.SuggestedRetailPrice)
+        </th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrderPlacementDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ShipDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsProcessed)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+        <tr>
+            @if (Model[i].item.Game.SuggestedRetailPrice > 0.01m)
+            {
+                <td>
+                    N/A
+                    @Html.HiddenFor(model => model[i].download)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model[i].hardCopy)
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.EditorFor(model => model[i].download)
+                </td>
+                <td>
+                    N/A
+                    @Html.HiddenFor(model => model[i].hardCopy)
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(model => model[i].item.Game.Name)
+                @Html.HiddenFor(model => model[i].item.OrderId)
+                @Html.HiddenFor(model => model[i].item.GameId)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model[i].item.Game.Platform.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model[i].item.Game.ESRB)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model[i].item.Game.SuggestedRetailPrice)
+            </td>
+        </tr>
+    }
 
 </table>
+if (TempData["EmptyCart"] != null)
+{
+    <p>@TempData["EmptyCart"]</p>
+    <br/>
+}
+<input type="submit" name="submit" value="Remove Selected" class="btn btn-primary" />
+@(Html.ActionLink("Empty Cart", "DeleteCart", "order", null, new { @class = "btn btn-primary" }))
+<br/>
+@(Html.ActionLink("Continue Shopping", "Index", "Game", null, new { @class = "btn btn-primary" }))
+<input type="submit" name="submit" value="Checkout Now" class="btn btn-primary" />
+}
