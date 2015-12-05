@@ -71,13 +71,21 @@ namespace SeaSharpe_CVGS.Controllers
             newFriendship.Friender = CurrentMember;
 
             var friendee = db.Members.FirstOrDefault(a => a.User.UserName == userName);
-            newFriendship.Friendee = friendee;
+            if(friendee.Id != CurrentMember.Id)
+            {
+                newFriendship.Friendee = friendee;
 
-            db.Friendships.Add(newFriendship);
-            db.SaveChanges();
+                db.Friendships.Add(newFriendship);
+                db.SaveChanges();
 
-            TempData["message"] = friendee.User.FirstName
-                + " " + friendee.User.LastName + " added as a friend";
+                TempData["message"] = friendee.User.FirstName
+                    + " " + friendee.User.LastName + " added as a friend";
+            }
+
+            else
+            {
+                TempData["message"] = "You can not add yourself as a friend.";
+            }            
 
             return RedirectToAction("Index");
         }
@@ -88,19 +96,29 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>Index view</returns>
         [Authorize(Roles="Member")]
         public ActionResult AddFamily(string userName)
-            {
+        {
             Friendship newFriendship = new Friendship();
             newFriendship.Friender = CurrentMember;
 
-            var friendee = db.Members.FirstOrDefault(a => a.User.UserName == userName);
-            newFriendship.Friendee = friendee;
-            newFriendship.IsFamilyMember = true;
 
-            db.Friendships.Add(newFriendship);
+            var friendee = db.Members.FirstOrDefault(a => a.User.UserName == userName);
+            if(friendee.Id != CurrentMember.Id)
+            {
+                newFriendship.Friendee = friendee;
+                newFriendship.IsFamilyMember = true;
+
+                db.Friendships.Add(newFriendship);
                 db.SaveChanges();
 
-            TempData["message"] = friendee.User.FirstName 
-                + " " + friendee.User.LastName + " added as family";
+                TempData["message"] = friendee.User.FirstName
+                    + " " + friendee.User.LastName + " added as family";
+            }
+
+            else
+            {
+                TempData["message"] = "You can not add yourself as family.";
+            }
+            
 
                 return RedirectToAction("Index");
             }
@@ -333,8 +351,7 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 res.AddRange(SearchPersonByWord(words[i].Trim()));
             }
-            res = res.Distinct().ToList();
-
+            res = res.Where(a => a.Id != CurrentMember.Id).Distinct().ToList();
             return res.OrderBy(a => a.User.LastName).
                 ThenBy(a => a.User.FirstName).ToList();
         }
