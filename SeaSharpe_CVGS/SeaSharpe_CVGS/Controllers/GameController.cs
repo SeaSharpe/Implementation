@@ -46,7 +46,7 @@ namespace SeaSharpe_CVGS.Controllers
                 new ESRB("E10", "Everyone 10+", 10),
                 new ESRB("T", "Teen", 13),
                 new ESRB("M", "Mature", 17),
-                new ESRB("AO", "Adult Only", 0)
+                new ESRB("AO", "Adult Only", 18)
             };
         
         #region Multiple Roles
@@ -150,15 +150,17 @@ namespace SeaSharpe_CVGS.Controllers
                 {
                     TimeSpan ageDifference = DateTime.Now.Subtract(CurrentUser.DateOfBirth);
                     userAge = ageDifference.Days / 365;
+                    Session["UserAge"] = userAge;
                 }
 
                 //Get age from visitor using jquery?
                 else
                 {
-
+                    Session["ageUndefined"] = true;
+                    ViewData["MinAge"] = esrbRating.MinAge;
                 }
 
-                Session["UserAge"] = userAge;
+                
             }
 
             //Redirect to search games if user not old enough

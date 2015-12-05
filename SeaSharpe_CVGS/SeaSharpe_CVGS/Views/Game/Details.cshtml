@@ -86,4 +86,16 @@
 <!-- End Right Hand Side-->
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryval")
+        <script type="text/javascript">
+            function checkAge( minAge)
+            {
+                var age = prompt("Enter your age");
+                if(age < minAge)
+                {
+                    alert("too young!");
+                }
+            }
+
+            checkAge(@ViewData["MinAge"]);
+        </script>
     }
