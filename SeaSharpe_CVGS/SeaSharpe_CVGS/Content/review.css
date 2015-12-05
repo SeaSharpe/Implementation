@@ -37,6 +37,15 @@ input, textarea {
 
     #selectedReview dl {
         width: 30px;
-        overflow-wrap:break-word;
     }
+    #selectedReview dt, #selectedReview dd { display: inline; margin: 0; }
+
+    #selectedReview :after {
+        content: '\A';
+        white-space: pre;
+    }
+}
+.reviewReview {
+    width: 230px;
+    max-width:230px;
 }

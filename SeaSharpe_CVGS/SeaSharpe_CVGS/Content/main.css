@@ -41,6 +41,11 @@ h1, h2, h3 {
     margin-bottom: 5px;
 }
 
+input[type="checkbox"]
+{
+    width:15px;
+    height:15px;
+}
 /* Footer */
 footer {
     z-index:1111;
@@ -210,10 +215,7 @@ select[multiple] option:hover
 .form-horizontal .control-label {
     padding-top: 2px;
 }
-.jumbotron {
-    width: 50%;
-    margin-left: 25%;
-}
+
 
 
 /* errors */
