@@ -8,29 +8,30 @@ using System.Web;
 using System.Web.Mvc;
 using SeaSharpe_CVGS.Models;
 
-/*
- * This Controller tracks orders for site members and employees.
- * 
- * **************For Members*********************
- * Cart:
- * can add items to a cart
- * view their cart
- * delete from their cart
- * purchase games from their cart
- * 
- * OrderHistory
- * View ordered games and the ship dates
- * 
- * **************For Employees*******************
- * Order Management:
- * View all completed orders
- * with partial views for orders waiting to be processed and a partial view to view the selected order
- * which also provides options to mark the selected order as "processed" as well as print a shipping 
- * label with the pertinent details.
- */
+
 
 namespace SeaSharpe_CVGS.Controllers
 {
+    ///<summary>
+    ///This Controller tracks orders for site members and employees.
+    ///
+    ///**************For Members*********************
+    ///Cart:
+    ///can add items to a cart
+    ///view their cart
+    ///delete from their cart
+    ///purchase games from their cart
+    ///
+    ///OrderHistory
+    ///View ordered games and the ship dates
+    ///
+    ///**************For Employees*******************
+    ///Order Management:
+    ///View all completed orders
+    ///with partial views for orders waiting to be processed and a partial view to view the selected order
+    ///which also provides options to mark the selected order as "processed" as well as print a shipping 
+    ///label with the pertinent details.
+    ///</summary>
     public class OrderController : Controller
     {
         #region Multiple Roles
