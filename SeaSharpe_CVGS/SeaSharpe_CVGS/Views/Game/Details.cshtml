@@ -96,7 +96,15 @@
             {
                 $("#page-content-wrapper").hide();
 
-                var age = prompt("Enter your age.");
+                //Set the expiration date for 1 year from now
+                var expirationDate = new Date();
+                expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+
+                //prompt user for their age and set the cookie to their response
+                var age = prompt("This page contains mature content. Please enter your age.");
+                document.cookie = "ageCookie=" + age +"; expires=" + expirationDate.toGMTString() + ";";
+
+                //Check their age against the minimum age for the game and show content if appropriate
                 if (isNaN(age) || age < minAge) {
                     $("#page-content-wrapper").html("<h1>You must be at least " + minAge + " years old to view this game.")
                 }
@@ -106,6 +114,7 @@
         }
     </script>
 
+    <!-- only call script for visitors who have no age input yet-->
     @if ((Boolean)ViewData["ageUndefined"])
     {
         <script type="text/javascript">checkAge(@ViewData["minAge"])</script>

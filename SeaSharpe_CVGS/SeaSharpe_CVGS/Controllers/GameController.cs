@@ -126,10 +126,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <param name="id">game id</param>
         /// <returns>game details view</returns>
         public ActionResult Details(int? id)
-        {
-            //Check for age session variable
-            int? userAge = (int?)Session["userAge"];
-
+        {                   
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -141,31 +138,44 @@ namespace SeaSharpe_CVGS.Controllers
                 return HttpNotFound();
             }
 
+            //Initialize age
+            int userAge = 0;
+            bool ageUndefined = false;
+
             //ESRB struct for the current games esrb rating
             ESRB esrbRating = esrbList.FirstOrDefault(e => e.Abbreviation == game.ESRB);
             
-            //User age not set in session variable
-            if(userAge == null)
+            //Get members age if user logged in
+            if(IsEmployee || IsMember)
             {
-                //Get members age
-                if(IsEmployee || IsMember)
-                {
-                    TimeSpan ageDifference = DateTime.Now.Subtract(CurrentUser.DateOfBirth);
-                    userAge = ageDifference.Days / 365;
-                    Session["UserAge"] = userAge;
-                }
+                TimeSpan ageDifference = DateTime.Now.Subtract(CurrentUser.DateOfBirth);
+                userAge = ageDifference.Days / 365;
+            }
 
-                //Pass values to get age from visitor using jquery on the view
-                else
+            //Check age if user is visitor
+            else
+            {
+                //Check for age cookie and parse into userAge
+                HttpCookie ageCookie = Request.Cookies["ageCookie"];
+                if (ageCookie != null)
                 {
-                    ViewData["ageUndefined"] = true;
+                    int.TryParse(ageCookie.Value, out userAge);
+                }
+                
+                //If the age is still 0(default) after checking cookie, set variables to prompt user in view
+                if(userAge == 0)
+                {
+                    ageUndefined = true;
                     ViewData["minAge"] = esrbRating.MinAge;
                 }
                 
-            }
+            }               
+
+            //set viewdata so the javascript prompt is called on the view as needed
+            ViewData["ageUndefined"] = ageUndefined;
 
             //Redirect to search games if user not old enough
-            if(userAge < esrbRating.MinAge)
+            if(userAge < esrbRating.MinAge && !ageUndefined)
             {
                 TempData["message"] = "You must be " + esrbRating.MinAge + " years old to view the game: " + game.Name;
                 return RedirectToAction("SearchGames");
