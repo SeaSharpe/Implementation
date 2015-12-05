@@ -43,8 +43,8 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 new ESRB("EC","Early Childhood",0),
                 new ESRB("E", "Everyone", 0),
-                new ESRB("E10", "Everyone 10+", 10),
-                new ESRB("T", "Teen", 13),
+                new ESRB("E10", "Everyone 10+", 0),
+                new ESRB("T", "Teen", 0),
                 new ESRB("M", "Mature", 17),
                 new ESRB("AO", "Adult Only", 18)
             };
@@ -127,7 +127,9 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>game details view</returns>
         public ActionResult Details(int? id)
         {
+            //Check for age session variable
             int? userAge = (int?)Session["userAge"];
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -153,13 +155,12 @@ namespace SeaSharpe_CVGS.Controllers
                     Session["UserAge"] = userAge;
                 }
 
-                //Get age from visitor using jquery?
+                //Pass values to get age from visitor using jquery on the view
                 else
                 {
-                    Session["ageUndefined"] = true;
-                    ViewData["MinAge"] = esrbRating.MinAge;
+                    ViewData["ageUndefined"] = true;
+                    ViewData["minAge"] = esrbRating.MinAge;
                 }
-
                 
             }
 
