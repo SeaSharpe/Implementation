@@ -293,8 +293,11 @@ namespace SeaSharpe_CVGS.Migrations
 
             foreach (string game in games)
             {
-                var currGame = db.Games.First(g => g.Name == game);
-                order.OrderItems.Add(new OrderItem { Order = order, Game = currGame, SalePrice = currGame.SuggestedRetailPrice });
+                var currGame = db.Games.FirstOrDefault(g => g.Name == game);
+                if (currGame != null)
+                {
+                    order.OrderItems.Add(new OrderItem { Order = order, Game = currGame, SalePrice = currGame.SuggestedRetailPrice });
+                }
             }
 
             return order;
