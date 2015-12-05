@@ -13,12 +13,38 @@ namespace SeaSharpe_CVGS.Controllers
 {
     public class GameController : Controller
     {
-        //Dictionary containing ESRB ratings
-        public static Dictionary<string, string> esrbDict = new Dictionary<string, string>
+        /// <summary>
+        /// Struct for holding ESRB rating information 
+        /// </summary>
+        private struct ESRB
+        {
+            private string abbreviation;
+            public string Abbreviation{get { return abbreviation; } set { abbreviation = value; }}
+
+            private string rating;
+            public string Rating{get { return rating; }set { rating = value; }}
+
+            private int minAge;
+            public int MinAge{get { return minAge; }set { minAge = value; }}
+
+            public ESRB( string abbreviation,string rating, int minAge)
+            {                
+                this.abbreviation = abbreviation;
+                this.rating = rating;
+                this.minAge = minAge;
+            }
+        }
+
+        //List containing esrb ratings
+        private List<ESRB> esrbList = new List<ESRB>()
             {
-                {"EC", "Early Childhood"},{"E", "Everyone"},{"E10", "Everyone 10+"},{"T", "Teen"},{"M", "Mature"},{"AO", "Adult Only"}
-            };
-        
+                new ESRB("EC","Early Childhood",0),
+                new ESRB("E", "Everyone", 0),
+                new ESRB("E10", "Everyone 10+", 10),
+                new ESRB("T", "Teen", 13),
+                new ESRB("M", "Mature", 17),
+                new ESRB("AO", "Adult Only", 0)
+            };        
 
         #region Multiple Roles
 
@@ -358,7 +384,7 @@ namespace SeaSharpe_CVGS.Controllers
             ViewData["categoryList"] = new SelectList(db.Catagories, "Id", "Name");
 
             //Send esrb selectlist to view for dropdown
-            ViewData["esrbList"] = new SelectList(esrbDict,"Key", "Value");
+            ViewData["esrbList"] = new SelectList(esrbList,"Abbreviation", "Rating");
         }
         #endregion
 
