@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using SeaSharpe_CVGS.Models;
 using System.Configuration;
+using Stripe;
 
 namespace SeaSharpe_CVGS.Controllers
 {
@@ -204,18 +205,30 @@ namespace SeaSharpe_CVGS.Controllers
         }
         
         #endregion
-
-        [HttpGet]
+       
         public ActionResult Buy()
         {
             return View();
         }
 
         [HttpPost]
-        [ActionName("Buy")]
-        public ActionResult PurchaseAThingPost(int? amount)
+        public ActionResult Buy(string stripeToken, string stripeTokenType, string stripeEmail)
         {
-            return View();
+            var chargeOptions = new StripeChargeCreateOptions
+            {
+                Amount = 5153,
+                Currency = "CAD",
+                Description = "Charge it like it's hot",
+                Source = new StripeSourceOptions
+                {
+                    Object = stripeTokenType,
+                    TokenId = stripeToken,
+                    ReceiptEmail = stripeEmail
+                }
+            };
+            var chargeService = new StripeChargeService();
+            var stripeCharge = chargeService.Create(chargeOptions);
+            return View(stripeCharge);
         }
 
     }
