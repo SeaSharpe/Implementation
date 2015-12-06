@@ -117,7 +117,6 @@ namespace SeaSharpe_CVGS.Controllers
                         try
                         {
                             db.SaveChanges();
-                            messageAccumulator.Append("Saved address.\n");
                         }
                         catch (Exception)
                         {
@@ -128,10 +127,12 @@ namespace SeaSharpe_CVGS.Controllers
                 }
             }
 
+            RemoveErrors(".Member");
             db.Members.Attach(member);
             db.Entry<Member>(member).State = EntityState.Modified;
 
             db.Users.Attach(member.User);
+            db.Entry<ApplicationUser>(member.User).State = EntityState.Unchanged;
             db.Entry<ApplicationUser>(member.User).Property(user => user.FirstName).IsModified = true;
             db.Entry<ApplicationUser>(member.User).Property(user => user.LastName).IsModified = true;
             db.Entry<ApplicationUser>(member.User).Property(user => user.Email).IsModified = true;
@@ -139,12 +140,11 @@ namespace SeaSharpe_CVGS.Controllers
             db.Entry<ApplicationUser>(member.User).Property(user => user.Gender).IsModified = true;
             db.Entry<ApplicationUser>(member.User).Property(user => user.DateOfBirth).IsModified = true;
 
-            if (TryValidateModel(member))
+            if (ModelState.IsValid)
             {
                 try
                 {
                     db.SaveChanges();
-                    messageAccumulator.Append("Saved profile\n");
                 }
                 catch (Exception)
                 {
@@ -161,16 +161,20 @@ namespace SeaSharpe_CVGS.Controllers
                 db.Entry<Member>(member).State = EntityState.Unchanged;
             }
             
-            TempData["message"] = messageAccumulator.ToString();
-
             if (failedToSaveSomething)
             {
+                TempData["message"] = messageAccumulator.ToString();
                 return View(model);
             }
 
+            TempData["message"] = "Saved profile.";
             return RedirectToAction("Index", "Home");
         }
 
+        /// <summary>
+        /// Remove all model state errors that match a pattern
+        /// </summary>
+        /// <param name="pattern">The pattern to compare against each error key</param>
         void RemoveErrors(string pattern)
         {
             var falseErrors = new List<string>();
