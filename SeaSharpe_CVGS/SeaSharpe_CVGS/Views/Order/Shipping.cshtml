@@ -1,0 +1,39 @@
+﻿@model SeaSharpe_CVGS.Models.Order
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Shipping</title>
+</head>
+<body>
+    <div>
+        <h1><img src="~/Content/themes/base/images/logo.png" id="logo" width="50px"/>Conestoga Video Game Store</h1>
+        <p>299 Doon Valley Dr,</p>
+        <p>Kitchener, Ontario, Canada</p>
+        <p>N2G 4M4</p>
+
+        <h4><u>Ship To:</u></h4>
+        <p>@Html.DisplayFor(model => model.Member.User.FirstName) @Html.DisplayFor(model => model.Member.User.LastName)</p>
+        <p>@Html.DisplayFor(model => model.ShippingAddress.StreetAddress)</p>
+        <p>@Html.DisplayFor(model => model.ShippingAddress.City), @Html.DisplayFor(model => model.ShippingAddress.Region)
+            @Html.DisplayFor(model => model.ShippingAddress.Country)</>
+        <p>@Html.DisplayFor(model => model.ShippingAddress.PostalCode)</p>
+
+        <h4><u>Enclosed:</u></h4>
+        @foreach (var item in Model.OrderItems)
+        {
+            <p>@Html.DisplayFor(model => item.Game.Name) for @Html.DisplayFor(model => item.Game.Platform.Name)</p>
+        }
+        <h4><u>Order Details:</u></h4>
+        <p>Order @Html.DisplayNameFor(model => model.Id): @Html.DisplayFor(model => model.Id)</p>
+        <p>@Html.DisplayNameFor(model => model.OrderPlacementDate): @Html.DisplayFor(model => model.OrderPlacementDate)</p>
+        <p>@Html.DisplayNameFor(model => model.ShipDate): @Html.DisplayFor(model => model.ShipDate)</p>
+        <br />
+    </div>
+</body>
+</html>

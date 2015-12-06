@@ -11,11 +11,15 @@ using System;
 
 namespace SeaSharpe_CVGS.Controllers
 {
+    /// <summary>
+    /// Controller class for handling actions realted to the Game entity
+    /// </summary>
     public class GameController : Controller
     {
         //Dictionary containing ESRB ratings
         public static Dictionary<string, string> esrbDict = new Dictionary<string, string>
             {
+                //TODO: Change key to local image path 
                 {"EC", "Early Childhood"},{"E", "Everyone"},{"E10", "Everyone 10+"},{"T", "Teen"},{"M", "Mature"},{"AO", "Adult Only"}
             };
         
@@ -29,25 +33,18 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         public ActionResult Index()
         {
-            // to be uncommented when roles are made
-            //User is employee, redirect to GameManagement
-
-            //if (Roles.IsUserInRole(@"employee"))
-            //{
-            //    return RedirectToAction("GameManagement");
-            //}
-
-            if (Roles.IsUserInRole(@"employee"))
+            //User is employee, go to game management page
+            if (IsEmployee)
             {
-            return RedirectToAction("GameManagement");
+                return RedirectToAction("GameManagement");
             }
 
 
             //User is visitor or member, redirect to SearchGames
-            //else
-            //{
+            else
+            {
                return RedirectToAction("SearchGames");
-            //}        
+            }        
         }
 
         /// <summary>
@@ -60,7 +57,7 @@ namespace SeaSharpe_CVGS.Controllers
             //Name search query
             if(nameSearch != null)
             {
-                gameList = gameList.Where(g => g.Name.Contains(nameSearch));
+                gameList = gameList.Where(g => g.Name.ToLower().Contains(nameSearch.ToLower()));
             }
 
             //Platform search query
@@ -109,6 +106,7 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Game game = db.Games.Find(id);
             if (game == null)
             {
@@ -124,44 +122,49 @@ namespace SeaSharpe_CVGS.Controllers
             //Get gameReview if it was not stored in tempdata from postback
             if(gameReview == null)
             {
-                //Temporary pull a review which mimics existing review for this user
-                //TODO: replace this with review from current user if it exists
-                gameReview = db.Reviews.FirstOrDefault();
+                if(IsMember)
+                {
+                    //Get current review for this member/game combination
+                    gameReview = db.Reviews.FirstOrDefault(r => r.Author.Id == CurrentMember.Id && r.Game_Id == id);
+                }                
 
                 //No review for this user, display blank form
                 if (gameReview == null)
                 {
-                    //WORK IN PROGRESS: CHECK FOR EXISTING REVIEW FOR THIS USER
                     gameReview = new Review();
-                }               
+                }
+
+                //Set gameReview game id to current game
+                gameReview.Game_Id = game.Id;  
             }
 
-            gameReview.Game_Id = game.Id;            
-
             //Push game review to view so it can be passed to the partial view for review
-            ViewData["review"] = gameReview;          
+            ViewData["isApproved"] = gameReview.IsApproved;
+            ViewData["review"] = gameReview;   
+                   
             return View(game);
-        }
-
-        /// <summary>
-        /// Displays game list page for employees
-        /// </summary>
-        /// <returns>List of games view</returns>
-        public ActionResult GameManagement()
-        {
-            IEnumerable<Game> gameList = db.Games.Include(g => g.Platform).Include(g => g.Categories);
-            return View(gameList.ToList());
-        }
+        }        
 
         #endregion
 
         #region Employee Side
 
         /// <summary>
+        /// Displays game list page for employees
+        /// </summary>
+        /// <returns>List of games view</returns>
+        [Authorize(Roles = "Employee")]
+        public ActionResult GameManagement()
+        {
+            IEnumerable<Game> gameList = db.Games.Include(g => g.Platform).Include(g => g.Categories);
+            return View(gameList.ToList());
+        }
+
+        /// <summary>
         /// Employee Side - Add a game
         /// </summary>
         /// <returns>return add/edit game view</returns>
-       
+        [Authorize(Roles = "Employee")]
         public ActionResult Create()
         {
             PopulateDropdownData();
@@ -176,6 +179,7 @@ namespace SeaSharpe_CVGS.Controllers
         //ADD EMPLOYY AUTH
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee")]
         public ActionResult Create([Bind(Include = "Id,Name,ReleaseDate,SuggestedRetailPrice, ImagePath, Publisher, ESRB")] Game game, int? Platform, int[] Categories)
         {            
             try
@@ -189,7 +193,7 @@ namespace SeaSharpe_CVGS.Controllers
                 
                 //Add game categories if value not null
                 if(Categories != null)
-        {
+                {
                     ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
                     game.Categories = gameCategories;
                 }     
@@ -198,12 +202,12 @@ namespace SeaSharpe_CVGS.Controllers
                 ModelState.Clear();
                 TryValidateModel(game);
 
-            if (ModelState.IsValid)
-            {
-                db.Games.Add(game);
-                db.SaveChanges();
-                return RedirectToAction("GameManagement");
-            }
+                if (ModelState.IsValid)
+                {
+                    db.Games.Add(game);
+                    db.SaveChanges();
+                    return RedirectToAction("GameManagement");
+                }
             }
 
             //Return message to employee if exception
@@ -221,6 +225,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>add/edit game view</returns>
+        [Authorize(Roles = "Employee")]
         public ActionResult Edit(int? id)
         {
             //Attempt to access edit page without game id
@@ -254,6 +259,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>list of games view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee")]
         public ActionResult Edit([Bind(Include = "Id,Name,ReleaseDate,SuggestedRetailPrice, ImagePath, Publisher, ESRB, Categories, Platform_id")] Game game, int[] Categories)
         {
             try
@@ -267,7 +273,7 @@ namespace SeaSharpe_CVGS.Controllers
                 Game originalGame = db.Games.Find(game.Id);
                 originalGame.Categories.Clear();
                 foreach (Category c in gameCategories)
-        {
+                {
                     originalGame.Categories.Add(c);
                 }
                 db.SaveChanges();
@@ -276,13 +282,13 @@ namespace SeaSharpe_CVGS.Controllers
                 //Update the model to include binded changes
                 ModelState.Clear();
                 TryValidateModel(game);
-            if (ModelState.IsValid)
-            {
-                db.Entry(game).State = EntityState.Modified;
-                db.SaveChanges();
+                if (ModelState.IsValid)
+                {
+                    db.Entry(game).State = EntityState.Modified;
+                    db.SaveChanges();
                     TempData["message"] = "Game with ID: " + game.Id + " updated.";
-                return RedirectToAction("GameManagement");
-            }
+                    return RedirectToAction("GameManagement");
+                }
             }
 
             catch (Exception e)
@@ -300,6 +306,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>list of games view</returns>
+        [Authorize(Roles = "Employee")]
         public ActionResult Delete(int id)
         {
             Game game = db.Games.Find(id);
@@ -309,8 +316,8 @@ namespace SeaSharpe_CVGS.Controllers
                 game.Categories.Clear();
 
                 //Remove game and save changes
-            db.Games.Remove(game);
-            db.SaveChanges();
+                db.Games.Remove(game);
+                db.SaveChanges();
                 TempData["message"] = game.Name + " and it's dependencies have been deleted.";
             }
 
@@ -321,23 +328,14 @@ namespace SeaSharpe_CVGS.Controllers
             
             return RedirectToAction("GameManagement");
         }
-        
-        /// <summary>
-        /// Member side - Add a specific game to wish list
-        /// ****No view required****
-        /// </summary>
-        /// <param name="id">game id</param>
-        /// <returns>game details view</returns>
-        public ActionResult AddToWishList(int? id)
-        {
-            return RedirectToAction("Details");
-        }
+                
         /// <summary>
         /// Member side - Download a specific game
         /// ****No view required****
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>game details view</returns>
+        [Authorize(Roles = "Member")]
         public ActionResult Download(int? id)
         {
             return RedirectToAction("Details");

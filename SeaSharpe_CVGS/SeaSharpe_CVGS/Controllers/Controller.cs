@@ -71,19 +71,19 @@ namespace SeaSharpe_CVGS.Controllers
             }
         }
 
-        public ApplicationUser CurrentUser 
+        public ApplicationUser CurrentUser
         {
             get
             {
-                return DbContext.Users.FirstOrDefault(u => u.UserName == User.Identity.Name); 
+                return DbContext.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             }
         }
 
         public Member CurrentMember
-        { 
-            get 
+        {
+            get
             {
-                return DbContext.Members.FirstOrDefault(m => m.User.UserName == User.Identity.Name); 
+                return DbContext.Members.FirstOrDefault(m => m.User.UserName == User.Identity.Name);
             }
         }
 
@@ -99,7 +99,7 @@ namespace SeaSharpe_CVGS.Controllers
 
         public bool IsEmployee { get { return CurrentEmployee != null; } }
 
-        public bool IsMember { get { return CurrentMember != null;} }
+        public bool IsMember { get { return CurrentMember != null; } }
 
         protected override void Dispose(bool disposing)
         {

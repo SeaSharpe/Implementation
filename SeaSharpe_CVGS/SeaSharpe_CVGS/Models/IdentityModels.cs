@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Data.Entity.Infrastructure;
 
 namespace SeaSharpe_CVGS.Models
 {
@@ -44,6 +46,7 @@ namespace SeaSharpe_CVGS.Models
     public partial class Member
     {
         public virtual ApplicationUser User { get; set; }
+        [Display(Name = "Member Id")]
         public int Id { get; set; }
         public bool IsEmailVerified { get; set; }
         public bool IsEmailMarketingAllowed { get; set; }
@@ -54,6 +57,8 @@ namespace SeaSharpe_CVGS.Models
 
     public partial class Employee
     {
+        [Column("User_Id")]
+        public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
         public int Id { get; set; }
     }
@@ -62,7 +67,6 @@ namespace SeaSharpe_CVGS.Models
     {
         public int Id { get; set; }
         public virtual Member Member { get; set; }
-        [Display(Name = "Street Address")]
         public string StreetAddress { get; set; }
         public string City { get; set; }
         public string Region { get; set; }
@@ -98,7 +102,7 @@ namespace SeaSharpe_CVGS.Models
         public int OrderId { get; set; }
         public virtual Game Game { get; set; }
         public virtual Order Order { get; set; }
-        [Display(Name = "Sale Price")]
+        [Display(Name = "Price")]
         public decimal SalePrice { get; set; }
     }
 
@@ -146,6 +150,7 @@ namespace SeaSharpe_CVGS.Models
         [ForeignKey("Game")]
         public int Game_Id { get; set; }
         public string Body { get; set; }
+        [Display(Name = "Approved")]
         public bool IsApproved { get; set; }
     }
 
@@ -196,6 +201,27 @@ namespace SeaSharpe_CVGS.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+        }
+
+        protected override DbEntityValidationResult ValidateEntity(DbEntityEntry entityEntry, IDictionary<object, object> items)
+        {   // This stops validation of items that wern't changed.
+            // Source: http://stackoverflow.com/a/29689644
+            var result = base.ValidateEntity(entityEntry, items);
+            var falseErrors = new List<DbValidationError>();
+
+            foreach (var error in result.ValidationErrors)
+            {
+                var member = entityEntry.Member(error.PropertyName);
+                var property = member as DbPropertyEntry;
+                if (property != null && !property.IsModified)
+                {
+                    falseErrors.Add(error);
+                }
+            }
+
+            foreach (var error in falseErrors.ToArray())
+                result.ValidationErrors.Remove(error);
+            return result;
         }
 
         public static ApplicationDbContext Create()

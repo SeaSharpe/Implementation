@@ -13,7 +13,7 @@
     <div class="form-horizontal">
         <h4>Event</h4>
         <hr />
-        @Html.ValidationSummary(true)
+        @Html.ValidationSummary(false)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Location, new { @class = "control-label col-md-2" })
@@ -26,7 +26,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.StartDate, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.StartDate)
+                @Html.EditorFor(model => model.StartDate, new { @class = "datefield" })
                 @Html.ValidationMessageFor(model => model.StartDate)
             </div>
         </div>
@@ -34,7 +34,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.EndDate, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EndDate)
+                @Html.EditorFor(model => model.EndDate, new { @class = "datefield" })
                 @Html.ValidationMessageFor(model => model.EndDate)
             </div>
         </div>

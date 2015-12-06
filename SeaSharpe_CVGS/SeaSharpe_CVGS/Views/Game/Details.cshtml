@@ -10,75 +10,84 @@
 <h1>@ViewBag.Title</h1>
 <hr/>
 <div class="row">
-    <!-- Left Hand Side-->
+<!-- Left Hand Side-->
     <div class="col-md-3 col-md-offset-2">
         <img src="@Model.ImagePath" class="img-details"/>
-        <!-- Download Game-->
-        <p>
+    <!-- link to other reviews for this game -->
+    <p>
+        @Html.ActionLink("View Reviews & Ratings", "ReviewsRating", "Review", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
+    </p>
+
+    <!-- Download Game-->
+    <p>
             @Html.ActionLink("Download", "Download", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
-        </p>
+    </p>
 
-        <!-- Add To Cart-->
-        <p>
+    <!-- Add To Cart-->
+    <p>
             @Html.ActionLink("Add To Cart", "AddToCart", "Order", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
-        </p>
+    </p>
 
-        <!-- Add To Wishlist -->
-        <p>
-            @Html.ActionLink("Add To Wishlist", "AddToWishlist", "Order", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
-        </p>
+    <!-- Add To Wishlist -->
+    <p>
+            @Html.ActionLink("Add To Wishlist", "AddToWishlist", "Friendship", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
+    </p>
 
-        <!-- Back To Games-->
-        <p>
+    <!-- Back To Games-->
+    <p>
             @Html.ActionLink("Back to Games", "Index", null, new { @class = "btn greenButton btn-details" })
-        </p>
-    </div>
-    <!-- End Left Hand Side-->
-    <!-- Right Hand Side-->
-    <div class="col-md-5 col-md-offset-1">
-        <dl class="dl-horizontal">
-            <!-- Game Name-->
-            <dt>
-                @Html.DisplayNameFor(model => model.Name)
-            </dt>
+    </p>
 
-            <dd>
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-
-            <!-- Game Publisher-->
-            <dt>
-                @Html.DisplayNameFor(model => model.Publisher)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Publisher)
-            </dd>
-
-            <!-- Game ESRB-->
-            <dt>
-                @Html.DisplayNameFor(model => model.ESRB)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.ESRB)
-            </dd>
-
-            <!-- display create review form if review is approved, else display review details TODO: replace true with !isApproved-->
-            @if (true)
-            {
-                @Html.Partial("~/Views/Review/PartialCreateReview.cshtml", ViewData["review"]);
-            }
-
-            else
-            {
-                @Html.Partial("~/Views/Review/PartialReviewDetails.cshtml", ViewData["review"]);
-            }
-
-            <!-- link to other reviews for this game -->
-            @Html.ActionLink("View Reviews & Ratings", "ReviewsRating", "Review", new { id = Model.Id }, null)
-
-        </dl>
-    </div>
 </div>
-    <!-- End Right Hand Side-->
+<!-- End Left Hand Side-->
+<!-- Right Hand Side-->
+    <div class="col-md-5 col-md-offset-1">
+    <dl class="dl-horizontal">
+        <!-- Game Name-->
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <!-- Game Publisher-->
+        <dt>
+            @Html.DisplayNameFor(model => model.Publisher)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Publisher)
+        </dd>
+
+        <!-- Game ESRB-->
+        <dt>
+            @Html.DisplayNameFor(model => model.ESRB)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ESRB)
+        </dd>
+
+
+        <!-- display create review form if review is approved, else display review details TODO: replace true with !isApproved-->
+            @if (!(Boolean)ViewData["isApproved"]) 
+        { 
+            @Html.Partial("~/Views/Review/PartialCreateReview.cshtml", ViewData["review"]); 
+                @Scripts.Render("~/bundles/jqueryval")
+        }        
+        
+        else
+        {
+            @Html.Partial("~/Views/Review/PartialReviewDetails.cshtml", ViewData["review"]);    
+        }
+        
+            
+    </dl>
+</div>
+</div>
+<!-- End Right Hand Side-->
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

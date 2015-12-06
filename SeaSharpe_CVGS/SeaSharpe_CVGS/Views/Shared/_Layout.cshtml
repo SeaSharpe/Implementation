@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -15,7 +14,7 @@
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <img src="~/Content/themes/base/images/logo.png" id="logo" />
+            <a href="/Home/Index"><img src="~/Content/themes/base/images/logo.png" id="logo" /></a>
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -40,14 +39,12 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Friends/Family", "Index", "Friendship")</li>
                     <li>@Html.ActionLink("Wish List", "DisplayCurrentMemberWishlist", "Friendship")</li>
-                    <li>@Html.ActionLink("Library", "Index", "Home")</li> @*library page not created yet*@
                     <li>@Html.ActionLink("Profile", "Edit", "User")</li>
+                    <li>@Html.ActionLink("Order History", "OrderHistory", "Order")</li> <!--library page not created yet-->
                     <li>@Html.ActionLink("Cart", "Cart", "Order")</li>   
+                    <li>@Html.ActionLink("Order History", "OrderHistory", "Order")</li> <!--library page not created yet-->
                     <li>@Html.Partial("_LoginPartial")</li>    
-                </ul>
-                
-                    
-                
+                </ul>                            
             }
              else
              {
@@ -58,8 +55,7 @@
         </div>
     </div>
     <div class="container body-content">
-        <span>@TempData["error"]</span>
-        <span>@TempData["Message"]</span>
+        
         <div id="wrapper">
 
             <!-- Sidebar -->
@@ -142,6 +138,7 @@
             <!-- /#sidebar-wrapper -->
             <div id="page-content-wrapper">
                 <div class="container-fluid">
+                    <span id="tempData">@TempData["message"]</span>
         @RenderBody()
                 </div>
             </div>
@@ -157,10 +154,6 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-
-    <!-- Jquery UI script for datepicker-->
-    @Scripts.Render("~/Scripts/jquery-ui-1.11.4.js")
-    @Scripts.Render("~/Scripts/datePickerReady.js")
 
     @RenderSection("scripts", required: false)
 </body>

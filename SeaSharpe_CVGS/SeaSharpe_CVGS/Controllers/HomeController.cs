@@ -11,21 +11,12 @@ namespace SeaSharpe_CVGS.Controllers
     {
         public ActionResult Index()
         {
-            IQueryable<Game> listOfGames = db.Games.OrderByDescending(x=>x.Id).Take(8);
+            IQueryable<Game> listOfGames = db.Games.OrderByDescending(x=>x.Id).Take(20);
             return View(listOfGames.ToList());
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
 
