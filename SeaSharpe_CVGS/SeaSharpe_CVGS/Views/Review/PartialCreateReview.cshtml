@@ -1,13 +1,12 @@
 ﻿@model SeaSharpe_CVGS.Models.Review
-<!DOCTYPE html>
-<html lang="en">
-<body>
+<link rel="stylesheet" href="~/Content/review.css" type="text/css">
+    <div class="reviewBorder">
     <!-- Add review form partial page -->
-    <h2>Review Game</h2>
-
+    <h3><b>Review Game</b></h3>
+    <hr />
     <!-- using an ajax form so that the post for the partial view is called instead of the parent view-->
     @using (Ajax.BeginForm("PartialCreateReview", "Review", new AjaxOptions { HttpMethod = "Post" }))
-    {        
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
@@ -26,47 +25,52 @@
 
             <!-- Review Subject -->
             <div class="form-group">
-                @Html.LabelFor(model => model.Subject, new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextBoxFor(model => model.Subject)
+                @Html.LabelFor(model => model.Subject, new { @class = "control-label col-md-2 col-md-offset-1" })
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Subject)<br />
                     @Html.ValidationMessageFor(model => model.Subject)
                 </div>
             </div>
 
             <!-- Review Body -->
             <div class="form-group">
-                @Html.LabelFor(model => model.Body, new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextBoxFor(model => model.Body)
+                @Html.LabelFor(model => model.Body, new { @class = "control-label col-md-2 col-md-offset-1" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.Body)<br />
                     @Html.ValidationMessageFor(model => model.Body)
                 </div>
+
             </div>
 
             <!-- Rating -->
             <div class="form-group">
-                @Html.LabelFor(model => model.Rating, new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <input value="@Model.Rating" type="number" id="Rating" name="Rating" class="rating" min="0" max="5" data-show-Caption="false" data-size="xs" />
-                    <script type="text/javascript">$("#Rating").rating()</script>
+                @Html.LabelFor(model => model.Rating, new { @class = "control-label col-md-2 col-md-offset-1" })
+                <div class="col-md-9">
+                    <input value="@Model.Rating" type="number" id="Rating" name="Rating" class="rating" min="0" max="5" data-show-caption="false" data-size="xs" />
+                    <script type="text/javascript">$("#Rating").rating()</script><br />
                     @Html.ValidationMessageFor(model => model.Rating)
                 </div>
             </div>
-            @if (Model.Aprover != null)
-            {
-                <span>Your review was not approved by our employees.</span>
-            }
-            @if (Model.Aprover == null && Model.Subject != null)
-            {
-                <span>Your review is pending approval from our employees.</span>
-            }
-            <!-- Submit, Reset, and View Reviews buttons-->
             <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="reset" value="Reset" class="btn btn-default" />
-                    <input type="submit" value="Submit" class="btn btn-default" />
+                <div class="col-md-offset-1 col-md-11">
+                    @if (Model.Aprover != null)
+                    {
+                        <div class="tempMessage">Your review was not approved.</div>
+                    }
+                    @if (Model.Aprover == null && Model.Subject != null)
+                    {
+                        <div class="tempMessage">Your review has been submitted.<br /> Approval is pending.</div>
+                    }
                 </div>
             </div>
-        </div>
+                <!-- Submit, Reset, and View Reviews buttons-->
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-8">
+                        <input type="reset" value="Reset" class="btn defaultButton" />
+                        <input type="submit" value="Submit" class="btn greenButton" />
+                    </div>
+                </div>
+            </div>
+    
     }
-</body>
-</html>
+</div>
