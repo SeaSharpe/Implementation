@@ -154,13 +154,13 @@ namespace SeaSharpe_CVGS.Migrations
                 MakeGame("World of Warcraft",                   "2004-11-23 00:00:00",  39.99m, PlatformEnum.PC,    "https://upload.wikimedia.org/wikipedia/en/thumb/9/91/WoW_Box_Art1.jpg/256px-WoW_Box_Art1.jpg",                             "Blizzard Entertainment",   RatingEnum.T,   CategoryEnum.RPG),
                 MakeGame("World Series of Poker",               "2006-02-24 00:00:00",  5.00m,  PlatformEnum.XBOX,  "https://upload.wikimedia.org/wikipedia/en/thumb/c/c9/World_Series_of_Poker_game.jpg/256px-World_Series_of_Poker_game.jpg", "Activision",               RatingEnum.T,   CategoryEnum.Simulation),
                 MakeGame("Harvest Moon: Tree of Tranquility",   "2007-07-07 00:00:00",  20.00m, PlatformEnum.Wii,   "http://vignette1.wikia.nocookie.net/hmwikia/images/7/7d/Harvestmoonwii.jpg/revision/latest?cb=20100503005312",             "Marvelous Interactive",    RatingEnum.E,   CategoryEnum.Simulation),
-                MakeGame("Animal Crossing: City Folk",          "2008-11-16 00:00:00",  18.00m, PlatformEnum.Wii,   "https://upload.wikimedia.org/wikipedia/en/8/89/Cityfolkbox.jpg",                                                           "Nintendo",                 RatingEnum.E,   CategoryEnum.Simulation),
+                MakeGame("Animal Crossing: City Folk",          "2008-11-16 00:00:00",  18.00m, PlatformEnum.Wii,   "https://upload.wikimedia.org/wikipedia/en/8/89/Cityfolkbox.jpg",                                                           "Nintendo",                 RatingEnum.EC,   CategoryEnum.Simulation),
                 MakeGame("Civilization V",                      "2010-09-24 00:00:00",  3.00m,  PlatformEnum.PC,    "https://upload.wikimedia.org/wikipedia/en/5/5c/CIVILIZATION-V-FRONT-OF-BOX.jpg",                                           "2K Games",                 RatingEnum.E,   CategoryEnum.RTS),
                 MakeGame("Portal 2",                            "2011-04-19 00:00:00",  12.00m, PlatformEnum.XBOX,  "https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/Portal2cover.jpg/250px-Portal2cover.jpg",                             "Valve Corporation",        RatingEnum.T,   CategoryEnum.Puzzle),
                 MakeGame("Farmville 2: Country Escape",         "2011-10-13 00:00:00",  0.00m,  PlatformEnum.Mobile,"http://www.amzmodapk.com/protected/uploads/media/cover/thumb/masxresdefault1.jpg",                                         "Zynga",                    RatingEnum.E,   CategoryEnum.Simulation, CategoryEnum.RPG),
                 MakeGame("The Elder Scrolls V: Skyrim",         "2011-11-11 00:00:00",  30.00m, PlatformEnum.PS4,   "http://vignette3.wikia.nocookie.net/elderscrolls/images/1/14/Skyrim_Cover.jpg/revision/latest?cb=20111107233110",          "Bethesda Softworks",       RatingEnum.M,   CategoryEnum.RPG, CategoryEnum.Action),
                 MakeGame("The Walking Dead",                    "2012-04-01 00:00:00",  10.00m, PlatformEnum.PS4,   "http://static.giantbomb.com/uploads/scale_small/8/87790/2348800-box_twdead.png",                                           "TellTale Games",           RatingEnum.M,   CategoryEnum.Adventure),
-                MakeGame("Dragon Quest X",                      "2012-08-02 00:00:00",  15.00m, PlatformEnum.Wii,   "https://upload.wikimedia.org/wikipedia/en/6/67/Dragon_Quest_X_Box_Art.jpg",                                                "Square Enix",              RatingEnum.EC,  CategoryEnum.RPG),             
+                MakeGame("Dragon Quest X",                      "2012-08-02 00:00:00",  15.00m, PlatformEnum.Wii,   "https://upload.wikimedia.org/wikipedia/en/6/67/Dragon_Quest_X_Box_Art.jpg",                                                "Square Enix",              RatingEnum.E,  CategoryEnum.RPG),             
                 MakeGame("Counter-Strike: Global Offensive",    "2012-08-21 00:00:00",  40.00m, PlatformEnum.XBOX,  "http://static1.gamespot.com/uploads/scale_tiny/mig/7/2/0/5/2227205-i2cs9uzmq4yua.jpg",                                     "Valve Corporation",        RatingEnum.M,   CategoryEnum.FPS),
                 MakeGame("Angry Birds: Star Wars",              "2012-11-08 00:00:00",  5.00m,  PlatformEnum.Mobile,"https://upload.wikimedia.org/wikipedia/en/8/8d/Angry_Birds_Star_Wars.png",                                                 "Rovio Entertainment",      RatingEnum.E,   CategoryEnum.Puzzle),
                 MakeGame("Grand Theft Auto VI",                 "2015-04-14 00:00:00",  45.00m, PlatformEnum.PC,    "https://upload.wikimedia.org/wikipedia/en/thumb/a/a5/Grand_Theft_Auto_V.png/250px-Grand_Theft_Auto_V.png",                 "Rockstar Games",           RatingEnum.M,   CategoryEnum.Action, CategoryEnum.Adventure),
@@ -301,8 +301,8 @@ namespace SeaSharpe_CVGS.Migrations
                 var currGame = db.Games.FirstOrDefault(g => g.Name == game);
                 if (currGame != null)
                 {
-                    order.OrderItems.Add(new OrderItem { Order = order, Game = currGame, SalePrice = currGame.SuggestedRetailPrice });
-                }
+                order.OrderItems.Add(new OrderItem { Order = order, Game = currGame, SalePrice = currGame.SuggestedRetailPrice });
+            }
             }
 
             return order;
