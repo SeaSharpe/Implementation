@@ -18,14 +18,19 @@ using System.Text;
 
 namespace SeaSharpe_CVGS.Controllers
 {
+    /// <summary>
+    /// This controller handles user profile management, generic user managment is handled 
+    /// in <see cref="SeaSharpe_CVGS.Controllers.AccountController"/>.
+    /// </summary>
     [Authorize]
     public class UserController : Controller
     {
         /// <summary>
-        /// Displays member profile page
-        /// ** contains (2) partial address views**
+        /// Displays an edit page for updating a profile. Employees can specify a member 
+        /// id to modify a member's profile, if left out the currently logged in member id
+        /// will be used.
         /// </summary>
-        /// <param name="id">member id</param>
+        /// <param name="id">member id (Optional)</param>
         /// <returns>Edit view</returns>
         public ActionResult Edit(int? id)
         {
@@ -59,10 +64,13 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
-        /// post back for edit member
+        /// Post back method for the profile page
         /// </summary>
-        /// <param name="member">member object</param>
-        /// <returns>redirect to Game/SearchGames</returns>
+        /// <param name="member">The member object</param>
+        /// <param name="billingAddress">The member's shipping address</param>
+        /// <param name="shippingAddress">The member's billing address</param>
+        /// <returns>Returns to index if successful, otherwise redisplays the 
+        /// edit page</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(
@@ -105,6 +113,7 @@ namespace SeaSharpe_CVGS.Controllers
                 try
                 {
                     db.SaveChanges();
+                    return RedirectToAction("Index", "Home")
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -116,27 +125,13 @@ namespace SeaSharpe_CVGS.Controllers
                             sb.Append(string.Format("{0} -> {1}\n", error.PropertyName, error.ErrorMessage));
                         }
                     }
-                    TempData["Message"] = sb.ToString();
+                    // Display errors
+                    TempData["message"] = sb.ToString();
                 }
             }
 
+            // Return to view if db not updated.
             return View(model);
-        }
-
-        void UpdateMember(Member updateFrom, Member updateTo)
-        {
-            updateTo.User.FirstName = updateFrom.User.FirstName;
-            updateTo.User.LastName = updateFrom.User.LastName;
-            updateTo.User.Email = updateFrom.User.Email;
-            updateTo.User.Gender = updateFrom.User.Gender;
-            updateTo.IsEmailMarketingAllowed = updateFrom.IsEmailMarketingAllowed;
-        }
-
-        void UpdateAddress(Address updateFrom, Address updateTo)
-        {
-            updateTo.PostalCode = updateFrom.PostalCode;
-            updateTo.Region = updateFrom.PostalCode;
-            updateTo.StreetAddress= updateFrom.PostalCode;
         }
     }
 }

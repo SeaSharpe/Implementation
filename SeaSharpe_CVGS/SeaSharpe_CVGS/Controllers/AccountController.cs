@@ -12,6 +12,9 @@ using SeaSharpe_CVGS.Models;
 
 namespace SeaSharpe_CVGS.Controllers
 {
+    /// <summary>
+    /// This controller handles user registration and logins
+    /// </summary>
     [Authorize]
     public class AccountController : Controller
     {
