@@ -39,9 +39,10 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Friends/Family", "Index", "Friendship")</li>
                     <li>@Html.ActionLink("Wish List", "DisplayCurrentMemberWishlist", "Friendship")</li>
-                    <li>@Html.ActionLink("Library", "Index", "Home")</li> <!--library page not created yet-->
                     <li>@Html.ActionLink("Profile", "Edit", "User")</li>
+                    <li>@Html.ActionLink("Order History", "OrderHistory", "Order")</li> <!--library page not created yet-->
                     <li>@Html.ActionLink("Cart", "Cart", "Order")</li>   
+                    <li>@Html.ActionLink("Order History", "OrderHistory", "Order")</li> <!--library page not created yet-->
                     <li>@Html.Partial("_LoginPartial")</li>    
                 </ul>                            
             }
