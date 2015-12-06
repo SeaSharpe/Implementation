@@ -14,7 +14,9 @@
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a href="/Home/Index"><img src="~/Content/themes/base/images/logo.png" id="logo" /></a>
+            <a href='@Url.Action("Index", "Home")'>
+                <img src='@Url.Content("~/Content/themes/base/images/logo.png")' id="logo" />
+            </a>
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
