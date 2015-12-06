@@ -180,17 +180,17 @@ namespace SeaSharpe_CVGS.Migrations
             {
                          //UserName                 ApproverId                  orderPlacementDate      shipDate                billAddr    shippAddr   IsProcessed     Games
                 //order shipped
-                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-04 00:00:00",  500000001,  500000001,  true,           "Fallout 4" ),
+                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-04 00:00:00",  0,  0,  true,           "Fallout 4" ),
                 //order shipped
-                MakeOrder(@"CRITKUBICKI272730",     @"NELLIELEE361672",         "2015-11-11 00:00:00",  "2015-11-24 00:00:00",  500000001,  500000001,          true,           "Star Craft II: Legacy of the Void" ),
+                MakeOrder(@"CRITKUBICKI272730",     @"NELLIELEE361672",         "2015-11-11 00:00:00",  "2015-11-24 00:00:00",  0,  0,          true,           "Star Craft II: Legacy of the Void" ),
                 //cart made with games, not paid for, not processed, not shipped
-                MakeOrder(@"JOHNESTIS244358",       null,                       null,                   null,                   500000004,  500000004,          false,          "Football Manager 2016", "The Walking Dead"),
+                MakeOrder(@"JOHNESTIS244358",       null,                       null,                   null,                   2,  2,          false,          "Football Manager 2016", "The Walking Dead"),
                 //order shipped
-                MakeOrder(@"JOHNESTIS244358",       @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-01 00:00:00",  500000004,  500000004,          true,           "Counter-Strike: Global Offensive"),
+                MakeOrder(@"JOHNESTIS244358",       @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-01 00:00:00",  3,  3,          true,           "Counter-Strike: Global Offensive"),
                 //order paid for, not processed, not shipped
-                MakeOrder(@"JAMES P.FAIRWTHR39",    null,                       "2015-11-11 04:00:00",  null,                   500000005,  500000005,          false,          "Dragon Quest X", "Call of Duty: Black Ops III"),
+                MakeOrder(@"JAMES P.FAIRWTHR39",    null,                       "2015-11-11 04:00:00",  null,                   1,  1,          false,          "Dragon Quest X", "Call of Duty: Black Ops III"),
                 //order paid for, not processed, not shipped
-                MakeOrder(@"HEATHERLUNTERKOFLER5",  null,                       "2015-11-11 04:00:00",  null,                   500000002,  500000003,          false,           "The Elder Scrolls V: Skyrim", "Portal 2")
+                MakeOrder(@"HEATHERLUNTERKOFLER5",  null,                       "2015-11-11 04:00:00",  null,                   4,  4,          false,           "The Elder Scrolls V: Skyrim", "Portal 2")
             };
             
             var mockFriendships = new Friendship[]
@@ -258,8 +258,8 @@ namespace SeaSharpe_CVGS.Migrations
             {
                 Member = db.Members.First(m => m.User.UserName == member),
                 Aprover = db.Employees.FirstOrDefault(e => e.User.UserName == aprover),
-                BillingAddress = db.Addresses.Find(billingAddressIndex),
-                ShippingAddress = db.Addresses.Find(shippingAddressIndex),
+                BillingAddress = db.Addresses.OrderBy(c => c.City).Skip(billingAddressIndex).FirstOrDefault(),
+                ShippingAddress = db.Addresses.OrderBy(c => c.City).Skip(shippingAddressIndex).FirstOrDefault(),
                 IsProcessed = isProcessed
             };
 
