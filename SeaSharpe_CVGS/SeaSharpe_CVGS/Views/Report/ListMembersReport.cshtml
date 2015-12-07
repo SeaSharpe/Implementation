@@ -3,40 +3,59 @@
 @{
     ViewBag.Title = "Member List Report";
 }
+<link rel="stylesheet" href="~/Content/report.css" type="text/css">
+<h1>@ViewBag.Title</h1>
+<hr />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="col-md-10 col-md-offset-1">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.User.UserName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.User.LastName)
+                    </th>
+                    <th>
+                        View Member
+                    </th>
+                    <th>
+                        Print Member Details
+                    </th>
+                </tr>
 
-<h2>@ViewBag.Title</h2>
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.User.Id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User.LastName)
-        </th>
-        <th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.LastName)
-            </td>
-        </tr>
-    }
-
-</table>
-<div>
-    @Html.ActionLink("Back to List", "Index")
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.UserName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.LastName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("View", "MemberDetailsReport", new { id = item.Id }, new { @class = "btn greenButton" })
+                        </td>
+                        <td>
+                            <input type="button" class="btn defaultButton" value="Print" />
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    </div>
 </div>

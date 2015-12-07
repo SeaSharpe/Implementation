@@ -1,9 +1,7 @@
 ﻿@model SeaSharpe_CVGS.Models.Address
     <div class="form-horizontal">
-        <h4>@(ViewBag.Title ?? Html.Raw("Address"))</h4>
         <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
             <div class="col-md-10">

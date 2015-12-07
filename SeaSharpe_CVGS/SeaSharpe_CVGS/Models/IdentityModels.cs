@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Data.Entity.Infrastructure;
 
 namespace SeaSharpe_CVGS.Models
 {
@@ -33,20 +35,33 @@ namespace SeaSharpe_CVGS.Models
         [Display(Name = "Last Name")]
         [Required, MinLength(1), MaxLength(50)]
         public string LastName { get; set; }
+
         [Required]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyy}")]
         [Display(Name = "Date of Birth")]
         public DateTime DateOfBirth { get; set; }
+
         [Required]
-        [Display(Name = "Date of Registration")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyy}")]
+        [Display(Name = "Registration Date")]
         public DateTime DateOfRegistration { get; set; }
     }
 
     public partial class Member
     {
+        [Column("User_Id")]
+        public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
+
+        [Display(Name = "Member Id")]
         public int Id { get; set; }
+
+        [Display(Name = "Email Verified?")]
         public bool IsEmailVerified { get; set; }
+
+        [Display(Name = "Email Marketing?")]
         public bool IsEmailMarketingAllowed { get; set; }
+
         public int StripeID { get; set; }
         public virtual ICollection<Friendship> Friendships { get; set; }
         public virtual ICollection<Event> Events { get; set; }
@@ -54,6 +69,9 @@ namespace SeaSharpe_CVGS.Models
 
     public partial class Employee
     {
+        [Column("User_Id")]
+        public string UserId { get; set; }
+
         public virtual ApplicationUser User { get; set; }
         public int Id { get; set; }
     }
@@ -61,12 +79,14 @@ namespace SeaSharpe_CVGS.Models
     public partial class Address
     {
         public int Id { get; set; }
+        [Column("Member_Id")]
+        public int MemberId { get; set; }
         public virtual Member Member { get; set; }
-        [Display(Name = "Street Address")]
         public string StreetAddress { get; set; }
         public string City { get; set; }
         public string Region { get; set; }
         public string Country { get; set; }
+
         [Display(Name = "Postal Code")]
         public string PostalCode { get; set; }
     }
@@ -74,17 +94,25 @@ namespace SeaSharpe_CVGS.Models
     public partial class Order
     {
         public int Id { get; set; }
+
         [Display(Name = "Billing Address")]
         public virtual Address BillingAddress { get; set; }
+
         [Display(Name = "Shipping Address")]
         public virtual Address ShippingAddress { get; set; }
+
         public virtual Member Member { get; set; }
+
         [Display(Name = "Approver")]
         public virtual Employee Aprover { get; set; } //todo: correct to Approver
+
         [Display(Name = "Order Placement Date")]
         public DateTime? OrderPlacementDate { get; set; }
+
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyy}")]
         [Display(Name = "Ship Date")]
         public DateTime? ShipDate { get; set; }
+
         [Display(Name = "Processed?")]
         public bool IsProcessed { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
@@ -98,7 +126,7 @@ namespace SeaSharpe_CVGS.Models
         public int OrderId { get; set; }
         public virtual Game Game { get; set; }
         public virtual Order Order { get; set; }
-        [Display(Name = "Sale Price")]
+        [Display(Name = "Price")]
         public decimal SalePrice { get; set; }
     }
 
@@ -116,20 +144,28 @@ namespace SeaSharpe_CVGS.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
         [Display(Name = "Image Path")]
         public string ImagePath { get; set; }
+
         [MinLength(0), MaxLength(50)]
         public string Publisher { get; set; }
+
         [MinLength(0), MaxLength(4)]
         public string ESRB { get; set; }
+
         [Display(Name = "Release Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyy}")]
         public DateTime ReleaseDate { get; set; }
+
         [Display(Name = "Price")]
         [DisplayFormat(DataFormatString="{0:c}")]
         public decimal SuggestedRetailPrice { get; set; }
+
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
         public virtual Platform Platform { get; set; }
+
         [ForeignKey("Platform")]
         public int Platform_Id { get; set; }
     }
@@ -139,13 +175,19 @@ namespace SeaSharpe_CVGS.Models
         public int Id { get; set; }
         public virtual Game Game { get; set; }
         public virtual Member Author { get; set; }
+
         [Display(Name = "Approver")]
         public virtual Employee Aprover { get; set; } // todo: correct spelling to Approver
+
         public float Rating { get; set; }
         public string Subject { get; set; }
+
         [ForeignKey("Game")]
         public int Game_Id { get; set; }
+
         public string Body { get; set; }
+
+        [Display(Name = "Approved")]
         public bool IsApproved { get; set; }
     }
 
@@ -154,11 +196,14 @@ namespace SeaSharpe_CVGS.Models
         [Key, Column("Friendee_Id", Order = 0)]
         [ForeignKey("Friendee")]
         public int FriendeeId { get; set; }
+
         [Key, Column("Friender_Id", Order = 1)]
         [ForeignKey("Friender")]
         public int FrienderId { get; set; }
+
         public virtual Member Friendee { get; set; }
         public virtual Member Friender { get; set; }
+
         [Display(Name = "Family Member?")]
         public bool IsFamilyMember { get; set; }
     }
@@ -182,10 +227,15 @@ namespace SeaSharpe_CVGS.Models
         public int Id { get; set; }
         public virtual Employee Employee { get; set; }
         public string Location { get; set; }
+
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyy}")]
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
+
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyy}")]
         [Display(Name = "End Date")]
         public DateTime EndDate { get; set; }
+
         public string Description { get; set; }
         public int Capacity { get; set; }
         public virtual ICollection<Member> Attendies { get; set; }
@@ -196,6 +246,27 @@ namespace SeaSharpe_CVGS.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+        }
+
+        protected override DbEntityValidationResult ValidateEntity(DbEntityEntry entityEntry, IDictionary<object, object> items)
+        {   // This stops validation of items that wern't changed.
+            // Source: http://stackoverflow.com/a/29689644
+            var result = base.ValidateEntity(entityEntry, items);
+            var falseErrors = new List<DbValidationError>();
+
+            foreach (var error in result.ValidationErrors)
+            {
+                var member = entityEntry.Member(error.PropertyName);
+                var property = member as DbPropertyEntry;
+                if (property != null && !property.IsModified)
+                {
+                    falseErrors.Add(error);
+                }
+            }
+
+            foreach (var error in falseErrors.ToArray())
+                result.ValidationErrors.Remove(error);
+            return result;
         }
 
         public static ApplicationDbContext Create()

@@ -1,43 +1,57 @@
-﻿@model IEnumerable<SeaSharpe_CVGS.Models.Order>
+﻿@model IEnumerable<SeaSharpe_CVGS.Models.OrderHistoryViewModel>
 
 @{
     ViewBag.Title = "OrderHistory";
 }
 
 <h2>OrderHistory</h2>
+@if (TempData["message"] != null)
+{
+<p>@TempData["message"]</p>
+<br />
+}
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.OrderPlacementDate)
+            @Html.DisplayNameFor(model => model.orderPlacementDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ShipDate)
+            @Html.DisplayNameFor(model => model.shipDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsProcessed)
+            @Html.DisplayNameFor(model => model.gameName)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.platform)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.pricePaid)
+        </th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.OrderPlacementDate)
+            @Html.DisplayFor(modelItem => item.orderPlacementDate)
+        </td>
+            @if (item.shipDate == DateTime.Parse("1900-01-01 00:00:00"))
+            {
+                <td>Awaiting Shipping</td>
+            }
+            else
+            {
+                <td>@Html.DisplayFor(modelItem => item.shipDate)</td>
+            }
+            
+        <td>
+            @Html.DisplayFor(modelItem => item.gameName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ShipDate)
+            @Html.DisplayFor(modelItem => item.platform)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.IsProcessed)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.DisplayFor(modelItem => item.pricePaid)
         </td>
     </tr>
 }

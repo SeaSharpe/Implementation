@@ -1,33 +1,35 @@
 ﻿@model SeaSharpe_CVGS.Models.Review
 
 <div class="form-horizontal">
-    <!-- Subject Label -->
-    <dt>
-        @Html.DisplayNameFor(model => model.Subject)
-    </dt>
+    <div id="selectedReview">
+        <!-- Subject Label -->
+        <b>
+            @Html.DisplayNameFor(model => model.Subject)
+        </b>
 
-    <!-- Subject text-->
-    <dd>
-        @Html.DisplayFor(model => model.Subject)
-    </dd>
+        <!-- Subject text-->
+        <p>
+            @Html.TextBoxFor(model => model.Subject, new { @class = "reviewReview", disabled = "disabled", @readonly = "readonly" })
+        </p>
 
-    <!-- Body Label -->
-    <dt>
-        @Html.DisplayNameFor(model => model.Body)
-    </dt>
+        <!-- Body Label -->
+        <b>
+            @Html.DisplayNameFor(model => model.Body)
+        </b>
 
-    <!-- Body Text -->
-    <dd>
-        @Html.DisplayFor(model => model.Body)
-    </dd>
+        <!-- Body Text -->
+        <p>
+            @Html.EditorFor(model => model.Body, new { htmlAttributes = new { @class = "reviewReview", disabled = "disabled", @readonly = "readonly" } })
+        </p>
 
-    <!-- Rating Label-->
-    <dt>
-        @Html.DisplayNameFor(model => model.Rating)
-    </dt>
+        <!-- Rating Label-->
+        <b>
+            @Html.DisplayNameFor(model => model.Rating)
+        </b>
 
-    <!-- Rating Text-->
-    <dd>
-        @Html.DisplayFor(model => model.Rating)
-    </dd>
+        <!-- Rating Text-->
+        <p>
+            @Html.TextBoxFor(model => model.Rating, new { @class = "reviewReview", disabled = "disabled", @readonly = "readonly" })
+        </p>
+    </div>
 </div>

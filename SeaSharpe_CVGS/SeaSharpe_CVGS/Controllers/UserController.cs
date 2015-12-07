@@ -18,14 +18,19 @@ using System.Text;
 
 namespace SeaSharpe_CVGS.Controllers
 {
+    /// <summary>
+    /// This controller handles user profile management, generic user managment is handled 
+    /// in <see cref="SeaSharpe_CVGS.Controllers.AccountController"/>.
+    /// </summary>
     [Authorize]
     public class UserController : Controller
     {
         /// <summary>
-        /// Displays member profile page
-        /// ** contains (2) partial address views**
+        /// Displays an edit page for updating a profile. Employees can specify a member 
+        /// id to modify a member's profile, if left out the currently logged in member id
+        /// will be used.
         /// </summary>
-        /// <param name="id">member id</param>
+        /// <param name="id">member id (Optional)</param>
         /// <returns>Edit view</returns>
         public ActionResult Edit(int? id)
         {
@@ -34,22 +39,21 @@ namespace SeaSharpe_CVGS.Controllers
                 Member = db.Members.FirstOrDefault(m => m.Id == id || m.User.UserName == User.Identity.Name)
             };
 
+            if (model.Member == null)
+            {
+                return HttpNotFound();
+            }
+
             var memberAddresses = db.
                 Addresses.
                 Where(a => a.Member.Id == model.Member.Id).
                 OrderBy(a => a.Id);
 
-            // Shipping address is the first address Billing adddress is the second address or a new adress
-            model.ShippingAddress = memberAddresses.FirstOrDefault() 
+            // Billing address is the first address Shipping adddress is the second address or a new adress
+            model.BillingAddress = memberAddresses.FirstOrDefault() 
                 ?? new Address { Member = model.Member };
-            model.BillingAddress = memberAddresses.Skip(1).FirstOrDefault() 
+            model.ShippingAddress = memberAddresses.Skip(1).FirstOrDefault() 
                 ?? new Address { Member = model.Member };
-
-
-            if (model.Member == null)
-            {
-                return HttpNotFound();
-            }
 
             if ( User.IsInRole("Employee") || model.Member.User.UserName == User.Identity.Name )
             {
@@ -60,86 +64,128 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
-        /// post back for edit member
+        /// Post back method for the profile page
         /// </summary>
-        /// <param name="member">member object</param>
-        /// <returns>redirect to Game/SearchGames</returns>
+        /// <param name="member">The member object</param>
+        /// <param name="billingAddress">The member's billing address</param>
+        /// <param name="shippingAddress">The member's shipping address</param>
+        /// <returns>Returns to index if successful, otherwise redisplays the 
+        /// edit page</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(
             [Bind(Prefix = "Member")] Member member, 
             [Bind(Prefix = "BillingAddress")] Address billingAddress, 
-            [Bind(Prefix = "ShippingAddress")] Address shippingAddress) {
-            var dbMember = db.Members.Find(member.Id);
-            var dbBillingAddress = db.Addresses.Find(billingAddress.Id);
-            var dbShippingAddress = db.Addresses.Find(billingAddress.Id);
+            [Bind(Prefix = "ShippingAddress")] Address shippingAddress)
+        {
+            ProfileViewModel model = new ProfileViewModel { Member = member, BillingAddress = billingAddress, ShippingAddress = shippingAddress };
+            StringBuilder messageAccumulator = new StringBuilder("");
+            bool failedToSaveSomething = false;
 
-            if (dbMember == null)
+            foreach (var address in new Address[] { billingAddress, shippingAddress })
             {
-                TempData["Message"] = "Warning: Member not found.";
-            }
-            else
-            {
-                UpdateMember(member, dbMember);
+                if (address != null)
+                {
+                    address.MemberId = member.Id;
+                    if (address.Id == 0)
+                    {   // Add new address when Id = 0
+                        if (!String.IsNullOrWhiteSpace(address.StreetAddress) ||
+                            !String.IsNullOrWhiteSpace(address.Region) ||
+                            !String.IsNullOrWhiteSpace(address.City) ||
+                            !String.IsNullOrWhiteSpace(address.Country) ||
+                            !String.IsNullOrWhiteSpace(address.PostalCode))
+                        {   // If any of the address fields are not null, try adding it
+                            db.Addresses.Add(address);
+                        }
+                        else if (address == shippingAddress)
+                        {   // If the user didn't enter any fields, ignore errors. 
+                            RemoveErrors("Shipping");
+                        }
+                        else if (address == billingAddress)
+                        {
+                            RemoveErrors("Billing");
+                        }
+                    }
+                    else
+                    {   // Update existing address
+                        db.Addresses.Attach(address);
+                        db.Entry<Address>(address).State = EntityState.Modified;
+                    }
+
+                    if (ModelState.IsValid)
+                    {
+                        try
+                        {
+                            db.SaveChanges();
+                        }
+                        catch (Exception)
+                        {
+                            messageAccumulator.Append("Failed to save address.\n");
+                            failedToSaveSomething = true;
+                        }
+                    }
+                }
             }
 
-            if (dbBillingAddress == null)
-            {
-                billingAddress.Member = member;
-                db.Addresses.Add(billingAddress);
-            }
-            else
-            {
-                UpdateAddress(billingAddress, dbBillingAddress);
-            }
+            RemoveErrors(".Member");
+            db.Members.Attach(member);
+            db.Entry<Member>(member).State = EntityState.Modified;
 
-            if (dbShippingAddress == null)
-            {
-                shippingAddress.Member = member;
-                db.Addresses.Add(shippingAddress);
-            }
-            else
-            {
-                UpdateAddress(shippingAddress, dbShippingAddress);
-            }
+            db.Users.Attach(member.User);
+            db.Entry<ApplicationUser>(member.User).State = EntityState.Unchanged;
+            db.Entry<ApplicationUser>(member.User).Property(user => user.FirstName).IsModified = true;
+            db.Entry<ApplicationUser>(member.User).Property(user => user.LastName).IsModified = true;
+            db.Entry<ApplicationUser>(member.User).Property(user => user.Email).IsModified = true;
+            db.Entry<ApplicationUser>(member.User).Property(user => user.PhoneNumber).IsModified = true;
+            db.Entry<ApplicationUser>(member.User).Property(user => user.Gender).IsModified = true;
+            db.Entry<ApplicationUser>(member.User).Property(user => user.DateOfBirth).IsModified = true;
 
-            if (ModelState.IsValid || true)
+            if (ModelState.IsValid)
             {
                 try
                 {
                     db.SaveChanges();
                 }
-                catch (DbEntityValidationException e)
+                catch (Exception)
                 {
-                    StringBuilder sb = new StringBuilder("");
-                    foreach (var entity in e.EntityValidationErrors)
-                    {
-                        foreach (var error in entity.ValidationErrors)
-                        {
-                            sb.Append(string.Format("{0} -> {1}\n", error.PropertyName, error.ErrorMessage));
-                        }
-                    }
-                    TempData["Message"] = sb.ToString();
+                    failedToSaveSomething = true;
+                    messageAccumulator.Append("Failed to save member\n");
                 }
-                //return RedirectToAction("SearchGames", "Game");
             }
-            return View(new ProfileViewModel { Member = member, BillingAddress = billingAddress, ShippingAddress = shippingAddress });
+            else
+            {   // If we fail to save, record it and detach member/user so that
+                // address information can still be saved.
+                failedToSaveSomething = true;
+                messageAccumulator.Append("Failed to save member\n");
+                db.Entry<ApplicationUser>(member.User).State = EntityState.Unchanged;
+                db.Entry<Member>(member).State = EntityState.Unchanged;
+            }
+            
+            if (failedToSaveSomething)
+            {
+                TempData["message"] = messageAccumulator.ToString();
+                return View(model);
+            }
+
+            TempData["message"] = "Saved profile.";
+            return RedirectToAction("Index", "Home");
         }
 
-        void UpdateMember(Member updateFrom, Member updateTo)
+        /// <summary>
+        /// Remove all model state errors that match a pattern
+        /// </summary>
+        /// <param name="pattern">The pattern to compare against each error key</param>
+        void RemoveErrors(string pattern)
         {
-            updateTo.User.FirstName = updateFrom.User.FirstName;
-            updateTo.User.LastName = updateFrom.User.LastName;
-            updateTo.User.Email = updateFrom.User.Email;
-            updateTo.User.Gender = updateFrom.User.Gender;
-            updateTo.IsEmailMarketingAllowed = updateFrom.IsEmailMarketingAllowed;
-        }
+            var falseErrors = new List<string>();
 
-        void UpdateAddress(Address updateFrom, Address updateTo)
-        {
-            updateTo.PostalCode = updateFrom.PostalCode;
-            updateTo.Region = updateFrom.PostalCode;
-            updateTo.StreetAddress= updateFrom.PostalCode;
+            foreach (string error in ModelState.Keys)
+            {
+                if (error.Contains(pattern)) falseErrors.Add(error);
+            }
+
+            foreach (var error in falseErrors)
+                ModelState.Remove(error);
         }
     }
 }

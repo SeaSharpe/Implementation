@@ -187,6 +187,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\OrderViewModels.cs" />
     <Compile Include="Models\ValidateAttributes.cs" />
     <Compile Include="Models\Validation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -199,6 +200,8 @@
     <Content Include="Content\game.css" />
     <Content Include="Content\home.css" />
     <Content Include="Content\main.css" />
+    <Content Include="Content\report.css" />
+    <Content Include="Content\review.css" />
     <Content Include="Content\simple-sidebar.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -268,7 +271,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
@@ -304,9 +306,6 @@
     <Content Include="Views\Event\ViewEvents.cshtml" />
     <Content Include="Views\Review\ReviewManagement.cshtml" />
     <Content Include="Views\Review\ReviewsRating.cshtml" />
-    <Content Include="Views\Order\Create.cshtml" />
-    <Content Include="Views\Order\Delete.cshtml" />
-    <Content Include="Views\Order\Details.cshtml" />
     <Content Include="Views\Order\OrderManagement.cshtml" />
     <Content Include="Views\Order\OrderHistory.cshtml" />
     <Content Include="Views\Order\Cart.cshtml" />
@@ -332,6 +331,7 @@
     <Content Include="Views\Friendship\PartialFamilyList.cshtml" />
     <Content Include="Views\Review\PartialReviewDetails.cshtml" />
     <Content Include="Views\Shared\_AddressPartial.cshtml" />
+    <Content Include="Views\Order\Shipping.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -65,7 +65,10 @@ namespace SeaSharpe_CVGS.Migrations
                 MakeUser(@"21f2a613-df08-44cb-b71c-db254085c074", @"drisatti@netnutz.biz",     @"APoNKqUpjcH+C4HIv1pThV9cWSfXmQBK6S8DhMKgYswcUm4WgkDpDBh95zpfc144pg==",   @"DOMONIQUERISATTI37874",  @"O",  @"DOMONIQUE",    @"RISATTI",    @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
                 MakeUser(@"25c8b5e0-ee1a-46b4-a9f1-8e543a6f555d", @"ecastenada@nolimits.com",  @"AD8X968nrxv+eoYvC6niKRg+FyS+hpsjHWHniYQL7jrF9/U3nYUknjHSwZch1BuQWA==",   @"EFFIECASTENADA664232",   @"O",  @"EFFIE",        @"CASTENADA",  @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
                 MakeUser(@"29a3e51c-d9d8-4359-83ba-57b74a1f9c5f", @"kperry@maplenet.ca",       @"AINwnT84pRS9uakp9pkPUerK8ZN0VXasxxmMZqvBIFwXM0UIfyg2Jv6gvGSVkqEp3w==",   @"KIMPERRY883536",         @"O",  @"KIM",          @"PERRY",      @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
-                MakeUser(@"2dec193e-7f24-4584-924d-36f32c23b548", @"lyokley@wired.biz",        @"AF2BuroNlwlHstJnQt8fGxVUSE8dgME/UZpONaq2GuWMOX7S/sqCZ5hgz5Z9YbKPYw==",   @"CVGSUSER",               @"O",  @"LEWIS",        @"YOKLEY",     @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
+                //All above applicationUsers are employees
+
+                //All below applicationUsers are members
+                MakeUser(@"2dec193e-7f24-4584-924d-36f32c23b548", @"lyokley@wired.biz",        @"AF2BuroNlwlHstJnQt8fGxVUSE8dgME/UZpONaq2GuWMOX7S/sqCZ5hgz5Z9YbKPYw==",   @"LEWISYOKLEY438432",      @"O",  @"LEWIS",        @"YOKLEY",     @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
                 MakeUser(@"2e6000ef-07a1-4b54-b012-c17c8738060f", @"rbrangan@webworks.com",    @"AHTwDr2x2aiDNX+mTMQtykFQgqvRWL0ev831AMXTkyriX2L2H0Lb9sFH+Vu3K4SWzg==",   @"ROSEBRANGAN283330",      @"O",  @"ROSE",         @"BRANGAN",    @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
                 MakeUser(@"32d53f96-6115-4f08-9942-4ceb9f1e2ec4", @"rsnow@wired.biz",          @"AH/IPfKGZzCOu/LxPOk2LpfuuohTE4VHM8KuW6ZkXkmctBfyPYkaIbOjN7ACfTcSyA==",   @"RSNOW726575",            @"O",  @"R",            @"SNOW",       @"2015-11-19 22:46:40",  @"2015-11-19 22:46:40"),
                 MakeUser(@"33ed6601-6173-4608-95ea-5f483cb11479", @"wmillian@wired.biz",       @"AFUmdg+m1k+fE7NFPDsYigJzH3hWhv4mfuNe62OeJ3dtTc8kd6NRJip7/f8aRle6XQ==",   @"WILLIAMAMILLIAN788469",  @"O",  @"WILLIAM A.",   @"MILLIAN",    @"2015-11-19 22:46:38",  @"2015-11-19 22:46:38"),
@@ -151,13 +154,13 @@ namespace SeaSharpe_CVGS.Migrations
                 MakeGame("World of Warcraft",                   "2004-11-23 00:00:00",  39.99m, PlatformEnum.PC,    "https://upload.wikimedia.org/wikipedia/en/thumb/9/91/WoW_Box_Art1.jpg/256px-WoW_Box_Art1.jpg",                             "Blizzard Entertainment",   RatingEnum.T,   CategoryEnum.RPG),
                 MakeGame("World Series of Poker",               "2006-02-24 00:00:00",  5.00m,  PlatformEnum.XBOX,  "https://upload.wikimedia.org/wikipedia/en/thumb/c/c9/World_Series_of_Poker_game.jpg/256px-World_Series_of_Poker_game.jpg", "Activision",               RatingEnum.T,   CategoryEnum.Simulation),
                 MakeGame("Harvest Moon: Tree of Tranquility",   "2007-07-07 00:00:00",  20.00m, PlatformEnum.Wii,   "http://vignette1.wikia.nocookie.net/hmwikia/images/7/7d/Harvestmoonwii.jpg/revision/latest?cb=20100503005312",             "Marvelous Interactive",    RatingEnum.E,   CategoryEnum.Simulation),
-                MakeGame("Animal Crossing: City Folk",          "2008-11-16 00:00:00",  18.00m, PlatformEnum.Wii,   "https://upload.wikimedia.org/wikipedia/en/8/89/Cityfolkbox.jpg",                                                           "Nintendo",                 RatingEnum.E,   CategoryEnum.Simulation),
+                MakeGame("Animal Crossing: City Folk",          "2008-11-16 00:00:00",  18.00m, PlatformEnum.Wii,   "https://upload.wikimedia.org/wikipedia/en/8/89/Cityfolkbox.jpg",                                                           "Nintendo",                 RatingEnum.EC,   CategoryEnum.Simulation),
                 MakeGame("Civilization V",                      "2010-09-24 00:00:00",  3.00m,  PlatformEnum.PC,    "https://upload.wikimedia.org/wikipedia/en/5/5c/CIVILIZATION-V-FRONT-OF-BOX.jpg",                                           "2K Games",                 RatingEnum.E,   CategoryEnum.RTS),
                 MakeGame("Portal 2",                            "2011-04-19 00:00:00",  12.00m, PlatformEnum.XBOX,  "https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/Portal2cover.jpg/250px-Portal2cover.jpg",                             "Valve Corporation",        RatingEnum.T,   CategoryEnum.Puzzle),
                 MakeGame("Farmville 2: Country Escape",         "2011-10-13 00:00:00",  0.00m,  PlatformEnum.Mobile,"http://www.amzmodapk.com/protected/uploads/media/cover/thumb/masxresdefault1.jpg",                                         "Zynga",                    RatingEnum.E,   CategoryEnum.Simulation, CategoryEnum.RPG),
                 MakeGame("The Elder Scrolls V: Skyrim",         "2011-11-11 00:00:00",  30.00m, PlatformEnum.PS4,   "http://vignette3.wikia.nocookie.net/elderscrolls/images/1/14/Skyrim_Cover.jpg/revision/latest?cb=20111107233110",          "Bethesda Softworks",       RatingEnum.M,   CategoryEnum.RPG, CategoryEnum.Action),
                 MakeGame("The Walking Dead",                    "2012-04-01 00:00:00",  10.00m, PlatformEnum.PS4,   "http://static.giantbomb.com/uploads/scale_small/8/87790/2348800-box_twdead.png",                                           "TellTale Games",           RatingEnum.M,   CategoryEnum.Adventure),
-                MakeGame("Dragon Quest X",                      "2012-08-02 00:00:00",  15.00m, PlatformEnum.Wii,   "https://upload.wikimedia.org/wikipedia/en/6/67/Dragon_Quest_X_Box_Art.jpg",                                                "Square Enix",              RatingEnum.EC,  CategoryEnum.RPG),             
+                MakeGame("Dragon Quest X",                      "2012-08-02 00:00:00",  15.00m, PlatformEnum.Wii,   "https://upload.wikimedia.org/wikipedia/en/6/67/Dragon_Quest_X_Box_Art.jpg",                                                "Square Enix",              RatingEnum.E,  CategoryEnum.RPG),             
                 MakeGame("Counter-Strike: Global Offensive",    "2012-08-21 00:00:00",  40.00m, PlatformEnum.XBOX,  "http://static1.gamespot.com/uploads/scale_tiny/mig/7/2/0/5/2227205-i2cs9uzmq4yua.jpg",                                     "Valve Corporation",        RatingEnum.M,   CategoryEnum.FPS),
                 MakeGame("Angry Birds: Star Wars",              "2012-11-08 00:00:00",  5.00m,  PlatformEnum.Mobile,"https://upload.wikimedia.org/wikipedia/en/8/8d/Angry_Birds_Star_Wars.png",                                                 "Rovio Entertainment",      RatingEnum.E,   CategoryEnum.Puzzle),
                 MakeGame("Grand Theft Auto VI",                 "2015-04-14 00:00:00",  45.00m, PlatformEnum.PC,    "https://upload.wikimedia.org/wikipedia/en/thumb/a/a5/Grand_Theft_Auto_V.png/250px-Grand_Theft_Auto_V.png",                 "Rockstar Games",           RatingEnum.M,   CategoryEnum.Action, CategoryEnum.Adventure),
@@ -177,15 +180,17 @@ namespace SeaSharpe_CVGS.Migrations
             {
                          //UserName                 ApproverId                  orderPlacementDate      shipDate                billAddr    shippAddr   IsProcessed     Games
                 //order shipped
-                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-11 00:00:00",  1,          1,          true,           "Fallout 4" ),
-                //cart made with games, not paid for, not processed, not shipped
-                MakeOrder(@"JOHNESTIS244358",       null,                       null,                   null,                   4,          4,          false,          "Footbal Manager 2016", "Counter-Strike"),
+                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-04 00:00:00",  0,  0,  true,           "Fallout 4" ),
                 //order shipped
-                MakeOrder(@"JOHNESTIS244358",       @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-11 00:00:00",  4,          4,          true,           "Skyrim"),
+                MakeOrder(@"CRITKUBICKI272730",     @"NELLIELEE361672",         "2015-11-11 00:00:00",  "2015-11-24 00:00:00",  0,  0,          true,           "Star Craft II: Legacy of the Void" ),
+                //cart made with games, not paid for, not processed, not shipped
+                MakeOrder(@"JOHNESTIS244358",       null,                       null,                   null,                   2,  2,          false,          "Football Manager 2016", "The Walking Dead"),
+                //order shipped
+                MakeOrder(@"JOHNESTIS244358",       @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-01 00:00:00",  3,  3,          true,           "Counter-Strike: Global Offensive"),
                 //order paid for, not processed, not shipped
-                MakeOrder(@"JAMES P.FAIRWTHR39",    null,                       "2015-11-11 04:00:00",  null,                   5,          5,          false,          "Skyrim", "rwar"),
-                //order paid for, order has been processed, not shipped
-                MakeOrder(@"HEATHERLUNTERKOFLER5",  @"abaswell@arachnet.ca",    "2015-11-11 04:00:00",  null,                   2,          3,          true,           "Skyrim", "rwar")
+                MakeOrder(@"JAMES P.FAIRWTHR39",    null,                       "2015-11-11 04:00:00",  null,                   1,  1,          false,          "Dragon Quest X", "Call of Duty: Black Ops III"),
+                //order paid for, not processed, not shipped
+                MakeOrder(@"HEATHERLUNTERKOFLER5",  null,                       "2015-11-11 04:00:00",  null,                   4,  4,          false,           "The Elder Scrolls V: Skyrim", "Portal 2")
             };
             
             var mockFriendships = new Friendship[]
@@ -253,8 +258,8 @@ namespace SeaSharpe_CVGS.Migrations
             {
                 Member = db.Members.First(m => m.User.UserName == member),
                 Aprover = db.Employees.FirstOrDefault(e => e.User.UserName == aprover),
-                BillingAddress = null, //db.Addresses.First(b => b.Id == billingAddressIndex),
-                ShippingAddress = null, //db.Addresses.First(b => b.Id == shippingAddressIndex),
+                BillingAddress = db.Addresses.OrderBy(c => c.City).Skip(billingAddressIndex).FirstOrDefault(),
+                ShippingAddress = db.Addresses.OrderBy(c => c.City).Skip(shippingAddressIndex).FirstOrDefault(),
                 IsProcessed = isProcessed
             };
 

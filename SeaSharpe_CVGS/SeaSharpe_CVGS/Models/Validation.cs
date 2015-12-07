@@ -150,6 +150,7 @@ namespace SeaSharpe_CVGS.Models
             [StringLength(500, MinimumLength = 1, ErrorMessage = "{0} maximum length is {1} characters")]
             public string Subject { get; set; }
 
+            [DataType(DataType.MultilineText)]
             [StringLength(4000, MinimumLength = 0, ErrorMessage = "{0} maximum length is {1} characters")]
             public string Body { get; set; }
         }
