@@ -81,6 +81,10 @@ namespace SeaSharpe_CVGS.Controllers
         [Authorize(Roles = "Employee")]
         public ActionResult SalesReport()
         {
+            // Get the number of sales
+            int numberOfSales = 0;
+            numberOfSales = db.Orders.Count();
+            ViewBag.numberOfSales = numberOfSales;
             return View();
         }
 
