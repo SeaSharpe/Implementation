@@ -180,17 +180,17 @@ namespace SeaSharpe_CVGS.Migrations
             {
                          //UserName                 ApproverId                  orderPlacementDate      shipDate                billAddr    shippAddr   IsProcessed     Games
                 //order shipped
-                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-11 00:00:00",  1,          1,          true,           "Fallout 4" ),
+                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-04 00:00:00",  0,  0,  true,           "Fallout 4" ),
                 //order shipped
-                MakeOrder(@"CRITKUBICKI272730",     @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-04-07 00:00:00",  1,          1,          true,           "Footbal Manager 2016" ),
+                MakeOrder(@"CRITKUBICKI272730",     @"NELLIELEE361672",         "2015-11-11 00:00:00",  "2015-11-24 00:00:00",  0,  0,          true,           "Star Craft II: Legacy of the Void" ),
                 //cart made with games, not paid for, not processed, not shipped
-                MakeOrder(@"JOHNESTIS244358",       null,                       null,                   null,                   4,          4,          false,          "Footbal Manager 2016", "Counter-Strike"),
+                MakeOrder(@"JOHNESTIS244358",       null,                       null,                   null,                   2,  2,          false,          "Football Manager 2016", "The Walking Dead"),
                 //order shipped
-                MakeOrder(@"JOHNESTIS244358",       @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-11 00:00:00",  4,          4,          true,           "Skyrim"),
+                MakeOrder(@"JOHNESTIS244358",       @"PAMELALALOVIC475670",     "2015-11-11 00:00:00",  "2015-12-01 00:00:00",  3,  3,          true,           "Counter-Strike: Global Offensive"),
                 //order paid for, not processed, not shipped
-                MakeOrder(@"JAMES P.FAIRWTHR39",    null,                       "2015-11-11 04:00:00",  null,                   5,          5,          false,          "Skyrim", "rwar"),
-                //order paid for, order has been processed, not shipped
-                MakeOrder(@"HEATHERLUNTERKOFLER5",  @"AYSEBASWELL622782",       "2015-11-11 04:00:00",  null,                   2,          3,          true,           "Skyrim", "rwar")
+                MakeOrder(@"JAMES P.FAIRWTHR39",    null,                       "2015-11-11 04:00:00",  null,                   1,  1,          false,          "Dragon Quest X", "Call of Duty: Black Ops III"),
+                //order paid for, not processed, not shipped
+                MakeOrder(@"HEATHERLUNTERKOFLER5",  null,                       "2015-11-11 04:00:00",  null,                   4,  4,          false,           "The Elder Scrolls V: Skyrim", "Portal 2")
             };
             
             var mockFriendships = new Friendship[]
@@ -301,8 +301,8 @@ namespace SeaSharpe_CVGS.Migrations
                 var currGame = db.Games.FirstOrDefault(g => g.Name == game);
                 if (currGame != null)
                 {
-                order.OrderItems.Add(new OrderItem { Order = order, Game = currGame, SalePrice = currGame.SuggestedRetailPrice });
-            }
+                    order.OrderItems.Add(new OrderItem { Order = order, Game = currGame, SalePrice = currGame.SuggestedRetailPrice });
+                }
             }
 
             return order;
