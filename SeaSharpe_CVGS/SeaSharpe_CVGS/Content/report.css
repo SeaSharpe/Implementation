@@ -1,0 +1,34 @@
+﻿a {
+    color: #0FA00F;
+}
+
+a:hover {
+    color: #05630C;
+}
+
+dd,dt {
+    padding-bottom: 10px;
+    font-size: 22px;
+}
+
+img {
+    width: 256px;
+    height:367px;
+}
+
+.btn{
+    width:100px;
+}
+
+.largeFont {
+    font-size: 22px;
+}
+
+.memberDetailsDl dt {
+    width: 250px;
+    padding-right: 20px;
+    font-size: 18px;
+    padding-bottom:5px;
+}
+
+
