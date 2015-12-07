@@ -71,6 +71,10 @@ namespace SeaSharpe_CVGS.Controllers
         [Authorize(Roles = "Employee")]
         public ActionResult WishListsReport()
         {
+            // Get the number of wishlists that exist
+            int numberOfWishlists = 0;
+            numberOfWishlists = db.WishLists.Count();
+            ViewBag.numberOfWishlists = numberOfWishlists;
             return View();
         }
 
@@ -81,11 +85,17 @@ namespace SeaSharpe_CVGS.Controllers
         [Authorize(Roles = "Employee")]
         public ActionResult SalesReport()
         {
-            // Get the number of sales
+            // Get the number of sales orders made
             int numberOfSales = 0;
             numberOfSales = db.Orders.Count();
             ViewBag.numberOfSales = numberOfSales;
+
+            // Get the total Sales
+           //decimal totalSales = 0;
             
+
+            //totalSales = from o in Order join oi in OrderItem on o.Id = oi.Order_Id
+
             return View();
         }
 
