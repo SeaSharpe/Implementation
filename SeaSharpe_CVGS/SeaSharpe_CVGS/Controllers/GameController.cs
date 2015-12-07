@@ -75,7 +75,12 @@ namespace SeaSharpe_CVGS.Controllers
         /// <summary>
         /// Displays game list page for members/visitors
         /// </summary>
-        /// <returns>List of games view</returns>
+        /// <param name="nameSearch">Search fragment for game name</param>
+        /// <param name="platformSearch">Platform id for search filtering</param>
+        /// <param name="categorySearch">Array of category ids for search filtering</param>
+        /// <param name="esrbSearch">ESRB code for search filtering</param>
+        /// <param name="isInclusive"></param>
+        /// <returns>ActionResult</returns>
         public ActionResult SearchGames(string nameSearch, int[] platformSearch, int[] categorySearch, string[] esrbSearch, bool isInclusive = false)
         {           
             IEnumerable<Game> gameList = db.Games.Include(g => g.Platform).Include(g => g.Categories);
@@ -243,8 +248,9 @@ namespace SeaSharpe_CVGS.Controllers
         /// Employee Side - post back for game creation, attempt to save to db
         /// </summary>
         /// <param name="game">game object</param>
-        /// <returns>view of games' list</returns>
-        //ADD EMPLOYY AUTH
+        /// <param name="Categories">Array of selected category ids</param>
+        /// <param name="Platform">PlatformId</param>
+        /// <returns>view of games list</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Employee")]
@@ -292,7 +298,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// Employee side - edit game
         /// </summary>
         /// <param name="id">game id</param>
-        /// <returns>add/edit game view</returns>
+        /// <returns>edit game view</returns>
         [Authorize(Roles = "Employee")]
         public ActionResult Edit(int? id)
         {
@@ -324,6 +330,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// Employee side - post back for edit game, save to db
         /// </summary>
         /// <param name="game">game object</param>
+        /// <param name="Categories">array of categories</param>
         /// <returns>list of games view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
