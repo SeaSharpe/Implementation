@@ -99,17 +99,11 @@ if (TempData["EmptyCart"] != null)
     if (ViewBag.StripeCharge != null)
     {
         var stripeCharge = (Stripe.StripeCharge)ViewBag.StripeCharge;
-        <label>
-            Amount:
-            @stripeCharge.Amount
-        </label>
-        <label>
-            Description:
-            @stripeCharge.Description
-        </label>
-        <label>
-            Status:
-            @stripeCharge.Status
-        </label>
+        <h4>
+            @string.Format("Order Amount: {0:C}", stripeCharge.Amount / 100m)
+        </h4>
+        <h4>
+            @string.Format("Payment Status: {0}", stripeCharge.Status)
+        </h4>
     }
 }

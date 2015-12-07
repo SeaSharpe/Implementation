@@ -342,7 +342,8 @@ namespace SeaSharpe_CVGS.Controllers
         {
             var memberOrder = db.Orders.
                 OrderBy(order => order.Id).
-                FirstOrDefault(order => order.Member.Id == CurrentMember.Id && order.IsProcessed == false);
+                FirstOrDefault(order => order.Member.Id == CurrentMember.Id &&
+                                        order.OrderPlacementDate == null);
 
             //Price in cents
             int price = Decimal.ToInt32(100 * memberOrder.OrderItems.Sum(orderItem => orderItem.SalePrice)); 
@@ -351,7 +352,10 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 Amount = price,
                 Currency = "cad",
-                Description = "Charge it like it's hot",
+                ReceiptEmail = CurrentUser.Email,
+                Metadata = new Dictionary<string, string>() { { "memberId", memberOrder.Member.Id.ToString() }, 
+                                                              { "orderId", memberOrder.Id.ToString() }, 
+                                                              { "userId", CurrentUser.Id } }, 
                 Source = new StripeSourceOptions
                 {
                     TokenId = stripeToken
@@ -362,7 +366,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             try
             {
-                TempData["message"] = "Charged card ";
+                TempData["message"] = "Charged card";
                 var stripeCharge = chargeService.Create(chargeOptions);
                 ViewBag.StripeCharge = stripeCharge;
                 memberOrder.OrderPlacementDate = DateTime.Now;
@@ -425,7 +429,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             //check if game already exists
             if (db.OrderItems.Where(m => m.OrderId == theCart.Id && m.GameId == game.Id).FirstOrDefault() != null)
-        {
+            {
                 //currently this stops the addToCart, if we add a quantity column to the orderItems table, it could increment the quantity instead
                 TempData["message"] = game.Name + " already exists in cart";
                 return RedirectToAction("details", "Game", new { id });
@@ -438,7 +442,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             TempData["message"] = game.Name + " added to cart";
 
-            return RedirectToAction("details", "Game", new { id });
+            return RedirectToAction("Cart");
         }
 
         /// <summary>
