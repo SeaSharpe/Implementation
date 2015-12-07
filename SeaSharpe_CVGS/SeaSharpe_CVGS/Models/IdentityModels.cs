@@ -79,6 +79,8 @@ namespace SeaSharpe_CVGS.Models
     public partial class Address
     {
         public int Id { get; set; }
+        [Column("Member_Id")]
+        public int MemberId { get; set; }
         public virtual Member Member { get; set; }
         public string StreetAddress { get; set; }
         public string City { get; set; }

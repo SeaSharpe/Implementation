@@ -6,6 +6,8 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using SeaSharpe_CVGS.Models;
+using Stripe;
+using System.Configuration;
 
 namespace SeaSharpe_CVGS
 {
@@ -63,6 +65,8 @@ namespace SeaSharpe_CVGS
             //    ClientId = "",
             //    ClientSecret = ""
             //});
+
+            StripeConfiguration.SetApiKey(ConfigurationManager.AppSettings["StripeApiPrivateKey"]);
         }
     }
 }
