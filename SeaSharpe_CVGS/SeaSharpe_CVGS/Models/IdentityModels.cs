@@ -49,6 +49,8 @@ namespace SeaSharpe_CVGS.Models
 
     public partial class Member
     {
+        [Column("User_Id")]
+        public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
 
         [Display(Name = "Member Id")]
