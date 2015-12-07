@@ -80,5 +80,30 @@ if (TempData["EmptyCart"] != null)
 @(Html.ActionLink("Empty Cart", "DeleteCart", "order", null, new { @class = "btn btn-primary" }))
 <br/>
 @(Html.ActionLink("Continue Shopping", "Index", "Game", null, new { @class = "btn btn-primary" }))
-<input type="submit" name="submit" value="Checkout Now" class="btn btn-primary" />
+}
+
+@using (@Html.BeginForm())
+{
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="@System.Configuration.ConfigurationManager.AppSettings.Get("StripeApiPublicKey")"
+        data-amount="@Model.Sum(m => m.item.SalePrice * 100)"
+        data-name="ConestogaVideoGameStore"
+        data-description="Games ($@Model.Sum(m => m.item.SalePrice))"
+        data-image='@Url.Content("~/Content/themes/base/images/logo.png")'
+        data-locale="auto"
+        data-bitcoin="true">
+    </script>
+}
+
+@{
+    if (ViewBag.StripeCharge != null)
+    {
+        var stripeCharge = (Stripe.StripeCharge)ViewBag.StripeCharge;
+        <h4>
+            @string.Format("Order Amount: {0:C}", stripeCharge.Amount / 100m)
+        </h4>
+        <h4>
+            @string.Format("Payment Status: {0}", stripeCharge.Status)
+        </h4>
+    }
 }
