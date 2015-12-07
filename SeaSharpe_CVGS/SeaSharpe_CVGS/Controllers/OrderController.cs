@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SeaSharpe_CVGS.Models;
+using System.Configuration;
+using Stripe;
 
 
 
@@ -323,6 +325,73 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
+        /// Cart purchase postback action
+        /// </summary>
+        /// <param name="stripeToken">
+        ///     The token provided to the client to track this purchase
+        /// </param>
+        /// <param name="stripeTokenType">The type of token, usualy "card"</param>
+        /// <param name="stripeEmail">
+        ///     The email the customer provided in the stripe payment dialogue box
+        /// </param>
+        /// <returns>
+        ///     Returns a view displaying the status of the payment to the user.
+        /// </returns>
+        [HttpPost]
+        public ActionResult Cart(string stripeToken, string stripeTokenType, string stripeEmail)
+        {
+            var memberOrder = db.Orders.
+                OrderBy(order => order.Id).
+                FirstOrDefault(order => order.Member.Id == CurrentMember.Id &&
+                                        order.OrderPlacementDate == null);
+
+            //Price in cents
+            int price = Decimal.ToInt32(100 * memberOrder.OrderItems.Sum(orderItem => orderItem.SalePrice)); 
+
+            var chargeOptions = new StripeChargeCreateOptions
+            {
+                Amount = price,
+                Currency = "cad",
+                ReceiptEmail = CurrentUser.Email,
+                Metadata = new Dictionary<string, string>() { { "memberId", memberOrder.Member.Id.ToString() }, 
+                                                              { "orderId", memberOrder.Id.ToString() }, 
+                                                              { "userId", CurrentUser.Id } }, 
+                Source = new StripeSourceOptions
+                {
+                    TokenId = stripeToken
+                }
+            };
+
+            var chargeService = new StripeChargeService();
+
+            try
+            {
+                TempData["message"] = "Charged card";
+                var stripeCharge = chargeService.Create(chargeOptions);
+                ViewBag.StripeCharge = stripeCharge;
+                memberOrder.OrderPlacementDate = DateTime.Now;
+
+                // Billing address will be the user's first address
+                memberOrder.BillingAddress = db.Addresses.
+                    OrderBy(addr => addr.Id).
+                    FirstOrDefault(addr => addr.Member.Id == CurrentMember.Id);
+
+                // Shipping address will be the user's last address
+                memberOrder.ShippingAddress = db.Addresses.
+                    OrderByDescending(addr => addr.Id).
+                    FirstOrDefault(addr => addr.Member.Id == CurrentMember.Id);
+
+                db.SaveChanges();
+                return Cart(null);
+            }
+            catch (Exception se)
+            {
+                TempData["message"] = se.Message;
+                return Cart(null);
+            }
+        }
+
+        /// <summary>
         /// Member side - Add a specific game to cart
         /// </summary>
         /// <param name="id">game id</param>
@@ -360,7 +429,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             //check if game already exists
             if (db.OrderItems.Where(m => m.OrderId == theCart.Id && m.GameId == game.Id).FirstOrDefault() != null)
-        {
+            {
                 //currently this stops the addToCart, if we add a quantity column to the orderItems table, it could increment the quantity instead
                 TempData["message"] = game.Name + " already exists in cart";
                 return RedirectToAction("details", "Game", new { id });
@@ -373,7 +442,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             TempData["message"] = game.Name + " added to cart";
 
-            return RedirectToAction("details", "Game", new { id });
+            return RedirectToAction("Cart");
         }
 
         /// <summary>
@@ -583,7 +652,5 @@ namespace SeaSharpe_CVGS.Controllers
         }
         
         #endregion
-       
-
     }
 }
