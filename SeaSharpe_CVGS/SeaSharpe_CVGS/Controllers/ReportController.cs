@@ -14,6 +14,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// Employee Side - display list of reports that can be created
         /// </summary>
         /// <returns>Index View (Report Management)</returns>
+        [Authorize(Roles = "Employee")]
         public ActionResult Index()
         {
             return View();
@@ -24,24 +25,28 @@ namespace SeaSharpe_CVGS.Controllers
         /// **Can be selected from List Games view**
         /// </summary>
         /// <returns>Game Details view</returns>
-        public ActionResult GameDetailsReport()
+        [Authorize(Roles = "Employee")]
+        public ActionResult GameDetailsReport(int id)
         {
-            return View(db.Games.ToList());
+            Game game = db.Games.Find(id);
+            return View(game);
         }
 
         /// <summary>
         /// Displays report of all games
         /// </summary>
         /// <returns>List Games view</returns>
+        [Authorize(Roles = "Employee")]
         public ActionResult ListGamesReport()
         {
-             return View(db.Games.ToList());
+            return View(db.Games.ToList());
         }
 
         /// <summary>
         /// Displays report of all members
         /// </summary>
         /// <returns>List Members view</returns>
+        [Authorize(Roles = "Employee")]
         public ActionResult ListMembersReport()
         {
             return View(db.Members.ToList());
@@ -52,15 +57,18 @@ namespace SeaSharpe_CVGS.Controllers
         /// **can be selected from List Members view**
         /// </summary>
         /// <returns>Member Details view</returns>
-        public ActionResult MemberDetailsReport()
+        [Authorize(Roles = "Employee")]
+        public ActionResult MemberDetailsReport(int id)
         {
-            return View(db.Members.ToList());
+            Member member = db.Members.Find(id);
+            return View(member);
         }
 
         /// <summary>
         /// Displays report of wish list statistics
         /// </summary>
         /// <returns>Wish Lists view</returns>
+        [Authorize(Roles = "Employee")]
         public ActionResult WishListsReport()
         {
             return View();
@@ -70,9 +78,11 @@ namespace SeaSharpe_CVGS.Controllers
         /// Displays report of sales statistics
         /// </summary>
         /// <returns>Sales Report view</returns>
+        [Authorize(Roles = "Employee")]
         public ActionResult SalesReport()
         {
             return View();
         }
+
 	}
 }

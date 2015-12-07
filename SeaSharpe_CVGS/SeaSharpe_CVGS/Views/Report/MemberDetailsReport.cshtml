@@ -1,75 +1,118 @@
-﻿@model IEnumerable<SeaSharpe_CVGS.Models.Member>
+﻿@model SeaSharpe_CVGS.Models.Member
 @{
     ViewBag.Title = "Member Details Report";
 }
-
-<h2>@ViewBag.Title</h2>
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.User.Id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User.UserName)
-        </th>
-        <th>
-            @*@Html.DisplayNameFor(model => model.User.DateOfRegistration)*@
-            Registration Date
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User.Gender)
-        </th>
-        <th>
-            @*@Html.DisplayNameFor(model => model.User.DateOfBirth)*@
-            DOB
-        </th>
-        <th>
-            @*@Html.DisplayNameFor(model => model.IsEmailVerified)*@
-            Email Verified?
-        </th>
-        <th>
-            @*@Html.DisplayNameFor(model => model.IsEmailMarketingAllowed)*@
-            Email Marketing?
-        </th>
-        <th>
-            Phone Number
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.DateOfRegistration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Gender)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.DateOfBirth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsEmailVerified)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsEmailMarketingAllowed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.PhoneNumber)
-            </td>
-        </tr>
-    }
-
-</table>
-<div>
-    @Html.ActionLink("Back to List", "Index")
+<link rel="stylesheet" href="~/Content/report.css" type="text/css">
+<h1>@ViewBag.Title</h1>
+<hr />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="col-md-8 col-md-offset-2 jumbotron">
+            <dl class="dl-horizontal memberDetailsDl">
+                <!-- Member Id -->
+                <dt>
+                    @Html.DisplayNameFor(model => model.Id)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Id)
+                </dd>
+                <!-- Member Username -->
+                <dt>
+                    @Html.DisplayNameFor(model => model.User.UserName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.User.UserName)
+                </dd>
+                <!-- Member First Name -->
+                <dt>
+                    @Html.DisplayNameFor(model => model.User.FirstName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.User.FirstName)
+                </dd>
+                <!-- Member Last Name -->
+                <dt>
+                    @Html.DisplayNameFor(model => model.User.LastName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.User.LastName)
+                </dd>
+                
+                <!-- Member Gender -->
+                <dt>
+                    @Html.DisplayNameFor(model => model.User.Gender)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.User.Gender)
+                </dd>
+                <!-- Member Email -->
+                <dt>
+                    @Html.DisplayNameFor(model => model.User.Email)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.User.Email)
+                </dd>
+                <!-- Member Phone -->
+                <dt>
+                    @Html.DisplayNameFor(model => model.User.PhoneNumber)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.User.PhoneNumber)
+                </dd>
+                <!-- Member DOB -->
+                <dt>
+                    @Html.DisplayNameFor(model => model.User.DateOfBirth)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.User.DateOfBirth)
+                </dd>
+                <!-- Member Registration Date -->
+                <dt>
+                    @Html.DisplayNameFor(model => model.User.DateOfRegistration)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.User.DateOfRegistration)
+                </dd>
+                <!-- Member IsEmailVerified -->
+                <dt>
+                    @Html.DisplayNameFor(model => model.IsEmailVerified)
+                </dt>
+                @if(Model.IsEmailVerified)
+                {
+                    <dd>
+                        Yes
+                    </dd>
+                }
+                else
+                {
+                    <dd>
+                        No
+                    </dd>
+                }
+                <!-- Member IsEmailMarketingAllowed-->
+                <dt>
+                    @Html.DisplayNameFor(model => model.IsEmailMarketingAllowed)
+                </dt>
+                @if(Model.IsEmailMarketingAllowed)
+                {
+                    <dd>
+                        Yes
+                    </dd>
+                }
+                else
+                {
+                    <dd>
+                        No
+                    </dd>
+                }
+            </dl>
+        </div>
+        <div class="row">
+            <div class="col-md-11 col-md-offset-1">
+                <div>
+                    @Html.ActionLink("Back to List", "ListMembersReport")
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-

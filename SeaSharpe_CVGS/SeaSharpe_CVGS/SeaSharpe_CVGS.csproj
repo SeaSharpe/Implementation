@@ -200,6 +200,7 @@
     <Content Include="Content\game.css" />
     <Content Include="Content\home.css" />
     <Content Include="Content\main.css" />
+    <Content Include="Content\report.css" />
     <Content Include="Content\review.css" />
     <Content Include="Content\simple-sidebar.css" />
     <Content Include="Content\themes\base\accordion.css" />
