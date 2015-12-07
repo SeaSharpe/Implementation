@@ -325,6 +325,69 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
+        /// Cart purchase postback action
+        /// </summary>
+        /// <param name="stripeToken">
+        ///     The token provided to the client to track this purchase
+        /// </param>
+        /// <param name="stripeTokenType">The type of token, usualy "card"</param>
+        /// <param name="stripeEmail">
+        ///     The email the customer provided in the stripe payment dialogue box
+        /// </param>
+        /// <returns>
+        ///     Returns a view displaying the status of the payment to the user.
+        /// </returns>
+        [HttpPost]
+        public ActionResult Cart(string stripeToken, string stripeTokenType, string stripeEmail)
+        {
+            var memberOrder = db.Orders.
+                OrderBy(order => order.Id).
+                FirstOrDefault(order => order.Member.Id == CurrentMember.Id && order.IsProcessed == false);
+
+            //Price in cents
+            int price = Decimal.ToInt32(100 * memberOrder.OrderItems.Sum(orderItem => orderItem.SalePrice)); 
+
+            var chargeOptions = new StripeChargeCreateOptions
+            {
+                Amount = price,
+                Currency = "cad",
+                Description = "Charge it like it's hot",
+                Source = new StripeSourceOptions
+                {
+                    TokenId = stripeToken
+                }
+            };
+
+            var chargeService = new StripeChargeService();
+
+            try
+            {
+                TempData["message"] = "Charged card ";
+                var stripeCharge = chargeService.Create(chargeOptions);
+                ViewBag.StripeCharge = stripeCharge;
+                memberOrder.OrderPlacementDate = DateTime.Now;
+
+                // Billing address will be the user's first address
+                memberOrder.BillingAddress = db.Addresses.
+                    OrderBy(addr => addr.Id).
+                    FirstOrDefault(addr => addr.Member.Id == CurrentMember.Id);
+
+                // Shipping address will be the user's last address
+                memberOrder.ShippingAddress = db.Addresses.
+                    OrderByDescending(addr => addr.Id).
+                    FirstOrDefault(addr => addr.Member.Id == CurrentMember.Id);
+
+                db.SaveChanges();
+                return Cart(null);
+            }
+            catch (Exception se)
+            {
+                TempData["message"] = se.Message;
+                return Cart(null);
+            }
+        }
+
+        /// <summary>
         /// Member side - Add a specific game to cart
         /// </summary>
         /// <param name="id">game id</param>
@@ -585,50 +648,5 @@ namespace SeaSharpe_CVGS.Controllers
         }
         
         #endregion
-       
-        public ActionResult Buy()
-        {
-            return View();
-        }
-
-        /// <summary>
-        /// Buy's postback action
-        /// </summary>
-        /// <param name="stripeToken">
-        ///     The token provided to the client to track this purchase
-        /// </param>
-        /// <param name="stripeTokenType">The type of token, usualy "card"</param>
-        /// <param name="stripeEmail">
-        ///     The email the customer provided in the stripe payment dialogue box
-        /// </param>
-        /// <returns>
-        ///     Returns a view displaying the status of the payment to the user.
-        /// </returns>
-        [HttpPost]
-        public ActionResult Buy(string stripeToken, string stripeTokenType, string stripeEmail)
-        {
-            var chargeOptions = new StripeChargeCreateOptions
-            {
-                Amount = 5153,
-                Currency = "CAD",
-                Description = "Charge it like it's hot",
-                Source = new StripeSourceOptions
-                {
-                    TokenId = stripeToken
-                }
-            };
-            var chargeService = new StripeChargeService();
-            try
-            {
-                var stripeCharge = chargeService.Create(chargeOptions);
-                return View(stripeCharge);
-            }
-            catch (StripeException se)
-            {
-                TempData["message"] = se.Message;
-                return View();
-            }
-        }
-
     }
 }
