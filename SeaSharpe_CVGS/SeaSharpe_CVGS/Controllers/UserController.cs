@@ -67,8 +67,8 @@ namespace SeaSharpe_CVGS.Controllers
         /// Post back method for the profile page
         /// </summary>
         /// <param name="member">The member object</param>
-        /// <param name="billingAddress">The member's shipping address</param>
-        /// <param name="shippingAddress">The member's billing address</param>
+        /// <param name="billingAddress">The member's billing address</param>
+        /// <param name="shippingAddress">The member's shipping address</param>
         /// <returns>Returns to index if successful, otherwise redisplays the 
         /// edit page</returns>
         [HttpPost]
