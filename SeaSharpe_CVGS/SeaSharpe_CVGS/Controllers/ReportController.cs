@@ -85,6 +85,7 @@ namespace SeaSharpe_CVGS.Controllers
             int numberOfSales = 0;
             numberOfSales = db.Orders.Count();
             ViewBag.numberOfSales = numberOfSales;
+            
             return View();
         }
 
