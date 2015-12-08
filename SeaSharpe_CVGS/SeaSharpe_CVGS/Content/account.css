@@ -1,0 +1,40 @@
+﻿a {
+    color: #0FA00F;
+}
+
+a:hover {
+    color: #05630C;
+}
+
+.jumbotron {
+  padding: 30px;
+  margin-bottom: 30px;
+  font-size: 18px;
+  font-weight: normal;
+  line-height: inherit;
+  color: inherit;
+  background-color: #eeeeee;
+}
+
+#btnLoginSubmit {
+    margin-left: 5px;
+    width:280px;
+    font-size: 18px;
+}
+
+#btnRegisterSubmit{
+    width:280px;
+    font-size: 18px;
+}
+
+@media screen and (min-width: 768px) {
+    .container .jumbotron {
+        padding-right: 30px;
+        padding-left: 0;
+    }
+}
+
+.form-control {
+    font-size: inherit;
+    color:black;
+}

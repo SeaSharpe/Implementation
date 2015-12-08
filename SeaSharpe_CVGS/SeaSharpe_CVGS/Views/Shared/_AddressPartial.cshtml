@@ -1,38 +1,38 @@
 ﻿@model SeaSharpe_CVGS.Models.Address
+<link rel="stylesheet" href="~/Content/user.css" type="text/css">
     <div class="form-horizontal">
-        <hr />
                 @Html.HiddenFor(model => model.Id)
-
+        <br/>
         <div class="form-group">
-            <div class="col-md-10">
+            <div class="col-md-11">
                 @Html.EditorFor(model => model.StreetAddress, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.StreetAddress) } })
                 @Html.ValidationMessageFor(model => model.StreetAddress, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-md-10">
+            <div class="col-md-11">
                 @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.City) } })
                 @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-md-10">
+            <div class="col-md-11">
                 @Html.EditorFor(model => model.Region, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Region) } })
                 @Html.ValidationMessageFor(model => model.Region, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-md-10">
+            <div class="col-md-11">
                 @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Country) } })
                 @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-md-10">
+            <div class="col-md-11">
                 @Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.PostalCode) } })
                 @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
             </div>

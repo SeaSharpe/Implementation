@@ -1,0 +1,42 @@
+﻿.jumbotron {
+  padding: 30px;
+  margin-bottom: 30px;
+  font-size: 18px;
+  font-weight: normal;
+  line-height: inherit;
+  color: inherit;
+  background-color: #eeeeee;
+}
+
+@media screen and (min-width: 768px) {
+    .container .jumbotron {
+        padding-right: 30px;
+        padding-left: 30px;
+    }
+}
+
+.form-control {
+    font-size: inherit;
+    color:black;
+}
+
+#btnProfileSubmit{
+    width:280px;
+    font-size: 18px;
+}
+
+.col-md-4 {
+    padding: 0;
+}
+
+a {
+    color: #0FA00F;
+}
+
+a:hover {
+    color: #05630C;
+}
+
+#linkChangePw {
+    margin-left: 20px;
+}

@@ -1,0 +1,46 @@
+﻿#btnChangePwSubmit {
+    width: 280px;
+    font-size: 18px;
+}
+
+.jumbotron {
+  padding: 30px;
+  margin-bottom: 30px;
+  font-size: 18px;
+  font-weight: normal;
+  line-height: inherit;
+  color: inherit;
+  background-color: #eeeeee;
+}
+
+@media screen and (min-width: 768px) {
+    .container .jumbotron {
+        padding-right: 0;
+        padding-left: 30px;
+    }
+}
+
+.form-control {
+    font-size: inherit;
+    color:black;
+}
+
+a {
+    color: #0FA00F;
+}
+
+a:hover {
+    color: #05630C;
+}
+
+@media (min-width: 768px) {
+
+    .dl-horizontal dt {
+        width:40%;
+        padding-right: 10px;
+    }
+
+    .dl-horizontal dd {
+        width:60%;
+    }
+}
