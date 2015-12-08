@@ -128,6 +128,7 @@ namespace SeaSharpe_CVGS.Controllers
             }
 
             RemoveErrors(".Member");
+            member.UserId = member.User.Id;
             db.Members.Attach(member);
             db.Entry<Member>(member).State = EntityState.Modified;
 
