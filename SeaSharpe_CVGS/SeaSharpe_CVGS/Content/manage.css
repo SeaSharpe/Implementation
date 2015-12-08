@@ -1,0 +1,14 @@
+﻿#btnChangePwSubmit {
+    width: 280px;
+    font-size: 18px;
+}
+
+.jumbotron {
+  padding: 30px;
+  margin-bottom: 30px;
+  font-size: 18px;
+  font-weight: normal;
+  line-height: inherit;
+  color: inherit;
+  background-color: #eeeeee;
+}

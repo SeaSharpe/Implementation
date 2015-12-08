@@ -21,6 +21,7 @@ namespace SeaSharpe_CVGS.Models
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
         public string ReturnUrl { get; set; }
+
         public bool RememberMe { get; set; }
     }
 
@@ -58,7 +59,7 @@ namespace SeaSharpe_CVGS.Models
         [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Keep Me Signed In")]
         public bool RememberMe { get; set; }
     }
 

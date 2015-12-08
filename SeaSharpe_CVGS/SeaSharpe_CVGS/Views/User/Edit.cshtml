@@ -1,5 +1,5 @@
 ﻿@model SeaSharpe_CVGS.Models.ProfileViewModel
-
+<link rel="stylesheet" href="~/Content/user.css" type="text/css">
 @{
     ViewBag.Title = "Edit Profile";
     
@@ -86,6 +86,7 @@
                         <input type="submit" value="Save" class="btn btn-default greenButton" />
                     </div>
                 </div>
+                @Html.ActionLink("Change Your Password", "ChangePassword", "Manage")
             </div>
         </div>
             <div class="col-md-4">
