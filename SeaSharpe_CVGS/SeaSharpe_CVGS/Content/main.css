@@ -64,7 +64,7 @@ footer p {
 
 }
 
-input[type="text"], input[type="password"], select{
+input[type="text"], input[type="password"], select, input[type="datetime"]{
     border-radius: 10px;
 }
 

@@ -1,7 +1,7 @@
 ﻿@model SeaSharpe_CVGS.Models.ProfileViewModel
 <link rel="stylesheet" href="~/Content/user.css" type="text/css">
 @{
-    ViewBag.Title = "Edit Profile";
+    ViewBag.Title = User.Identity.Name + "'s Profile";
     
     ViewBag.Genders = from gender in new Dictionary<string, string> { { "Male", "M" }, { "Female", "F" }, { "Other", "O" } }
                       select new System.Web.Mvc.SelectListItem {
@@ -11,100 +11,104 @@
                       };
 }
 
-<h2>@ViewBag.Title</h2>
+<h1>@ViewBag.Title</h1>
+<hr/>
+<div class="row">
+    <div class="col-lg-10 col-lg-offset-1 jumbotron">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-md-4">
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    <div class="row">
-        <div class="col-md-4">
+                    <div class="form-horizontal">
+                        @Html.HiddenFor(model => model.Member.Id)
+                        @Html.HiddenFor(model => model.Member.User.Id)
+                        @Html.HiddenFor(model => model.Member.User.UserName)
 
-            <div class="form-horizontal">
-                @Html.HiddenFor(model => model.Member.Id)
-                @Html.HiddenFor(model => model.Member.User.Id)
-                @Html.HiddenFor(model => model.Member.User.UserName)
+                        <div class="form-group">
+                            <div class="col-md-10 col-md-offset-1">
+                                @Html.LabelFor(model => model.Member.User.UserName)
+                                @Html.DisplayFor(model => model.Member.User.UserName)
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.LabelFor(model => model.Member.User.UserName)
-                        @Html.DisplayFor(model => model.Member.User.UserName)
+                        <div class="form-group">
+                            <div class="col-md-10 col-md-offset-1">
+                                @Html.EditorFor(model => model.Member.User.FirstName, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Member.User.FirstName) } })
+                                @Html.ValidationMessageFor(model => model.Member.User.FirstName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-10 col-md-offset-1">
+                                @Html.EditorFor(model => model.Member.User.LastName, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Member.User.LastName) } })
+                                @Html.ValidationMessageFor(model => model.Member.User.LastName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-10 col-md-offset-1">
+                                @Html.EditorFor(model => model.Member.User.Email, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Member.User.Email) } })
+                                @Html.ValidationMessageFor(model => model.Member.User.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-10 col-md-offset-1">
+                                @Html.EditorFor(model => model.Member.User.PhoneNumber, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Member.User.PhoneNumber) } })
+                                @Html.ValidationMessageFor(model => model.Member.User.PhoneNumber, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10 col-md-offset-1">
+                                @Html.EditorFor(model => model.Member.User.DateOfBirth, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Member.User.DateOfBirth) } })
+                                @Html.ValidationMessageFor(model => model.Member.User.DateOfBirth, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10 col-md-offset-1">
+                                @Html.LabelFor(model => model.Member.User.Gender, new { @class = "col-md-5" })
+                                @Html.DropDownListFor(model => model.Member.User.Gender, (IEnumerable<SelectListItem>)ViewBag.Genders, new { @class = "col-md-7" })
+                                @Html.ValidationMessageFor(model => model.Member.User.Gender, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Member.User.FirstName, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Member.User.FirstName) } })
-                        @Html.ValidationMessageFor(model => model.Member.User.FirstName, "", new { @class = "text-danger" })
-                    </div>
+                <div class="col-md-4">
+                    @{
+            ViewData.TemplateInfo.HtmlFieldPrefix = "BillingAddress";
+                    }
+                    <h4><b>Billing Address</b></h4>
+                    @Html.Partial("_AddressPartial", Model.BillingAddress)
                 </div>
-
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Member.User.LastName, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Member.User.LastName) } })
-                        @Html.ValidationMessageFor(model => model.Member.User.LastName, "", new { @class = "text-danger" })
-                    </div>
+                <div class="col-md-4">
+                    @{
+            ViewData.TemplateInfo.HtmlFieldPrefix = "ShippingAddress";
+                    }
+                    <h4><b>Shipping Address</b></h4>
+                    @Html.Partial("_AddressPartial", Model.ShippingAddress)
                 </div>
-
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Member.User.Email, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Member.User.Email) } })
-                        @Html.ValidationMessageFor(model => model.Member.User.Email, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Member.User.PhoneNumber, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Member.User.PhoneNumber) } })
-                        @Html.ValidationMessageFor(model => model.Member.User.PhoneNumber, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.DropDownListFor(model => model.Member.User.Gender, (IEnumerable<SelectListItem>)ViewBag.Genders)
-                        @Html.ValidationMessageFor(model => model.Member.User.Gender, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Member.User.DateOfBirth, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Member.User.DateOfBirth) } })
-                        @Html.ValidationMessageFor(model => model.Member.User.DateOfBirth, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Member.IsEmailMarketingAllowed)
-                        @Html.LabelFor(model => model.Member.IsEmailMarketingAllowed, "I wish to receive promotional material")
-                        @Html.ValidationMessageFor(model => model.Member.IsEmailMarketingAllowed)
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Save" class="btn btn-default greenButton" />
-                    </div>
-                </div>
-                @Html.ActionLink("Change Your Password", "ChangePassword", "Manage")
+                @{
+            ViewData.TemplateInfo.HtmlFieldPrefix = "";
+                }
             </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Member.IsEmailMarketingAllowed)
+            @Html.LabelFor(model => model.Member.IsEmailMarketingAllowed, "I wish to receive promotional material")
+            @Html.ValidationMessageFor(model => model.Member.IsEmailMarketingAllowed)
         </div>
-            <div class="col-md-4">
-                @{
-                    ViewData.TemplateInfo.HtmlFieldPrefix = "BillingAddress";
-                }
-                <h4>Billing Address</h4>
-                @Html.Partial("_AddressPartial", Model.BillingAddress)
-            </div>
-            <div class="col-md-4">
-                @{
-                    ViewData.TemplateInfo.HtmlFieldPrefix = "ShippingAddress";
-                }
-                <h4>Shipping Address</h4>
-                @Html.Partial("_AddressPartial", Model.ShippingAddress)
-            </div>
-            @{
-                ViewData.TemplateInfo.HtmlFieldPrefix = "";
-            }
     </div>
-}
+    <br/><br/>
+    <div class="form-group">
+        <div class="col-md-12">
+            <input type="submit" value="Save" class="btn btn-default greenButton" id="btnProfileSubmit"/>
+        </div>
+    </div>
+    @Html.ActionLink("Change Your Password", "ChangePassword", "Manage", new { @class = "col-md-4", @id="linkChangePw" })
+        }
+    </div>
+</div>
