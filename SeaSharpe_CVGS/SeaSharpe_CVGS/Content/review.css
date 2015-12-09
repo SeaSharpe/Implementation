@@ -24,13 +24,16 @@ input, textarea {
 }
 
 @media (min-width: 768px) {
+
     #selectedReview dt {
         width: 40%;
     }
+
     #selectedReview dd {
         padding-bottom: 10px;
         width: 60%;
     }
+
     #selectedReview dd {
         margin-left: 110px;
     }
@@ -38,13 +41,18 @@ input, textarea {
     #selectedReview dl {
         width: 30px;
     }
-    #selectedReview dt, #selectedReview dd { display: inline; margin: 0; }
+
+    #selectedReview dt, #selectedReview dd { 
+        display: inline; margin: 0; 
+    }
 
     #selectedReview :after {
         content: '\A';
         white-space: pre;
     }
+
 }
+
 .reviewReview {
     width: 230px;
     max-width:230px;

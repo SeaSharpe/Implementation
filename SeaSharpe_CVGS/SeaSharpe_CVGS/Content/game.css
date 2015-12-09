@@ -2,9 +2,11 @@
     width:170px;
     height:5em;
 }
+
 select, input[type=text] {
     width: 190px;
 }
+
 img {
     height:2.5em;
     width:75px;
@@ -13,32 +15,40 @@ img {
 #searchSubmit {
     margin-left:25px;
 }
+
 a {
     color: #0FA00F;
 }
+
 a:hover {
     color: #05630C;
 }
+
 .img-details {
     height: 275px;
     width: 200px;
     margin: 0 0 10px 12px;
 }
+
 .btn-details {
     width: 225px;
     text-align:center;
     padding-bottom: 4px;
 }
+
 .dl-horizontal {
     margin-top: 0;
 }
+
 @media (min-width: 768px) {
     .dl-horizontal dd {
         margin-left: 125px;
     }
+
     .dl-horizontal dt {
         width: 125px;
     }
+
     dd {
         padding: 0 0 10px 10px;
     }

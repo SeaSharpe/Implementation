@@ -16,14 +16,39 @@ namespace SeaSharpe_CVGS.Controllers
     /// </summary>
     public class GameController : Controller
     {
-        //Dictionary containing ESRB ratings
-        public static Dictionary<string, string> esrbDict = new Dictionary<string, string>
+        /// <summary>
+        /// Struct for holding ESRB rating information 
+        /// </summary>
+        private struct ESRB
+        {
+            private string abbreviation;
+            public string Abbreviation{get { return abbreviation; } set { abbreviation = value; }}
+
+            private string rating;
+            public string Rating{get { return rating; }set { rating = value; }}
+
+            private int minAge;
+            public int MinAge{get { return minAge; }set { minAge = value; }}
+
+            public ESRB( string abbreviation,string rating, int minAge)
+            {                
+                this.abbreviation = abbreviation;
+                this.rating = rating;
+                this.minAge = minAge;
+            }
+        }
+
+        //List containing esrb ratings
+        private List<ESRB> esrbList = new List<ESRB>()
             {
-                //TODO: Change key to local image path 
-                {"EC", "Early Childhood"},{"E", "Everyone"},{"E10", "Everyone 10+"},{"T", "Teen"},{"M", "Mature"},{"AO", "Adult Only"}
+                new ESRB("EC","Early Childhood",0),
+                new ESRB("E", "Everyone", 0),
+                new ESRB("E10", "Everyone 10+", 0),
+                new ESRB("T", "Teen", 0),
+                new ESRB("M", "Mature", 17),
+                new ESRB("AO", "Adult Only", 18)
             };
         
-
         #region Multiple Roles
 
         /// <summary>
@@ -44,13 +69,18 @@ namespace SeaSharpe_CVGS.Controllers
             else
             {
                return RedirectToAction("SearchGames");
-            }        
+            }
         }
 
         /// <summary>
         /// Displays game list page for members/visitors
         /// </summary>
-        /// <returns>List of games view</returns>
+        /// <param name="nameSearch">Search fragment for game name</param>
+        /// <param name="platformSearch">Platform id for search filtering</param>
+        /// <param name="categorySearch">Array of category ids for search filtering</param>
+        /// <param name="esrbSearch">ESRB code for search filtering</param>
+        /// <param name="isInclusive"></param>
+        /// <returns>ActionResult</returns>
         public ActionResult SearchGames(string nameSearch, int[] platformSearch, int[] categorySearch, string[] esrbSearch, bool isInclusive = false)
         {           
             IEnumerable<Game> gameList = db.Games.Include(g => g.Platform).Include(g => g.Categories);
@@ -101,7 +131,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// <param name="id">game id</param>
         /// <returns>game details view</returns>
         public ActionResult Details(int? id)
-        {
+        {                   
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -111,6 +141,49 @@ namespace SeaSharpe_CVGS.Controllers
             if (game == null)
             {
                 return HttpNotFound();
+            }
+
+            //Initialize age
+            int userAge = 0;
+            bool ageUndefined = false;
+
+            //ESRB struct for the current games esrb rating
+            ESRB esrbRating = esrbList.FirstOrDefault(e => e.Abbreviation == game.ESRB);
+            
+            //Get members age if user logged in
+            if(IsEmployee || IsMember)
+            {
+                TimeSpan ageDifference = DateTime.Now.Subtract(CurrentUser.DateOfBirth);
+                userAge = ageDifference.Days / 365;
+            }
+
+            //Check age if user is visitor
+            else
+            {
+                //Check for age cookie and parse into userAge
+                HttpCookie ageCookie = Request.Cookies["ageCookie"];
+                if (ageCookie != null)
+                {
+                    int.TryParse(ageCookie.Value, out userAge);
+                }
+                
+                //If the age is still 0(default) after checking cookie, set variables to prompt user in view
+                if(userAge == 0)
+                {
+                    ageUndefined = true;
+                    ViewData["minAge"] = esrbRating.MinAge;
+                }
+                
+            }               
+
+            //set viewdata so the javascript prompt is called on the view as needed
+            ViewData["ageUndefined"] = ageUndefined;
+
+            //Redirect to search games if user not old enough
+            if(userAge < esrbRating.MinAge && !ageUndefined)
+            {
+                TempData["message"] = "You must be " + esrbRating.MinAge + " years old to view the game: " + game.Name;
+                return RedirectToAction("SearchGames");
             }
 
             //Get tempData message from postback
@@ -132,18 +205,18 @@ namespace SeaSharpe_CVGS.Controllers
                 if (gameReview == null)
                 {
                     gameReview = new Review();
-                }
+                }               
 
                 //Set gameReview game id to current game
-                gameReview.Game_Id = game.Id;  
+                gameReview.Game_Id = game.Id;            
             }
 
             //Push game review to view so it can be passed to the partial view for review
             ViewData["isApproved"] = gameReview.IsApproved;
-            ViewData["review"] = gameReview;   
+            ViewData["review"] = gameReview;          
                    
             return View(game);
-        }        
+        }
 
         #endregion
 
@@ -175,8 +248,9 @@ namespace SeaSharpe_CVGS.Controllers
         /// Employee Side - post back for game creation, attempt to save to db
         /// </summary>
         /// <param name="game">game object</param>
-        /// <returns>view of games' list</returns>
-        //ADD EMPLOYY AUTH
+        /// <param name="Categories">Array of selected category ids</param>
+        /// <param name="Platform">PlatformId</param>
+        /// <returns>view of games list</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Employee")]
@@ -193,7 +267,7 @@ namespace SeaSharpe_CVGS.Controllers
                 
                 //Add game categories if value not null
                 if(Categories != null)
-                {
+        {
                     ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
                     game.Categories = gameCategories;
                 }     
@@ -202,12 +276,12 @@ namespace SeaSharpe_CVGS.Controllers
                 ModelState.Clear();
                 TryValidateModel(game);
 
-                if (ModelState.IsValid)
-                {
-                    db.Games.Add(game);
-                    db.SaveChanges();
-                    return RedirectToAction("GameManagement");
-                }
+            if (ModelState.IsValid)
+            {
+                db.Games.Add(game);
+                db.SaveChanges();
+                return RedirectToAction("GameManagement");
+            }
             }
 
             //Return message to employee if exception
@@ -224,7 +298,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// Employee side - edit game
         /// </summary>
         /// <param name="id">game id</param>
-        /// <returns>add/edit game view</returns>
+        /// <returns>edit game view</returns>
         [Authorize(Roles = "Employee")]
         public ActionResult Edit(int? id)
         {
@@ -256,6 +330,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// Employee side - post back for edit game, save to db
         /// </summary>
         /// <param name="game">game object</param>
+        /// <param name="Categories">array of categories</param>
         /// <returns>list of games view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -273,7 +348,7 @@ namespace SeaSharpe_CVGS.Controllers
                 Game originalGame = db.Games.Find(game.Id);
                 originalGame.Categories.Clear();
                 foreach (Category c in gameCategories)
-                {
+        {
                     originalGame.Categories.Add(c);
                 }
                 db.SaveChanges();
@@ -282,13 +357,13 @@ namespace SeaSharpe_CVGS.Controllers
                 //Update the model to include binded changes
                 ModelState.Clear();
                 TryValidateModel(game);
-                if (ModelState.IsValid)
-                {
-                    db.Entry(game).State = EntityState.Modified;
-                    db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                db.Entry(game).State = EntityState.Modified;
+                db.SaveChanges();
                     TempData["message"] = "Game with ID: " + game.Id + " updated.";
-                    return RedirectToAction("GameManagement");
-                }
+                return RedirectToAction("GameManagement");
+            }
             }
 
             catch (Exception e)
@@ -316,8 +391,8 @@ namespace SeaSharpe_CVGS.Controllers
                 game.Categories.Clear();
 
                 //Remove game and save changes
-                db.Games.Remove(game);
-                db.SaveChanges();
+            db.Games.Remove(game);
+            db.SaveChanges();
                 TempData["message"] = game.Name + " and it's dependencies have been deleted.";
             }
 
@@ -328,7 +403,7 @@ namespace SeaSharpe_CVGS.Controllers
             
             return RedirectToAction("GameManagement");
         }
-                
+        
         /// <summary>
         /// Member side - Download a specific game
         /// ****No view required****
@@ -356,7 +431,7 @@ namespace SeaSharpe_CVGS.Controllers
             ViewData["categoryList"] = new SelectList(db.Catagories, "Id", "Name");
 
             //Send esrb selectlist to view for dropdown
-            ViewData["esrbList"] = new SelectList(esrbDict,"Key", "Value");
+            ViewData["esrbList"] = new SelectList(esrbList,"Abbreviation", "Rating");
         }
         #endregion
 

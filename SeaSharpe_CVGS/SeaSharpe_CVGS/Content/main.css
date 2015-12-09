@@ -64,7 +64,7 @@ footer p {
 
 }
 
-input[type="text"], input[type="password"]{
+input[type="text"], input[type="password"], select, input[type="datetime"]{
     border-radius: 10px;
 }
 
@@ -216,12 +216,14 @@ select[multiple] option:hover
     padding-top: 2px;
 }
 
-
-
 /* errors */
 
 .field-validation-error {
     color: red;
     font-weight:bold;
     font-size: 12px;
+}
+
+.largeFont {
+    font-size: 22px;
 }

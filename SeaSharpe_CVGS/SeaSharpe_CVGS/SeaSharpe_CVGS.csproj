@@ -198,12 +198,14 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\account.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\friendship.css" />
     <Content Include="Content\game.css" />
     <Content Include="Content\home.css" />
     <Content Include="Content\main.css" />
+    <Content Include="Content\manage.css" />
     <Content Include="Content\report.css" />
     <Content Include="Content\review.css" />
     <Content Include="Content\simple-sidebar.css" />
@@ -241,10 +243,12 @@
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="Content\star-rating.css" />
+    <Content Include="Content\user.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\loading.gif" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
