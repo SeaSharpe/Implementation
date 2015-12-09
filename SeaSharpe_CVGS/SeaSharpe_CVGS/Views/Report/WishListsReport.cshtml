@@ -5,7 +5,25 @@
 <link rel="stylesheet" href="~/Content/report.css" type="text/css">
 <h1>@ViewBag.Title</h1>
 <hr />
-<div class="row">
+
+<h2>Summary</h2>
+<div>
+    <table class="table">
+        <tr>
+            <td>Total number of Wishlists</td>
+            <td>@ViewBag.numberOfWishlists</td>
+        </tr>
+        <tr>
+            <td>Number of Members with Wishlists</td>
+            <td>@ViewBag.membersWithWishlists</td>
+        </tr>
+        <tr>
+            <td>Average Number of Items in a Wishlist</td>
+            <td>@ViewBag.avgNumOfItemsPerMember</td>
+        </tr>
+    </table>
+</div>
+@*<div class="row">
     <div class="col-lg-12">
         <div class="col-md-8 col-md-offset-2">
             <table class="table">
@@ -25,7 +43,7 @@
             </table>
         </div>
     </div>
-</div>
+</div>*@
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
         <div>

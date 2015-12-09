@@ -4,7 +4,32 @@
 <link rel="stylesheet" href="~/Content/report.css" type="text/css">
 <h1>@ViewBag.Title</h1>
 <hr />
-<div class="row">
+<h2>Summary</h2>
+<div>
+    <table class="table">
+        <tr>
+            <td>Total number of Sales Orders: </td>
+            <td>@ViewBag.numberOfSales</td>
+        </tr>
+        <tr>
+            <td>Total Sales: </td>
+            <td>@ViewBag.totalSales</td>
+        </tr>
+        <tr>
+            <td>Members who purchased items: </td>
+            <td>@ViewBag.membersWhoPurchasedItems</td>
+        </tr>
+        <tr>
+            <td>% of Members who purchased items: </td>
+            <td>@ViewBag.percentageOfMembersWhoPurchased</td>
+        </tr>
+
+    </table>
+</div>
+
+
+
+@*<div class="row">
     <div class="col-lg-12">
         <div class="col-md-8 col-md-offset-2">
             <table class="table">
@@ -24,11 +49,11 @@
             </table>
         </div>
     </div>
-</div>
+</div>*@
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
         <div>
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Back to List Of Reports", "Index")
         </div>
     </div>
 </div>

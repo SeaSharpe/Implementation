@@ -71,6 +71,22 @@ namespace SeaSharpe_CVGS.Controllers
         [Authorize(Roles = "Employee")]
         public ActionResult WishListsReport()
         {
+            // Get the number of wishlists that exist
+            int numberOfWishlists = 0;
+            numberOfWishlists = db.WishLists.Count();
+            ViewBag.numberOfWishlists = numberOfWishlists;
+
+            // Get the number of members with wishlists
+            int membersWithWishlists = 0;
+            membersWithWishlists = db.WishLists.Select(w => w.MemberId).Distinct().Count();
+            ViewBag.membersWithWishlists = membersWithWishlists;
+
+            // Average number of items in a members wish list
+            int itemsInAWishlist = db.WishLists.Count();
+            int numberOfPlayersWithWL = db.WishLists.Select(wl => wl.MemberId).Distinct().Count();
+            double avgNumOfItemsPerMember = ((double)itemsInAWishlist / (double)numberOfPlayersWithWL) * 100;
+            ViewBag.avgNumOfItemsPerMember = itemsInAWishlist;
+
             return View();
         }
 
@@ -81,6 +97,31 @@ namespace SeaSharpe_CVGS.Controllers
         [Authorize(Roles = "Employee")]
         public ActionResult SalesReport()
         {
+            // Get the number of sales orders made
+            int numberOfSales = 0;
+            numberOfSales = db.Orders.Count();
+            ViewBag.numberOfSales = numberOfSales;
+
+            // Get the total sales so far
+            decimal totalSales = db.Orders.Sum(o => o.OrderItems.Sum(oi => oi.SalePrice));
+            ViewBag.totalSales = totalSales;
+
+            // Get the total members who made purchase
+            int membersWhoPurchasedItems = 0;
+            membersWhoPurchasedItems = db.Orders.Select(o => o.Member.Id).Distinct().Count();
+            ViewBag.membersWhoPurchasedItems = membersWhoPurchasedItems;
+
+            // Get total number of members
+            int numberOfMembers = 0;
+            decimal percentageOfMembersWhoPurchased = 0;
+
+            numberOfMembers = db.Members.Count();
+            percentageOfMembersWhoPurchased = ((decimal)membersWhoPurchasedItems / (decimal)numberOfMembers);
+            ViewBag.percentageOfMembersWhoPurchased = percentageOfMembersWhoPurchased * 100;
+            ViewBag.numberOfMembers = numberOfMembers; // this is only for debugging
+
+            // % of sales from Action Games
+            
             return View();
         }
 
