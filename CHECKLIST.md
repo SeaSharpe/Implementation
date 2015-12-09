@@ -1,3 +1,33 @@
+# Deliverables Checklist
+- In a 3-ring binder, **(unless everything done online already)**
+  - Professional labeling on the outside
+  - Professional Table of Contents
+  - Complete set of Individual and Group Status reports
+  - The ProjectID sheet ~~+Installation CD in a page protector for easy removal~~
+  - Dividers between deliverables
+  - ~~Printed user documentation (create with HelpScribble or another tool) ~~
+  - ~~Printed technical documentation (create with Doxygen or Sandcastle or another tool)~~
+  - ~~Unit test plan document filled and screenshot~~
+- ~~Installation CD with a professional label.~~
+- ~~The Installation CD must also have these folders:~~
+- **Create a zipfile archive to be submitted to Desire2Learn, containing:**
+  - `\Project` containing all analysis and design documents and diagrams from meetings 1, 2 and 3
+  - `\Documentation` containing the user and technical documentation
+  - `\Source` containing complete source code for the application (buildable and runnable).
+- Checklist
+  - Project Id sheet
+  - UnitTest completed (all passed)
+  - Tech Doc
+  - User Doc
+  - Program
+  - User Interface
+  - ~~Installer~~
+  - Report
+  - Binder
+  - ~~DVD~~
+
+# Requirements checklist
+
 | Feature                                                                     | Implemented?              | Notes                              | Member        | Due Date |
 |-----------------------------------------------------------------------------|---------------------------|------------------------------------|---------------|----------|
 | Employee add game                                                           | Yes :white_check_mark:    |                                    |               |          |
@@ -41,3 +71,4 @@
 | Create new user with unique display name                                    | Yes :white_check_mark:    |                                    |               |          |
 | Strong password                                                             | Yes :white_check_mark:    |                                    |               |          |
 | Limit login attempts (3)                                                    | No :large_orange_diamond: | Implemented in PR #60              |               |          |
+
