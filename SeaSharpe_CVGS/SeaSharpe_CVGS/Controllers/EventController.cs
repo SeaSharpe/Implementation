@@ -187,33 +187,38 @@ namespace SeaSharpe_CVGS.Controllers
         [Authorize(Roles = "Member")]
         public ActionResult Register(int? id)
         {
-            // Get the memberId for the currently logged in member
-            // Use the eventID and MemberId to populate the EventMembers Table?
-
-            // Determine if event is at capacity, if so then return an error messae
+            // Find the current event by id
             var currentEvent = db.Events.Find(id);
+            // Store the current event's capacity
             int eventCapacity = currentEvent.Capacity;
+            // Determine how many members are currently attending the current event
             int currentAttendies = currentEvent.Attendies.Count();
 
+            // Check to see if the member is already attending the event
             if ( currentEvent.Attendies.Any(m => m.Id == CurrentMember.Id))
             {
-                TempData["message"] = "You are already attending the event";
+                TempData["message"] = CurrentMember.User.FirstName + " " +
+                    CurrentMember.User.LastName + 
+                    ", you are already attending " +
+                    currentEvent.Description;
             }
+            // Check to see if the event has any capcacity left
             else if (currentAttendies >= eventCapacity)
             {
-                TempData["message"] = "Event: " + currentEvent.Description +
-                    " does not have any more capacity";
+                TempData["message"] = "Sorry, " + currentEvent.Description +
+                    " is currently full";
             }
+            // If the member is not already attending the event and the event has capacity
+            // let the member join the event
             else
             {
                 CurrentMember.Events.Add(db.Events.Find(id));
                 db.SaveChanges();
                 TempData["message"] = CurrentMember.User.FirstName + " " +
-                    CurrentMember.User.LastName + " added to event" + currentEvent.Description;
+                    CurrentMember.User.LastName + " you have now succesfully joined " +
+                    currentEvent.Description;
             }
             
-            
-
             return RedirectToAction("ViewEvents");
         }
         #endregion
