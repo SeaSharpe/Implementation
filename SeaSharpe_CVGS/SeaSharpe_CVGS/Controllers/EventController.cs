@@ -21,22 +21,7 @@ namespace SeaSharpe_CVGS.Controllers
         [Authorize(Roles = "Employee")]
         public ActionResult Index()
         {
-            //if (Roles.IsUserInRole(@"employee"))
-            //{
-            //    return View(db.Events.ToList());
             return RedirectToAction("EventManagement");
-            //}
-            //else if (Roles.IsUserInRole(@"member"))
-            //{
-            //    //return ViewEvents view
-            //      return RedirectToAction("ViewEvents");
-            //}
-            //else
-            //{
-            //    //return ViewEvents view
-            //      return RedirectToAction("ViewEvents");
-            //}
-
         }
         
         
@@ -88,19 +73,8 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 TempData["message"] = "Error creating event: " + e.GetBaseException().Message;
             }
-           
-            //@event.Employee = CurrentEmployee;
-            //ModelState.Clear();
-            //if (TryValidateModel(@event))
-            //{
-            //    db.Events.Add(@event);
-            //    db.SaveChanges();
-            //    TempData["message"] = CurrentEmployee.User.FirstName + " " + CurrentEmployee.User.LastName +
-            //       ": " + @event.Description + " has been created.";
-            //    return RedirectToAction("EventManagement");
-            //}
 
-            return View(@event);
+           return View(@event);
         }
 
        /// <summary>
@@ -150,16 +124,7 @@ namespace SeaSharpe_CVGS.Controllers
            {
                TempData["message"] = "Error updating event: " + e.GetBaseException().Message;
            }
-           //@event.Employee = CurrentEmployee;
-           // ModelState.Clear();
-           //if (ModelState.IsValid)
-           //{
-           //    db.Entry(@event).State = EntityState.Modified;
-           //    db.SaveChanges();
-           //    TempData["message"] = CurrentEmployee.User.FirstName + " " + CurrentEmployee.User.LastName +
-           //        ": " + @event.Description + " has been updated.";
-           //    return RedirectToAction("EventManagement");
-           //}
+
            return View(@event);
        }
 
@@ -229,10 +194,10 @@ namespace SeaSharpe_CVGS.Controllers
         /// display details of currently selected event
         /// </summary>
         /// <returns>PartialSelectedEvent view</returns>
-        public ActionResult PartialSelectedEvent()
-       {
-           return View();
-       }
+       // public ActionResult PartialSelectedEvent()
+       //{
+       //    return View();
+       //}
         /// <summary>
         /// Member Side - register for event
         /// **** No View Required ****
