@@ -23,19 +23,22 @@
             @Html.ActionLink("Download", "Download", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
     </p>
 
+@if (User.Identity.IsAuthenticated) // Hide these buttons for users that are not logged in
+{
     <!-- Add To Cart-->
     <p>
-            @Html.ActionLink("Add To Cart", "AddToCart", "Order", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
+        @Html.ActionLink("Add To Cart", "AddToCart", "Order", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
     </p>
 
     <!-- Add To Wishlist -->
     <p>
-            @Html.ActionLink("Add To Wishlist", "AddToWishlist", "Friendship", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
+        @Html.ActionLink("Add To Wishlist", "AddToWishlist", "Friendship", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
     </p>
+}
 
     <!-- Back To Games-->
     <p>
-            @Html.ActionLink("Back to Games", "Index", null, new { @class = "btn greenButton btn-details" })
+        @Html.ActionLink("Back to Games", "Index", null, new { @class = "btn greenButton btn-details" })
     </p>
 
 </div>
