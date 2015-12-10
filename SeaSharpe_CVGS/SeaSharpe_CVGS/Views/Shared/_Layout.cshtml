@@ -25,34 +25,36 @@
                 </button>
                 @Html.ActionLink("Conestoga Video Game Store", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-             @if (User.IsInRole("Employee"))
-            {
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Events", "EventManagement", "Event")</li>
-                    <li>@Html.ActionLink("Reviews", "ReviewManagement", "Review")</li>
-                    <li>@Html.ActionLink("Games", "GameManagement", "Game")</li>
-                    <li>@Html.ActionLink("Orders", "OrderManagement", "Order")</li>
-                    <li>@Html.ActionLink("Reports", "Index", "Report")</li>   
-                    <li>@Html.Partial("_LoginPartial")</li>                            
-                </ul>
-            }
-             else if (User.IsInRole("Member"))
-             {
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Friends/Family", "Index", "Friendship")</li>
-                    <li>@Html.ActionLink("Wish List", "DisplayCurrentMemberWishlist", "Friendship")</li>
-                    <li>@Html.ActionLink("Profile", "Edit", "User")</li>
-                    <li>@Html.ActionLink("Cart", "Cart", "Order")</li>   
-                    <li>@Html.ActionLink("Orders", "OrderHistory", "Order")</li>
-                    <li>@Html.Partial("_LoginPartial")</li>    
-                </ul>                            
-            }
-             else
-             {
-                <div class="navbar-collapse collapse">                    
-                @Html.Partial("_LoginPartial")
-                </div>
-            }            
+            <div class="navbar-collapse collapse">
+                @if (User.IsInRole("Employee"))
+                {
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Events", "EventManagement", "Event")</li>
+                        <li>@Html.ActionLink("Reviews", "ReviewManagement", "Review")</li>
+                        <li>@Html.ActionLink("Games", "GameManagement", "Game")</li>
+                        <li>@Html.ActionLink("Orders", "OrderManagement", "Order")</li>
+                        <li>@Html.ActionLink("Reports", "Index", "Report")</li>
+                        <li>@Html.Partial("_LoginPartial")</li>
+                    </ul>
+                }
+                else if (User.IsInRole("Member"))
+                {
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Friends/Family", "Index", "Friendship")</li>
+                        <li>@Html.ActionLink("Wish List", "DisplayCurrentMemberWishlist", "Friendship")</li>
+                        <li>@Html.ActionLink("Profile", "Edit", "User")</li>
+                        <li>@Html.ActionLink("Cart", "Cart", "Order")</li>
+                        <li>@Html.ActionLink("Orders", "OrderHistory", "Order")</li>
+                        <li>@Html.Partial("_LoginPartial")</li>
+                    </ul>
+                }
+                else
+                {
+                    <div class="nav navbar-nav">
+                        @Html.Partial("_LoginPartial")
+                    </div>
+                }
+            </div>
         </div>
     </div>
     <div class="container body-content">
