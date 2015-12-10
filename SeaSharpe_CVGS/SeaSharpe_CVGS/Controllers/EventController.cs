@@ -45,6 +45,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// list all events 
         /// </summary>
         /// <returns>Event Management view</returns>
+        [Authorize(Roles = "Employee")]
         public ActionResult EventManagement()
         {
             return View(db.Events.ToList());
@@ -54,6 +55,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// Employee side - add events
         /// </summary>
         /// <returns>Add/Edit Event view</returns>
+        [Authorize(Roles = "Employee")]
         public ActionResult Create()
         {
             return View();
@@ -74,6 +76,8 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 db.Events.Add(@event);
                 db.SaveChanges();
+                TempData["message"] = CurrentEmployee.User.FirstName + " " + CurrentEmployee.User.LastName +
+                   ": " + @event.Description + " has been created.";
                 return RedirectToAction("EventManagement");
             }
 
@@ -85,7 +89,8 @@ namespace SeaSharpe_CVGS.Controllers
        /// </summary>
        /// <param name="id">event id</param>
        /// <returns>Add/Edit Event view</returns>
-       public ActionResult Edit(int? id)
+       [Authorize(Roles = "Employee")]
+        public ActionResult Edit(int? id)
        {
            if (id == null)
            {
@@ -114,6 +119,8 @@ namespace SeaSharpe_CVGS.Controllers
            {
                db.Entry(@event).State = EntityState.Modified;
                db.SaveChanges();
+               TempData["message"] = CurrentEmployee.User.FirstName + " " + CurrentEmployee.User.LastName +
+                   ": " + @event.Description + " has been updated.";
                return RedirectToAction("EventManagement");
            }
            return View(@event);
@@ -125,8 +132,9 @@ namespace SeaSharpe_CVGS.Controllers
        /// </summary>
        /// <param name="id">event id</param>
        /// <returns>list of events view</returns>
-       public ActionResult Delete(int id)
-       {
+       [Authorize(Roles = "Employee")]
+        public ActionResult Delete(int id)
+        {
            // Find the event
            Event @event = db.Events.Find(id);
 
@@ -145,7 +153,8 @@ namespace SeaSharpe_CVGS.Controllers
                //Remove event and save changes
                db.Events.Remove(@event);
                db.SaveChanges();
-               TempData["message"] = @event.Description + " has been deleted.";
+               TempData["message"] = CurrentEmployee.User.FirstName + " " + CurrentEmployee.User.LastName + 
+                   ": " + @event.Description + " has been deleted.";
            }
 
            catch (Exception e)
