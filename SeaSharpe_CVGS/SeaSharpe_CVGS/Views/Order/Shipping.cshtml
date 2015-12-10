@@ -18,67 +18,62 @@
     @Styles.Render("~/Content/themes/base/all.css")
 </head>
 <body id="shippingBody">
-    <div class="row">
-        <div class="col-md-11 col-md-offset-1">
-            <h1>@ViewBag.Title</h1>
+    
+        <div class="row">
+            <div class="col-md-11 col-md-offset-1">
+                <h1>@ViewBag.Title</h1>
+                <h4><b>Cut along the dotted line.</b></h4>
+                <h4>Affix to package.  Do not cover any part of the bar code.</h4>
+            </div>
         </div>
-    </div>
+    <div id="labelBorder">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-7 col-md-offset-1 outsetBorder">
+
+                    <h1><img src="~/Content/themes/base/images/logo.png" id="logoLabel" />Conestoga Video Game Store</h1>
+                    299 Doon Valley Dr,<br />
+                    Kitchener, Ontario, Canada<br />
+                    N2G 4M4<br />
+                </div>
+                
+                <div class="col-md-2 col-md-offset-1">
+                    <img src="~/Content/themes/base/images/postagePaid.jpg" id="postagePaid" />
+                </div>
+            </div><br /><br />
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <hr />
             </div>
         </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="col-md-5 col-md-offset-1 outsetBorder">
-
-                <h1><img src="~/Content/themes/base/images/logo.png" id="logo" width="50px" />Conestoga Video Game Store</h1>
-                299 Doon Valley Dr,<br />
-                Kitchener, Ontario, Canada<br />
-                N2G 4M4<br />
-            </div>
-            <div class="col-md-5 col-md-offset-1">
-                <h2><u>Ship To:</u></h2>
-                <p>@Html.DisplayFor(model => model.Member.User.FirstName) @Html.DisplayFor(model => model.Member.User.LastName)</p>
-                <p>@Html.DisplayFor(model => model.ShippingAddress.StreetAddress)</p>
-                <p>
-                    @Html.DisplayFor(model => model.ShippingAddress.City), @Html.DisplayFor(model => model.ShippingAddress.Region)
-                    @Html.DisplayFor(model => model.ShippingAddress.Country)</>
-                <p>@Html.DisplayFor(model => model.ShippingAddress.PostalCode)</p>
-            </div>
-        </div><br/><br/>
-        </div>
-    <div class="row">
-        <div class="col-md-12">
-            <hr />
-        </div>
-    </div>
         <div class="row">
             <div class="col-lg-12">
-                <div class="col-md-6 col-md-offset-1">
-                    <h2><u>Enclosed:</u></h2>
-                    @foreach (var item in Model.OrderItems)
-                    {
-                        <p>@Html.DisplayFor(model => item.Game.Name) for @Html.DisplayFor(model => item.Game.Platform.Name)</p>
-                    }
+                <div class="col-md-3 col-md-offset-1">
+                    <h2><u>Ship To:</u></h2>
+                    <p>@Html.DisplayFor(model => model.Member.User.FirstName) @Html.DisplayFor(model => model.Member.User.LastName)</p>
+                    <p>@Html.DisplayFor(model => model.ShippingAddress.StreetAddress)</p>
+                    <p>
+                        @Html.DisplayFor(model => model.ShippingAddress.City), @Html.DisplayFor(model => model.ShippingAddress.Region)
+                        @Html.DisplayFor(model => model.ShippingAddress.Country)</>
+                    <p>@Html.DisplayFor(model => model.ShippingAddress.PostalCode)</p>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-3">
                     <h2><u>Order Details:</u></h2>
                     Order @Html.DisplayNameFor(model => model.Id): @Html.DisplayFor(model => model.Id)<br />
                     @Html.DisplayNameFor(model => model.OrderPlacementDate): @Html.DisplayFor(model => model.OrderPlacementDate)<br />
                     @Html.DisplayNameFor(model => model.ShipDate): @Html.DisplayFor(model => model.ShipDate)<br />
                     <br />
                 </div>
+                <div class="col-md-5">
+                    <img src="~/Content/themes/base/images/barcode.png" id="upc" />
+                </div>
             </div>
         </div>
-    <div class="row">
-        <div class="col-md-12">
-            <hr />
-        </div>
-    </div>
+       
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")
 
-
+    </div>
 </body>
 </html>

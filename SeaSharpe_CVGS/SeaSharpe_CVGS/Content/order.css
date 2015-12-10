@@ -61,7 +61,13 @@
     background: white;
 }
 
-#logo {
+#labelBorder {
+    border: dashed black 3px;
+    margin: 10px 150px;
+    padding: 40px;
+}
+
+#logoLabel {
     height: 2.5em !important;
     width: 90px !important;
     float: left;
@@ -69,7 +75,8 @@
     margin-top:5px;
 }
 
-.clear {
-    clear:both;
-    padding-top: 15px;
+#upc {
+    width: 400px;
+    height: 200px;
 }
+
