@@ -103,13 +103,13 @@ Manny absent (wife giving birth)
 
 |  Member | Worked On  | Hours This Week  |  Total Hours for Implementation |
 ------ | ----- | -------- | ----------
-Dan | Order controller | 21.5 | 4 | 25.5
-John | User/Address controller | 20 | 18 | 38
-Manny | Friendship controller | unknown  | 9 |
-Nicole | GUIs | 15 | 16 | 31
-Peter | Game/Review controller | 20 | 24 | 44
-Rob | Report controller | 13 | 4 | 17
-Steve | Documentation | 15 | 0 | 15
+Dan | Order controller | 21.5 | 25.5 |
+John | User/Address controller | 20 | 38 |
+Manny | Friendship controller | 13  | 21 |
+Nicole | GUIs | 15 | 31 |
+Peter | Game/Review controller | 20 | 44 |
+Rob | Report controller | 13 | 17 |
+Steve | Documentation | 15 | 15 |
 
 ### During the Meeting
 - John discussed issues he's having with User controller
@@ -124,6 +124,34 @@ Steve | Documentation | 15 | 0 | 15
 - Each member to write unit tests for their own controller
 - Each member to add documentation comment to the class for their controller and any methods that are missing them
 - Some views are unused and can be deleted by the member that worked on that controller.
+  
+**Next Meeting: December 9th**
+
+## December 9, 2015
+All members present
+
+### Review
+- all portions of the program are nearly complete, there are just a few items missing
+
+#### Work Period from December 2nd - December 9th
+
+|  Member | *Remaining Work*  | Hours This Week  |  Total Hours for Implementation |
+| ------ | ----------- | -------- | ---------- |
+| Dan | Unit tests, edit Steve's documentation | 13.5 | 25.5 |
+| John | Unit tests, schema change, ZIP file?, preferences | 25 | 38 |
+| Manny | Unit tests | 0 | 21 |
+| Nicole | 2 report, events, and orders GUIs | 14 | 45 |
+| Peter | Unit tests, bug fix, downloads | 17.5 | 61.5 |
+| Rob | Unit tests, member side events | 15 | 32 |
+| Steve | member events document, updating images in documentation | 13 | 28 |
+
+### During the Meeting
+- Went over message that Hyslop emailed out earlier, to see what points we were missing
+- remaining points were delegated and given a deadline
+- changed number of login attempts from 5 to 3, as per email
+
+### Moving forward
+- Members to have their remaining work done by Saturday December 12th
   
 **Next Meeting: December 9th**
 
