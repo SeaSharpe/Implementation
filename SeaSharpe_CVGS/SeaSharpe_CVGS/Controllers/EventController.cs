@@ -10,7 +10,7 @@ using SeaSharpe_CVGS.Models;
 
 namespace SeaSharpe_CVGS.Controllers
 {
-    [Authorize(Roles="Employee")]
+    //[Authorize(Roles="Employee")]
     public class EventController : Controller
     {
         #region Multiple Roles
@@ -184,8 +184,36 @@ namespace SeaSharpe_CVGS.Controllers
         /// **** No View Required ****
         /// </summary>
         /// <returns></returns>
-        public ActionResult Register(int eventId, int memberId)
+        [Authorize(Roles = "Member")]
+        public ActionResult Register(int? id)
         {
+            // Get the memberId for the currently logged in member
+            // Use the eventID and MemberId to populate the EventMembers Table?
+
+            // Determine if event is at capacity, if so then return an error messae
+            var currentEvent = db.Events.Find(id);
+            int eventCapacity = currentEvent.Capacity;
+            int currentAttendies = currentEvent.Attendies.Count();
+
+            if ( currentEvent.Attendies.Any(m => m.Id == CurrentMember.Id))
+            {
+                TempData["message"] = "You are already attending the event";
+            }
+            else if (currentAttendies >= eventCapacity)
+            {
+                TempData["message"] = "Event: " + currentEvent.Description +
+                    " does not have any more capacity";
+            }
+            else
+            {
+                CurrentMember.Events.Add(db.Events.Find(id));
+                db.SaveChanges();
+                TempData["message"] = CurrentMember.User.FirstName + " " +
+                    CurrentMember.User.LastName + " added to event" + currentEvent.Description;
+            }
+            
+            
+
             return RedirectToAction("ViewEvents");
         }
         #endregion
