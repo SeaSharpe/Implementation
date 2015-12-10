@@ -127,7 +127,19 @@ namespace SeaSharpe_CVGS.Controllers
        /// <returns>list of events view</returns>
        public ActionResult Delete(int id)
        {
+           // Find the event
            Event @event = db.Events.Find(id);
+
+
+           // First delete any users that are part of the event, then delete the event
+           if (@event.Attendies.Count() > 0)
+           {
+               // delete the members from the event
+               @event.Attendies.Clear();
+           }
+           
+
+           // Delete the event
            try
            {
                //Remove event and save changes
