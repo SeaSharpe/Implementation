@@ -18,6 +18,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// checks authorization and redirects to appropriate page
         /// </summary>
         /// <returns>redirect to event management or view events methods</returns>
+        [Authorize(Roles = "Employee")]
         public ActionResult Index()
         {
             //if (Roles.IsUserInRole(@"employee"))
@@ -70,16 +71,34 @@ namespace SeaSharpe_CVGS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Location,StartDate,EndDate,Description,Capacity")] Event @event)
         {
-            @event.Employee = CurrentEmployee;
-            ModelState.Clear();
-            if (TryValidateModel(@event))
+            try
             {
-                db.Events.Add(@event);
-                db.SaveChanges();
-                TempData["message"] = CurrentEmployee.User.FirstName + " " + CurrentEmployee.User.LastName +
-                   ": " + @event.Description + " has been created.";
-                return RedirectToAction("EventManagement");
+                @event.Employee = CurrentEmployee;
+                ModelState.Clear();
+                if (TryValidateModel(@event))
+                {
+                    db.Events.Add(@event);
+                    db.SaveChanges();
+                    TempData["message"] = CurrentEmployee.User.FirstName + " " + CurrentEmployee.User.LastName +
+                       ": " + @event.Description + " has been created.";
+                    return RedirectToAction("EventManagement");
+                }
             }
+            catch (Exception e)
+            {
+                TempData["message"] = "Error creating event: " + e.GetBaseException().Message;
+            }
+           
+            //@event.Employee = CurrentEmployee;
+            //ModelState.Clear();
+            //if (TryValidateModel(@event))
+            //{
+            //    db.Events.Add(@event);
+            //    db.SaveChanges();
+            //    TempData["message"] = CurrentEmployee.User.FirstName + " " + CurrentEmployee.User.LastName +
+            //       ": " + @event.Description + " has been created.";
+            //    return RedirectToAction("EventManagement");
+            //}
 
             return View(@event);
         }
@@ -113,16 +132,34 @@ namespace SeaSharpe_CVGS.Controllers
        [ValidateAntiForgeryToken]
        public ActionResult Edit([Bind(Include = "Id,Location,StartDate,EndDate,Description,Capacity")] Event @event)
        {
-           @event.Employee = CurrentEmployee;
-            ModelState.Clear();
-           if (ModelState.IsValid)
+           try
            {
-               db.Entry(@event).State = EntityState.Modified;
-               db.SaveChanges();
-               TempData["message"] = CurrentEmployee.User.FirstName + " " + CurrentEmployee.User.LastName +
-                   ": " + @event.Description + " has been updated.";
-               return RedirectToAction("EventManagement");
+               // Get the current Employee
+               @event.Employee = CurrentEmployee;
+               ModelState.Clear();
+               if (ModelState.IsValid)
+               {
+                   db.Entry(@event).State = EntityState.Modified;
+                   db.SaveChanges();
+                   TempData["message"] = CurrentEmployee.User.FirstName + " " + CurrentEmployee.User.LastName +
+                       ": " + @event.Description + " has been updated.";
+                   return RedirectToAction("EventManagement");
+               }
            }
+           catch (Exception e)
+           {
+               TempData["message"] = "Error updating event: " + e.GetBaseException().Message;
+           }
+           //@event.Employee = CurrentEmployee;
+           // ModelState.Clear();
+           //if (ModelState.IsValid)
+           //{
+           //    db.Entry(@event).State = EntityState.Modified;
+           //    db.SaveChanges();
+           //    TempData["message"] = CurrentEmployee.User.FirstName + " " + CurrentEmployee.User.LastName +
+           //        ": " + @event.Description + " has been updated.";
+           //    return RedirectToAction("EventManagement");
+           //}
            return View(@event);
        }
 
@@ -135,28 +172,24 @@ namespace SeaSharpe_CVGS.Controllers
        [Authorize(Roles = "Employee")]
         public ActionResult Delete(int id)
         {
-           // Find the event
-           Event @event = db.Events.Find(id);
-
-
-           // First delete any users that are part of the event, then delete the event
-           if (@event.Attendies.Count() > 0)
-           {
-               // delete the members from the event
-               @event.Attendies.Clear();
-           }
-           
-
-           // Delete the event
            try
            {
-               //Remove event and save changes
+               // Find the event
+               Event @event = db.Events.Find(id);
+
+               // First delete any users that are part of the event, then delete the event
+               if (@event.Attendies.Count() > 0)
+               {
+                   // delete the members from the event
+                   @event.Attendies.Clear();
+               }
+           
+               // Delete the event and save changes to the database
                db.Events.Remove(@event);
                db.SaveChanges();
                TempData["message"] = CurrentEmployee.User.FirstName + " " + CurrentEmployee.User.LastName + 
                    ": " + @event.Description + " has been deleted.";
            }
-
            catch (Exception e)
            {
                TempData["message"] = "Error deleting event: " + e.GetBaseException().Message;
