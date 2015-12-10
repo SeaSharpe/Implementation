@@ -1,35 +1,41 @@
 ﻿@model IEnumerable<SeaSharpe_CVGS.Models.Order>
-<h4>Outstanding Orders</h4>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Member.Id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OrderPlacementDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OrderItems.Count)
-        </th>
-        <th></th>
-    </tr>
+<link rel="stylesheet" href="~/Content/order.css" type="text/css">
 
-@foreach (var item in Model)
-{
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Member.Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrderPlacementDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrderItems.Count)
-        </td>
-        <td>
-            @Html.ActionLink("View", "OrderManagement", new { id = item.Id })
-        </td>
-    </tr>
-}
+<div class="row">
+    <div class="col-lg-12">
+        <h3><b>Outstanding Orders</b></h3>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Member.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderPlacementDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderItems.Count)
+                </th>
+                <th></th>
+            </tr>
 
-</table>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Member.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderPlacementDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderItems.Count)
+                    </td>
+                    <td>
+                        @Html.ActionLink("View", "OrderManagement", new { id = item.Id }, new { @class = "btn greenButton" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

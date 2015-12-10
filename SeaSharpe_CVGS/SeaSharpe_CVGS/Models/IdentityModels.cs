@@ -93,6 +93,7 @@ namespace SeaSharpe_CVGS.Models
 
     public partial class Order
     {
+        [Display(Name = "Order Id")]
         public int Id { get; set; }
 
         [Display(Name = "Billing Address")]
@@ -106,7 +107,8 @@ namespace SeaSharpe_CVGS.Models
         [Display(Name = "Approver")]
         public virtual Employee Aprover { get; set; } //todo: correct to Approver
 
-        [Display(Name = "Order Placement Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyy}")]
+        [Display(Name = "Order Date")]
         public DateTime? OrderPlacementDate { get; set; }
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyy}")]

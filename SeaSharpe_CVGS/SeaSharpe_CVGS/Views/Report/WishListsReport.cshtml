@@ -1,53 +1,37 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Wish Lists Report";
 }
 <link rel="stylesheet" href="~/Content/report.css" type="text/css">
 <h1>@ViewBag.Title</h1>
 <hr />
-
-<h2>Summary</h2>
-<div>
-    <table class="table">
-        <tr>
-            <td>Total number of Wishlists</td>
-            <td>@ViewBag.numberOfWishlists</td>
-        </tr>
-        <tr>
-            <td>Number of Members with Wishlists</td>
-            <td>@ViewBag.membersWithWishlists</td>
-        </tr>
-        <tr>
-            <td>Average Number of Items in a Wishlist</td>
-            <td>@ViewBag.avgNumOfItemsPerMember</td>
-        </tr>
-    </table>
-</div>
-@*<div class="row">
+<div class="row">
     <div class="col-lg-12">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8 col-md-offset-2 largeFont">
             <table class="table">
                 <tr>
-                    <th>
-                        <!-- table headers-->
-                    </th>
+                    <th colspan="2">Summary</th>
                 </tr>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            <!-- table data-->
-                        </td>
-                    </tr>
-                }
+                <tr>
+                    <td>Total number of Wishlists</td>
+                    <td>@ViewBag.numberOfWishlists</td>
+                </tr>
+                <tr>
+                    <td>Number of Members with Wishlists</td>
+                    <td>@ViewBag.membersWithWishlists</td>
+                </tr>
+                <tr>
+                    <td>Average Number of Items in a Wishlist</td>
+                    <td>@ViewBag.avgNumOfItemsPerMember</td>
+                </tr>
             </table>
         </div>
     </div>
-</div>*@
-<div class="row">
-    <div class="col-md-10 col-md-offset-1">
-        <div>
-            @Html.ActionLink("Back to List", "Index")
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>
         </div>
     </div>
 </div>
+

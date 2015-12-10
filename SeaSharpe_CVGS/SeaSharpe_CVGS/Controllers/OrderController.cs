@@ -51,14 +51,14 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 return RedirectToAction("OrderHistory");
             }
-            else if(employee != null)
+            else if (employee != null)
             {
-            return RedirectToAction("OrderManagement");
-        }
-        
+                return RedirectToAction("OrderManagement");
+            }
+
             return RedirectToAction("Index", "Home");
         }
-        
+
         #endregion
 
         #region Employee Side
@@ -77,12 +77,14 @@ namespace SeaSharpe_CVGS.Controllers
             if (employee == null)
             {
                 return RedirectToAction("OrderHistory");
-        }
+            }
 
             IEnumerable<Order> completedOrders = db.Orders
                 .Where(o => o.IsProcessed == true)
                 .Include(m => m.Member).Include(u => u.Aprover.User).Include(oi => oi.OrderItems).OrderByDescending(d => d.ShipDate);
 
+            // Nicole added - only display partial selected order when order is selected
+            ViewData["order"] = db.Orders.Find(id);
             return View(completedOrders);
         }
 
@@ -118,7 +120,7 @@ namespace SeaSharpe_CVGS.Controllers
             if (employee == null)
             {
                 return RedirectToAction("OrderHistory");
-        }
+            }
 
             IEnumerable<Order> outstandingOrders = db.Orders
                 .Where(o => o.OrderPlacementDate != null && o.IsProcessed == false)
@@ -144,7 +146,7 @@ namespace SeaSharpe_CVGS.Controllers
             if (employee == null)
             {
                 return RedirectToAction("OrderHistory");
-        }
+            }
 
             Order order;
             if (id == 0)
@@ -189,7 +191,7 @@ namespace SeaSharpe_CVGS.Controllers
                 //Message should only appear in SelectedOrderPartialView, so unique TempData key is given
                 TempData["messageDan1"] = "Please select a valid game";
                 return RedirectToAction("OrderManagement");
-        }
+            }
 
             //if order is already processed
             if (order.IsProcessed == true)
@@ -226,7 +228,7 @@ namespace SeaSharpe_CVGS.Controllers
             if (member == null)
             {
                 return RedirectToAction("Index", "Home");
-        }
+            }
 
             //get orders for member (not cart)
             var exists = db.Orders.Where(m => m.Member.Id == member.Id).Where(d => d.OrderPlacementDate != null).Any();
@@ -265,12 +267,12 @@ namespace SeaSharpe_CVGS.Controllers
                 {
                     shipDate = DateTime.Parse("1900-01-01 00:00:00");
                 }
-                
+
 
                 IEnumerable<OrderItem> orderItemIds = db.OrderItems.Where(oi => oi.OrderId == item.Id).ToList();
                 foreach (var orderItem in orderItemIds)
                 {
-                    
+
                     gameName = db.Games.Where(g => g.Id == orderItem.GameId).Select(ga => ga.Name).First();
                     platformName = db.Games.Include(p => p.Platform).Where(g => g.Id == orderItem.GameId).Select(ga => ga.Platform.Name).First().ToString();
                     pricePaid = orderItem.SalePrice;
@@ -346,7 +348,7 @@ namespace SeaSharpe_CVGS.Controllers
                                         order.OrderPlacementDate == null);
 
             //Price in cents
-            int price = Decimal.ToInt32(100 * memberOrder.OrderItems.Sum(orderItem => orderItem.SalePrice)); 
+            int price = Decimal.ToInt32(100 * memberOrder.OrderItems.Sum(orderItem => orderItem.SalePrice));
 
             var chargeOptions = new StripeChargeCreateOptions
             {
@@ -355,7 +357,7 @@ namespace SeaSharpe_CVGS.Controllers
                 ReceiptEmail = CurrentUser.Email,
                 Metadata = new Dictionary<string, string>() { { "memberId", memberOrder.Member.Id.ToString() }, 
                                                               { "orderId", memberOrder.Id.ToString() }, 
-                                                              { "userId", CurrentUser.Id } }, 
+                                                              { "userId", CurrentUser.Id } },
                 Source = new StripeSourceOptions
                 {
                     TokenId = stripeToken
@@ -436,7 +438,7 @@ namespace SeaSharpe_CVGS.Controllers
             }
 
             OrderItem orderItem = new OrderItem { Game = game, GameId = game.Id, OrderId = theCart.Id, Order = theCart, SalePrice = game.SuggestedRetailPrice };
-            
+
             db.OrderItems.Add(orderItem);
             db.SaveChanges();
 
@@ -460,7 +462,7 @@ namespace SeaSharpe_CVGS.Controllers
             string userId = CurrentUser.Id;
             var member = db.Members.FirstOrDefault(m => m.User.Id == userId);
             if (member == null)
-        {
+            {
                 return RedirectToAction("Index", "Home");
             }
 
@@ -511,7 +513,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             //if order is now empty
             if (originalOrder.OrderItems.Count == itemsRemoved)
-        {
+            {
                 //delete the now empty order
                 db.Orders.Remove(originalOrder);
                 db.SaveChanges();
@@ -573,7 +575,7 @@ namespace SeaSharpe_CVGS.Controllers
             foreach (var cvm in cart)
             {
                 if (cvm.download)
-        {
+                {
                     numberOfPurchasedItems++;
                     //add new order id to orderitem, based on do
                     cvm.item.Order = downloads;
@@ -589,7 +591,7 @@ namespace SeaSharpe_CVGS.Controllers
                     db.SaveChanges();
                 }
                 else if (cvm.hardCopy)
-            {
+                {
                     numberOfPurchasedItems++;
                     cvm.item.Order = hardcopies;
                     OrderItem originalHardcopy = db.OrderItems.Where(oi => oi.OrderId == originalOrder.Id && oi.GameId == cvm.item.GameId).First();
@@ -601,19 +603,19 @@ namespace SeaSharpe_CVGS.Controllers
                     newHardcopy.OrderId = hardcopies.Id;
                     db.OrderItems.Remove(originalHardcopy);
                     db.OrderItems.Add(newHardcopy);
-                db.SaveChanges();
+                    db.SaveChanges();
+                }
             }
-        }
 
             db.SaveChanges();
-            
+
 
             //delete original cart if no orderItems remain
             if (numberOfPurchasedItems == numberOfItems)
-        {
+            {
                 //delete the original order
                 db.Orders.Remove(originalOrder);
-            db.SaveChanges();
+                db.SaveChanges();
             }
         }
 
@@ -635,7 +637,7 @@ namespace SeaSharpe_CVGS.Controllers
             var exists = db.Orders.Where(m => m.Member.Id == member.Id).Where(d => d.OrderPlacementDate == null).Any();
 
             if (!exists)
-        {
+            {
                 //empty cart
                 TempData["message"] = "Cart is empty";
                 return RedirectToAction("Cart");
@@ -650,7 +652,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             return RedirectToAction("Cart");
         }
-        
+
         #endregion
     }
 }

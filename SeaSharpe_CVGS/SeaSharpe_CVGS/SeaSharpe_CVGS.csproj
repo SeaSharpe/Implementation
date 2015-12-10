@@ -206,6 +206,7 @@
     <Content Include="Content\home.css" />
     <Content Include="Content\main.css" />
     <Content Include="Content\manage.css" />
+    <Content Include="Content\order.css" />
     <Content Include="Content\report.css" />
     <Content Include="Content\review.css" />
     <Content Include="Content\simple-sidebar.css" />

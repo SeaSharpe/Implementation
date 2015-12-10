@@ -145,6 +145,7 @@ input, select {
 .defaultButton:hover {
 	box-shadow: inset 0 1px 0 0 black, inset 0 1px 1px 0 black;
 	color: black;
+    background-color:gray;
 }
 
 .defaultButton:active {

@@ -1,0 +1,75 @@
+﻿.btnOrderManage {
+    margin: 0 17.5px;
+    width: 200px;
+    display:inline-block;
+}
+
+.outsetBorder {
+    border: 4px outset;
+    padding: 10px 10px 10px 10px;
+}
+
+@media (min-width: 768px) {
+
+    .dl-horizontal dt {
+        width: 100px;
+    }
+
+    .dl-horizontal dd {
+        width: 125px;
+        margin-left: 110px;
+    }
+
+}
+
+.stripe-button-el span {
+    border-radius: 5px;
+	background: #0FA00F;
+	color: black;
+	border-left: black solid 1px;
+	border-right: black solid 1px;
+	border-top: black solid .1px;
+	border-bottom: black solid 1px;
+	font-weight: bold;	
+	font-size: 16px;
+	box-shadow: inset 0 0 2px 0 black;
+    width: 210px;
+    font-size: 20px;
+    height:2em;
+    padding-top: 7px;
+}
+
+.stripe-button-el:hover span {
+    box-shadow: inset 0 1px 0 0 black, inset 0 1px 1px 0 black;
+    background: linear-gradient(-45deg, black, #0FA00F, #0FA00F, black);
+    color: black;
+}
+
+.stripe-button-el:active span {
+    background: black;
+    color: white;
+    box-shadow: inset 0 2px 0 0 black, inset 0 2px 2px 0 black;
+}
+
+.cartButtons {
+    width: 210px;
+    font-size: 20px;
+    margin-bottom:15px;
+}
+
+#shippingBody {
+    background: white;
+}
+
+#logo {
+    height: 2.5em !important;
+    width: 90px !important;
+    float: left;
+    margin-right: 15px;
+    margin-top:5px;
+}
+
+.clear {
+    clear:both;
+    padding-top: 15px;
+}

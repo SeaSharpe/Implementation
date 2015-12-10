@@ -104,7 +104,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             // Get the total sales so far
             decimal totalSales = db.Orders.Sum(o => o.OrderItems.Sum(oi => oi.SalePrice));
-            ViewBag.totalSales = totalSales;
+            ViewBag.totalSales = totalSales.ToString("C");
 
             // Get the total members who made purchase
             int membersWhoPurchasedItems = 0;
@@ -117,7 +117,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             numberOfMembers = db.Members.Count();
             percentageOfMembersWhoPurchased = ((decimal)membersWhoPurchasedItems / (decimal)numberOfMembers);
-            ViewBag.percentageOfMembersWhoPurchased = percentageOfMembersWhoPurchased * 100;
+            ViewBag.percentageOfMembersWhoPurchased = Math.Round(Convert.ToDecimal(percentageOfMembersWhoPurchased * 100), 2); 
             ViewBag.numberOfMembers = numberOfMembers; // this is only for debugging
 
             // % of sales from Action Games
