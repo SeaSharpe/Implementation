@@ -1,14 +1,11 @@
 ﻿@model IEnumerable<SeaSharpe_CVGS.Models.Event>
 
 @{
-    ViewBag.Title = "ViewEvents";
+    ViewBag.Title = "View Current Events";
 }
 
-<h2>ViewEvents</h2>
+<h2>@ViewBag.Title</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -25,6 +22,9 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Capacity)
+        </th>
+        <th>
+            <p>Join Event</p>
         </th>
         <th></th>
     </tr>
@@ -47,9 +47,7 @@
             @Html.DisplayFor(modelItem => item.Capacity)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Join Event", "Register", new { id = item.Id })
         </td>
     </tr>
 }

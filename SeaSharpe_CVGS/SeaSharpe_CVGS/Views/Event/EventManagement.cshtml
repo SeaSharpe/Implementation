@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<SeaSharpe_CVGS.Models.Event>
 
 @{
-    ViewBag.Title = "EventManagement";
+    ViewBag.Title = "Event Management";
 }
 
-<h2>EventManagement</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New Event", "Create")
 </p>
 <table class="table">
     <tr>
@@ -48,10 +48,8 @@
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.Id })
         </td>
     </tr>
 }
-
 </table>
