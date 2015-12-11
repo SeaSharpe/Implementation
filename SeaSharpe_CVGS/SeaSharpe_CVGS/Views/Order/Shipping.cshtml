@@ -36,7 +36,7 @@
                     Kitchener, Ontario, Canada<br />
                     N2G 4M4<br />
                 </div>
-                
+
                 <div class="col-md-2 col-md-offset-1">
                     <img src="~/Content/themes/base/images/postagePaid.jpg" id="postagePaid" />
                 </div>
@@ -51,12 +51,13 @@
             <div class="col-lg-12">
                 <div class="col-md-3 col-md-offset-1">
                     <h2><u>Ship To:</u></h2>
-                    <p>@Html.DisplayFor(model => model.Member.User.FirstName) @Html.DisplayFor(model => model.Member.User.LastName)</p>
-                    <p>@Html.DisplayFor(model => model.ShippingAddress.StreetAddress)</p>
+                    @Html.DisplayFor(model => model.Member.User.FirstName) @Html.DisplayFor(model => model.Member.User.LastName)<br />
+                    @Html.DisplayFor(model => model.ShippingAddress.StreetAddress)<br />
                     <p>
                         @Html.DisplayFor(model => model.ShippingAddress.City), @Html.DisplayFor(model => model.ShippingAddress.Region)
-                        @Html.DisplayFor(model => model.ShippingAddress.Country)</>
-                    <p>@Html.DisplayFor(model => model.ShippingAddress.PostalCode)</p>
+                        @Html.DisplayFor(model => model.ShippingAddress.Country)
+                        @Html.DisplayFor(model => model.ShippingAddress.PostalCode)
+                    </p>
                 </div>
                 <div class="col-md-3">
                     <h2><u>Order Details:</u></h2>
@@ -70,7 +71,17 @@
                 </div>
             </div>
         </div>
-       
+    </div>
+       <div class="row">
+           <div class="col-lg-12">
+               <div class="col-md-5 col-md-offset-2">
+                   <h2><u>Make sure to enclose:</u></h2>
+                   @foreach (var item in Model.OrderItems)
+                   {
+                       <p>@Html.DisplayFor(model => item.Game.Name) for @Html.DisplayFor(model => item.Game.Platform.Name)</p>
+                   }
+               </div>
+           </div>
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")
 
