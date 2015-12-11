@@ -70,5 +70,5 @@
 | Option for visitor to join- Login screen                                    | Yes :white_check_mark:    |                                    |               |          |
 | Create new user with unique display name                                    | Yes :white_check_mark:    |                                    |               |          |
 | Strong password                                                             | Yes :white_check_mark:    |                                    |               |          |
-| Limit login attempts (3)                                                    | No :large_orange_diamond: | Implemented in PR #60              |               |          |
+| Limit login attempts (3)                                                    | Yes :white_check_mark:    | Implemented in PR #60              |               |          |
 
