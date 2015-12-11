@@ -335,7 +335,6 @@
     <Content Include="Views\Order\PartialSelectedOrder.cshtml" />
     <Content Include="Views\Review\PartialSelectedReview.cshtml" />
     <Content Include="Views\Review\PartialCreateReview.cshtml" />
-    <Content Include="Views\Event\PartialSelectedEvent.cshtml" />
     <Content Include="Views\Friendship\PartialFriendsList.cshtml" />
     <Content Include="Views\Friendship\PartialFamilyList.cshtml" />
     <Content Include="Views\Review\PartialReviewDetails.cshtml" />

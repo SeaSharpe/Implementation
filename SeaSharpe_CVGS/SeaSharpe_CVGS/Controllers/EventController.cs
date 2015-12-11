@@ -10,7 +10,6 @@ using SeaSharpe_CVGS.Models;
 
 namespace SeaSharpe_CVGS.Controllers
 {
-    //[Authorize(Roles="Employee")]
     public class EventController : Controller
     {
         #region Multiple Roles
@@ -162,21 +161,6 @@ namespace SeaSharpe_CVGS.Controllers
 
            return RedirectToAction("Index");
        }
-
-       /// <summary>
-       /// post back for delete event
-       /// </summary>
-       /// <param name="id">event id</param>
-       /// <returns>Event Management view</returns>
-       //[HttpPost, ActionName("Delete")]
-       //[ValidateAntiForgeryToken]
-       //public ActionResult DeleteConfirmed(int id)
-       //{
-       //    Event @event = db.Events.Find(id);
-       //    db.Events.Remove(@event);
-       //    db.SaveChanges();
-       //    return RedirectToAction("EventManagement");
-       //}
         #endregion
 
         #region Member Side
@@ -190,14 +174,7 @@ namespace SeaSharpe_CVGS.Controllers
        {
            return View(db.Events.ToList());
        }
-        /// <summary>
-        /// display details of currently selected event
-        /// </summary>
-        /// <returns>PartialSelectedEvent view</returns>
-       // public ActionResult PartialSelectedEvent()
-       //{
-       //    return View();
-       //}
+        
         /// <summary>
         /// Member Side - register for event
         /// **** No View Required ****
