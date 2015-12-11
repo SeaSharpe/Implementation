@@ -120,6 +120,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\FriendshipControllerTest.cs" />
     <Compile Include="Controllers\UserControllerTests.cs" />
     <Compile Include="MockHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
