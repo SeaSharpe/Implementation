@@ -80,3 +80,9 @@
     height: 200px;
 }
 
+#successMessage h4 {
+    clear:both;
+    color:red;
+    font-weight:bold;
+    margin-left:200px;
+}
