@@ -1,17 +1,17 @@
 ﻿@model SeaSharpe_CVGS.Models.Event
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create A New Event";
 }
 
-<h2>Create</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Event</h4>
+        <h4></h4>
         <hr />
         @Html.ValidationSummary(false)
 
