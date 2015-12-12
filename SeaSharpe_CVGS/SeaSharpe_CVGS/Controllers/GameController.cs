@@ -41,14 +41,14 @@ namespace SeaSharpe_CVGS.Controllers
 
         //List containing esrb ratings
         private List<ESRB> esrbList = new List<ESRB>()
-            {
-                new ESRB("EC","Early Childhood",0),
-                new ESRB("E", "Everyone", 0),
-                new ESRB("E10", "Everyone 10+", 0),
-                new ESRB("T", "Teen", 0),
-                new ESRB("M", "Mature", 17),
-                new ESRB("AO", "Adult Only", 18)
-            };
+        {
+            new ESRB("EC","Early Childhood",0),
+            new ESRB("E", "Everyone", 0),
+            new ESRB("E10", "Everyone 10+", 0),
+            new ESRB("T", "Teen", 0),
+            new ESRB("M", "Mature", 17),
+            new ESRB("AO", "Adult Only", 18)
+        };
         
         #region Multiple Roles
 
@@ -308,7 +308,7 @@ namespace SeaSharpe_CVGS.Controllers
                 
                 //Add game categories if value not null
                 if(Categories != null)
-        {
+                {
                     ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
                     game.Categories = gameCategories;
                 }     
@@ -317,12 +317,12 @@ namespace SeaSharpe_CVGS.Controllers
                 ModelState.Clear();
                 TryValidateModel(game);
 
-            if (ModelState.IsValid)
-            {
-                db.Games.Add(game);
-                db.SaveChanges();
-                return RedirectToAction("GameManagement");
-            }
+                if (ModelState.IsValid)
+                {
+                    db.Games.Add(game);
+                    db.SaveChanges();
+                    return RedirectToAction("GameManagement");
+                }
             }
 
             //Return message to employee if exception
@@ -388,23 +388,26 @@ namespace SeaSharpe_CVGS.Controllers
                 ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
                 Game originalGame = db.Games.Find(game.Id);
                 originalGame.Categories.Clear();
+
                 foreach (Category c in gameCategories)
-        {
+                {
                     originalGame.Categories.Add(c);
                 }
+
                 db.SaveChanges();
                 db.Entry(originalGame).State = EntityState.Detached;
 
                 //Update the model to include binded changes
                 ModelState.Clear();
                 TryValidateModel(game);
-            if (ModelState.IsValid)
-            {
-                db.Entry(game).State = EntityState.Modified;
-                db.SaveChanges();
+
+                if (ModelState.IsValid)
+                {
+                    db.Entry(game).State = EntityState.Modified;
+                    db.SaveChanges();
                     TempData["message"] = "Game with ID: " + game.Id + " updated.";
-                return RedirectToAction("GameManagement");
-            }
+                    return RedirectToAction("GameManagement");
+                }
             }
 
             catch (Exception e)
@@ -417,29 +420,31 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
-        /// Employee -side post back for delete game.  **no delete view, delete button on list of games view***
+        /// Employee makes the game inactive or active 
         /// ****No view required****
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>list of games view</returns>
         [Authorize(Roles = "Employee")]
-        public ActionResult Delete(int id)
+        public ActionResult Activate(int id)
         {
             Game game = db.Games.Find(id);
             try
             {
-                //Remove the gameCategories associated with the game being deleted
-                game.Categories.Clear();
+                //Change the activity of the game
+                game.IsActive = !game.IsActive;
+
+                TryValidateModel(game);
 
                 //Remove game and save changes
-            db.Games.Remove(game);
-            db.SaveChanges();
-                TempData["message"] = game.Name + " and it's dependencies have been deleted.";
+                db.Entry(game).State = EntityState.Modified;
+                db.SaveChanges();
+                TempData["message"] = game.Name + " has had it's activity state changed.";
             }
 
             catch (Exception e)
             {
-                TempData["message"] = "Error deleting game: " + e.GetBaseException().Message;
+                TempData["message"] = "Error changing activity state of game: " + e.GetBaseException().Message;
             }
             
             return RedirectToAction("GameManagement");
