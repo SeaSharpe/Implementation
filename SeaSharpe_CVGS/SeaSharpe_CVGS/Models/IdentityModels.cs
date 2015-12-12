@@ -198,7 +198,7 @@ namespace SeaSharpe_CVGS.Models
         public bool IsApproved { get; set; }
 
         [ForeignKey("Aprover")]
-        public int Aprover_Id { get; set; }
+        public int? Aprover_Id { get; set; }
     }
 
     public partial class Friendship
