@@ -49,7 +49,7 @@
 | Member search game                                                          | Yes :white_check_mark:    |                                    |               |          |
 | Member see a game detail                                                    | Yes :white_check_mark:    |                                    |               |          |
 | Member change password                                                      | Yes :white_check_mark:    |                                    |               |          |
-| Member forget password and resets                                           | No :red_circle:           |                                    | John          | Friday   |
+| Member forget password and resets                                           | Yes :white_check_mark:    | Implemented in [PR #69](https://github.com/SeaSharpe/Implementation/pull/69) | John          | Friday   |
 | Display overall rating for each game                                        | Yes :white_check_mark:    |                                    |               |          |
 | Member profile contains display name, actual name, gender, birthdate, email | Yes :white_check_mark:    |                                    |               |          |
 | Member can select promotional email                                         | Yes :white_check_mark:    |                                    |               |          |
