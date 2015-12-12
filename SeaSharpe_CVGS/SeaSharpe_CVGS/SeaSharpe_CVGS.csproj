@@ -186,13 +186,9 @@
     <Compile Include="Migrations\201511271956227_CVGS_Classes.Designer.cs">
       <DependentUpon>201511271956227_CVGS_Classes.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201512121718100_Schema_Additions.cs" />
-    <Compile Include="Migrations\201512121718100_Schema_Additions.Designer.cs">
-      <DependentUpon>201512121718100_Schema_Additions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201512121807485_Stripe_Removed.cs" />
-    <Compile Include="Migrations\201512121807485_Stripe_Removed.Designer.cs">
-      <DependentUpon>201512121807485_Stripe_Removed.cs</DependentUpon>
+    <Compile Include="Migrations\201512121823090_Schema_Additions.cs" />
+    <Compile Include="Migrations\201512121823090_Schema_Additions.Designer.cs">
+      <DependentUpon>201512121823090_Schema_Additions.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\UserViewModels.cs" />
@@ -368,11 +364,8 @@
     <EmbeddedResource Include="Migrations\201511271956227_CVGS_Classes.resx">
       <DependentUpon>201511271956227_CVGS_Classes.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201512121718100_Schema_Additions.resx">
-      <DependentUpon>201512121718100_Schema_Additions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201512121807485_Stripe_Removed.resx">
-      <DependentUpon>201512121807485_Stripe_Removed.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201512121823090_Schema_Additions.resx">
+      <DependentUpon>201512121823090_Schema_Additions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

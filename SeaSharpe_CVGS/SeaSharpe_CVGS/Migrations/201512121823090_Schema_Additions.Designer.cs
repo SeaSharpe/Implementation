@@ -7,13 +7,13 @@ namespace SeaSharpe_CVGS.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Stripe_Removed : IMigrationMetadata
+    public sealed partial class Schema_Additions : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Stripe_Removed));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Schema_Additions));
         
         string IMigrationMetadata.Id
         {
-            get { return "201512121807485_Stripe_Removed"; }
+            get { return "201512121823090_Schema_Additions"; }
         }
         
         string IMigrationMetadata.Source

@@ -30,9 +30,8 @@ namespace SeaSharpe_CVGS.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         IsEmailVerified = c.Boolean(nullable: false),
                         IsEmailMarketingAllowed = c.Boolean(nullable: false),
-                        //StripeID = c.Int(nullable: false),
+                        StripeID = c.Int(nullable: false),
                         User_Id = c.String(nullable: false, maxLength: 128),
-                        Preferences = c.String(maxLength: 500),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.User_Id, cascadeDelete: true)
@@ -100,7 +99,6 @@ namespace SeaSharpe_CVGS.Migrations
                         ReleaseDate = c.DateTime(nullable: false),
                         SuggestedRetailPrice = c.Decimal(nullable: false, precision: 18, scale: 2),
                         Platform_Id = c.Int(nullable: false),
-                        IsActive = c.Boolean(nullable: false, defaultValue: true),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Platforms", t => t.Platform_Id, cascadeDelete: true)
@@ -124,7 +122,7 @@ namespace SeaSharpe_CVGS.Migrations
                         Subject = c.String(maxLength: 500),
                         Body = c.String(maxLength: 4000),
                         IsApproved = c.Boolean(nullable: false),
-                        Aprover_Id = c.Int(nullable: true),
+                        Aprover_Id = c.Int(),
                         Author_Id = c.Int(nullable: false),
                         Game_Id = c.Int(nullable: false),
                     })

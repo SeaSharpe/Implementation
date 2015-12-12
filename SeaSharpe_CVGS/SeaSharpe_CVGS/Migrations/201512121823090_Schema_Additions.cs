@@ -8,11 +8,13 @@ namespace SeaSharpe_CVGS.Migrations
         public override void Up()
         {
             AddColumn("dbo.Members", "Preferences", c => c.String(maxLength: 500));
-            AddColumn("dbo.Games", "IsActive", c => c.Boolean(nullable: false, defaultValue: true));
+            AddColumn("dbo.Games", "IsActive", c => c.Boolean(nullable: false));
+            DropColumn("dbo.Members", "StripeID");
         }
         
         public override void Down()
         {
+            AddColumn("dbo.Members", "StripeID", c => c.Int(nullable: false));
             DropColumn("dbo.Games", "IsActive");
             DropColumn("dbo.Members", "Preferences");
         }
