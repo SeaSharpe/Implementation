@@ -62,7 +62,6 @@ namespace SeaSharpe_CVGS.Models
         [Display(Name = "Email Marketing?")]
         public bool IsEmailMarketingAllowed { get; set; }
 
-        public int StripeID { get; set; }
         public virtual ICollection<Friendship> Friendships { get; set; }
         public virtual ICollection<Event> Events { get; set; }
 
