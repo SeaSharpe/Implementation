@@ -56,7 +56,7 @@
 | Member indicates favourite platforms and game categories                    | No :red_circle:           |                                    | John          | Saturday |
 | Member enter ship address                                                   | Yes :white_check_mark:    |                                    |               |          |
 | Member modify ship address                                                  | Yes :white_check_mark:    |                                    |               |          |
-| Member delete ship address                                                  | No :red_circle:           |                                    | John          | Friday   |
+| Member delete ship address                                                  | Yes :white_check_mark:    | Implemented in [PR #70](https://github.com/SeaSharpe/Implementation/pull/70) | John          | Friday   |
 | Member register credit cards                                                | Yes :white_check_mark:    | Only one card saved                |               |          |
 | Member fill wishlist                                                        | Yes :white_check_mark:    |                                    |               |          |
 | Friends and relatives see wishlist                                          | Yes :white_check_mark:    |                                    |               |          |
