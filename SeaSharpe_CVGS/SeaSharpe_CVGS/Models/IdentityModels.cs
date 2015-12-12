@@ -65,6 +65,9 @@ namespace SeaSharpe_CVGS.Models
         public int StripeID { get; set; }
         public virtual ICollection<Friendship> Friendships { get; set; }
         public virtual ICollection<Event> Events { get; set; }
+
+        [MinLength(0),MaxLength(500)]
+        public string Preferences { get; set; }
     }
 
     public partial class Employee
@@ -170,6 +173,8 @@ namespace SeaSharpe_CVGS.Models
 
         [ForeignKey("Platform")]
         public int Platform_Id { get; set; }
+
+        public bool IsActive { get; set; }
     }
 
     public partial class Review
@@ -191,6 +196,9 @@ namespace SeaSharpe_CVGS.Models
 
         [Display(Name = "Approved")]
         public bool IsApproved { get; set; }
+
+        [ForeignKey("Aprover")]
+        public int Aprover_Id { get; set; }
     }
 
     public partial class Friendship
