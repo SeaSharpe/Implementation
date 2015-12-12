@@ -190,8 +190,8 @@ namespace SeaSharpe_CVGS.Controllers
                         //Detach original review from database
                         db.Entry(originalReview).State = EntityState.Detached;
 
-                        //Set approver to null
-                        review.Aprover = null;
+                        //Set approver ID to null
+                        review.Aprover_Id = null;
 
                         //Update the review
                         db.Entry(review).State = EntityState.Modified;
