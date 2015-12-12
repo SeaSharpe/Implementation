@@ -8,7 +8,7 @@
 $(function ()
 {
     //Set datefield class elements to datepicker 
-    $(".datefield").datepicker({ dateFormat: 'dd-mm-yy' });
+    $(".datefield").datepicker({ dateFormat: 'dd-MM-yy' });
 
     //Jquery date validation format
     $.validator.methods.date = function (value, element)
