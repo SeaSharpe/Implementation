@@ -7,6 +7,9 @@ using System.Web.Mvc;
 
 namespace SeaSharpe_CVGS.Controllers
 {
+    /// <summary>
+    ///  Controller class for handling actions related to report generation
+    /// </summary>
     public class ReportController : Controller
     {
 

@@ -27,9 +27,10 @@
             @Html.DisplayNameFor(model => model.Rating)
         </b>
 
-        <!-- Rating Text-->
+        <!-- Rating -->
         <p>
-            @Html.TextBoxFor(model => model.Rating, new { @class = "reviewReview", disabled = "disabled", @readonly = "readonly" })
+            <input value="@Model.Rating" type="number" id="Rating" name="Rating" class="rating reviewReview" data-show-clear="false" data-readonly="true" data-show-caption="false" data-size="xs" />
+            <script type="text/javascript">$("#Rating").rating()</script><br />
         </p>
     </div>
 </div>

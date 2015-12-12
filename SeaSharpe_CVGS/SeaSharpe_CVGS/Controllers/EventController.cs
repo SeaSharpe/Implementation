@@ -10,6 +10,9 @@ using SeaSharpe_CVGS.Models;
 
 namespace SeaSharpe_CVGS.Controllers
 {
+    /// <summary>
+    /// Controller class for handling actions related to events
+    /// </summary>
     public class EventController : Controller
     {
         #region Multiple Roles
