@@ -83,6 +83,10 @@
                     }
                     <h4><b>Billing Address</b></h4>
                     @Html.Partial("_AddressPartial", Model.BillingAddress)
+                    @if (Model.BillingAddress.Id != 0)
+                    {
+                    <input type="submit" value="Delete Billing Address" class="btn btn-danger" id="deleteBilling" name="deleteAddress" />
+                    }
                 </div>
                 <div class="col-md-4">
                     @{
@@ -90,6 +94,10 @@
                     }
                     <h4><b>Shipping Address</b></h4>
                     @Html.Partial("_AddressPartial", Model.ShippingAddress)
+                    @if (Model.ShippingAddress.Id != 0)
+                    {
+                    <input type="submit" value="Delete Shipping Address" class="btn btn-danger" id="deleteBilling" name="deleteAddress" />
+                    }
                 </div>
                 @{
             ViewData.TemplateInfo.HtmlFieldPrefix = "";

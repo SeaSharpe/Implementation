@@ -64,11 +64,15 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
-        /// Post back method for the profile page
+        /// Post back method for the profile page, will update the user, member, and adress 
+        /// objects associated with the currently logged in user. If "deleteAddress" is set, 
+        /// this action will only delete the address and return the view without making other
+        /// changes.
         /// </summary>
         /// <param name="member">The member object</param>
         /// <param name="billingAddress">The member's billing address</param>
         /// <param name="shippingAddress">The member's shipping address</param>
+        /// <param name="deleteAddress">A string that contains Billing or Shipping</param>
         /// <returns>Returns to index if successful, otherwise redisplays the 
         /// edit page</returns>
         [HttpPost]
@@ -76,9 +80,51 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult Edit(
             [Bind(Prefix = "Member")] Member member, 
             [Bind(Prefix = "BillingAddress")] Address billingAddress, 
-            [Bind(Prefix = "ShippingAddress")] Address shippingAddress)
+            [Bind(Prefix = "ShippingAddress")] Address shippingAddress,
+            String deleteAddress)
         {
             ProfileViewModel model = new ProfileViewModel { Member = member, BillingAddress = billingAddress, ShippingAddress = shippingAddress };
+
+            if (deleteAddress != null)
+            {
+                Address deletingAddress = null;
+                string addressType = "";
+                if (deleteAddress.Contains("Billing"))
+                {
+                    deletingAddress = billingAddress;
+                    addressType = "billing";
+                    model.BillingAddress = new Address();
+                }
+                else if (deleteAddress.Contains("Shipping"))
+                {
+                    deletingAddress = shippingAddress;
+                    addressType = "shipping";
+                    model.ShippingAddress = new Address();
+                }
+
+                if (deleteAddress != null && deletingAddress.Id != 0)
+                {
+                    try
+                    {
+                        db.Entry(deletingAddress).State = EntityState.Deleted;
+                        TempData["message"] = string.Format("Deleted {0} address \"{1}\".", addressType, deletingAddress.StreetAddress);
+                        db.SaveChanges();
+                        ModelState.Clear();
+                        return View(model);
+                    }
+                    catch (Exception e)
+                    {
+                        TempData["message"] = string.Format("Could not delete {0} address \"{1}\".", addressType, deletingAddress.StreetAddress);
+                        return View(model);
+                    }
+                }
+                else
+                {
+                    TempData["message"] = string.Format("Could not delete {0} address.", addressType);
+                    return View(model);
+                }
+            }
+
             StringBuilder messageAccumulator = new StringBuilder("");
             bool failedToSaveSomething = false;
 
