@@ -125,6 +125,33 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
+        /// Returns the searchGames action with the specified platform or category
+        /// </summary>
+        /// <param name="platformStrings">Platform names to search for</param>
+        /// <param name="categoryStrings">Category names to search for</param>
+        /// <returns></returns>
+        public ActionResult SearchBy(string platformString, string categoryString)
+        {
+            List<Game> gameList = new List<Game>();
+
+            //Get the ids for the platform strings
+            if(platformString != null)
+            {
+                gameList= db.Games.Include(g => g.Platform).Where(g=> platformString.ToLower() == g.Platform.Name.ToLower()).ToList();                
+            }
+
+            //Populate categories
+            if(categoryString != null)
+            {
+                gameList = db.Games.Include(g => g.Categories).Where(g => g.Categories.Any(c => c.Name == categoryString.ToLower())).ToList();   
+            }
+
+            //Return the search games action with the categories/platforms
+            PopulateDropdownData();
+            return View("SearchGames",gameList);
+        }
+
+        /// <summary>
         /// Get Single Game
         /// **view shared with PartialCreateReview***
         /// </summary>
