@@ -190,6 +190,10 @@
     <Compile Include="Migrations\201512121718100_Schema_Additions.Designer.cs">
       <DependentUpon>201512121718100_Schema_Additions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512121807485_Stripe_Removed.cs" />
+    <Compile Include="Migrations\201512121807485_Stripe_Removed.Designer.cs">
+      <DependentUpon>201512121807485_Stripe_Removed.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\UserViewModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -366,6 +370,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512121718100_Schema_Additions.resx">
       <DependentUpon>201512121718100_Schema_Additions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512121807485_Stripe_Removed.resx">
+      <DependentUpon>201512121807485_Stripe_Removed.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
