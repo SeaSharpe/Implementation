@@ -63,7 +63,7 @@
 | Member rate games                                                           | Yes :white_check_mark:    |                                    |               |          |
 | Member review games                                                         | Yes :white_check_mark:    |                                    |               |          |
 | Member download shareware game                                              | No :red_circle:           |                                    | John, Peter   | Saturday |
-| Member register event                                                       | No :large_orange_diamond: | Implemented in [PR #61](https://github.com/SeaSharpe/Implementation/pull/61) | Rob           | Friday   |
+| Member register event                                                       | Yes :white_check_mark:    | Implemented in [PR #61](https://github.com/SeaSharpe/Implementation/pull/61) | Rob           | Friday   |
 | Add items to Cart                                                           | Yes :white_check_mark:    |                                    |               |          |
 | Remove items to Cart                                                        | Yes :white_check_mark:    |                                    |               |          |
 | Checkout                                                                    | Yes :white_check_mark:    |                                    |               |          |
