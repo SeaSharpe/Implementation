@@ -334,7 +334,8 @@ namespace SeaSharpe_CVGS.Migrations
                 Platform             = platformObj,
                 ImagePath            = image,
                 Publisher            = publisher,
-                ESRB                 = Enum.GetName(typeof(RatingEnum), esrb)
+                ESRB                 = Enum.GetName(typeof(RatingEnum), esrb),
+                IsActive             = true,
             };
 
             // Add optional categories

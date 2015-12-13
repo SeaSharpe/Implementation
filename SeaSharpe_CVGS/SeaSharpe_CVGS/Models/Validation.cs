@@ -217,6 +217,7 @@ namespace SeaSharpe_CVGS.Models
             [Required(ErrorMessage = "Required")]
             public DateTime EndDate { get; set; }
 
+            [DataType(DataType.MultilineText)]
             [MinLength(0), MaxLength(4000)]
             public string Description { get; set; }
             

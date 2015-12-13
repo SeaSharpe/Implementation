@@ -3,107 +3,126 @@
 @{
     ViewBag.Title = "Cart";
 }
-@using (Html.BeginForm("AlterCart", "Order", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-<h2>Cart</h2>
-<table class="table">
-    <tr>
-        <th>
-            Download
-        </th>
-        <th>
-            Hard Copy
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.First().item.Game.Name)
-        </th>
-        <th>
-            @Html.LabelFor(model => model.First().item.Game.Platform.Name, "Platform")
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.First().item.Game.ESRB)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.First().item.Game.SuggestedRetailPrice)
-        </th>
-    </tr>
+<head>
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Content/order.css" type="text/css">
+</head>
+<div class="row">
+    <div class="col-lg-12">
+
+        @using (Html.BeginForm("AlterCart", "Order", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="col-md-10 col-md-offset-1">
+                <h1>Cart</h1>
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().download)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().hardCopy)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().item.Game.Name)
+                        </th>
+                        <th>
+                            @Html.LabelFor(model => model.First().item.Game.Platform.Name, "Platform")
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().item.Game.ESRB)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().item.Game.SuggestedRetailPrice)
+                        </th>
+                    </tr>
 
 
-    @for (int i = 0; i < Model.Count(); i++)
-    {
-        <tr>
-            @if (Model[i].item.Game.SuggestedRetailPrice > 0.01m)
+                    @for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            @if (Model[i].item.Game.SuggestedRetailPrice > 0.01m)
+                            {
+                                <td>
+                                    N/A
+                                    @Html.HiddenFor(model => model[i].download)
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model[i].hardCopy)
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @Html.EditorFor(model => model[i].download)
+                                </td>
+                                <td>
+                                    N/A
+                                    @Html.HiddenFor(model => model[i].hardCopy)
+                                </td>
+                            }
+                            <td>
+                                @Html.DisplayFor(model => model[i].item.Game.Name)
+                                @Html.HiddenFor(model => model[i].item.OrderId)
+                                @Html.HiddenFor(model => model[i].item.GameId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model[i].item.Game.Platform.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model[i].item.Game.ESRB)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model[i].item.Game.SuggestedRetailPrice)
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            </div>
+            if (TempData["EmptyCart"] != null)
             {
-                <td>
-                    N/A
-                    @Html.HiddenFor(model => model[i].download)
-                </td>
-                <td>
-                    @Html.EditorFor(model => model[i].hardCopy)
-                </td>
+                <p>@TempData["EmptyCart"]</p>
+                <br />
             }
-            else
+            <div class="col-md-3 col-md-offset-3">
+                <input type="submit" name="submit" value="Remove Selected" class="btn defaultButton cartButtons" />
+            </div>
+            <div class="col-md-6">
+                @(Html.ActionLink("Empty Cart", "DeleteCart", "order", null, new { @class = "btn defaultButton cartButtons" }))
+                <br />
+            </div>
+            <div class="col-md-3 col-md-offset-3">
+                @(Html.ActionLink("Continue Shopping", "Index", "Game", null, new { @class = "btn greenButton cartButtons" }))
+            </div>
+        }
+        <div class="col-md-6">
+            @using (@Html.BeginForm())
             {
-                <td>
-                    @Html.EditorFor(model => model[i].download)
-                </td>
-                <td>
-                    N/A
-                    @Html.HiddenFor(model => model[i].hardCopy)
-                </td>
+                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="@System.Configuration.ConfigurationManager.AppSettings.Get("StripeApiPublicKey")"
+                        data-amount="@Model.Sum(m => m.item.SalePrice * 100)"
+                        data-name="ConestogaVideoGameStore"
+                        data-description="Games ($@Model.Sum(m => m.item.SalePrice))"
+                        data-image='@Url.Content("~/Content/themes/base/images/logo.png")'
+                        data-locale="auto"
+                        data-bitcoin="true">
+                </script>
             }
-            <td>
-                @Html.DisplayFor(model => model[i].item.Game.Name)
-                @Html.HiddenFor(model => model[i].item.OrderId)
-                @Html.HiddenFor(model => model[i].item.GameId)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model[i].item.Game.Platform.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model[i].item.Game.ESRB)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model[i].item.Game.SuggestedRetailPrice)
-            </td>
-        </tr>
-    }
-
-</table>
-if (TempData["EmptyCart"] != null)
-{
-    <p>@TempData["EmptyCart"]</p>
-    <br/>
-}
-<input type="submit" name="submit" value="Remove Selected" class="btn btn-primary" />
-@(Html.ActionLink("Empty Cart", "DeleteCart", "order", null, new { @class = "btn btn-primary" }))
-<br/>
-@(Html.ActionLink("Continue Shopping", "Index", "Game", null, new { @class = "btn btn-primary" }))
-}
-
-@using (@Html.BeginForm())
-{
-    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-        data-key="@System.Configuration.ConfigurationManager.AppSettings.Get("StripeApiPublicKey")"
-        data-amount="@Model.Sum(m => m.item.SalePrice * 100)"
-        data-name="ConestogaVideoGameStore"
-        data-description="Games ($@Model.Sum(m => m.item.SalePrice))"
-        data-image='@Url.Content("~/Content/themes/base/images/logo.png")'
-        data-locale="auto"
-        data-bitcoin="true">
-    </script>
-}
-
-@{
-    if (ViewBag.StripeCharge != null)
-    {
-        var stripeCharge = (Stripe.StripeCharge)ViewBag.StripeCharge;
-        <h4>
-            @string.Format("Order Amount: {0:C}", stripeCharge.Amount / 100m)
-        </h4>
-        <h4>
-            @string.Format("Payment Status: {0}", stripeCharge.Status)
-        </h4>
-    }
-}
+        </div>
+        @{
+            if (ViewBag.StripeCharge != null)
+            {
+                var stripeCharge = (Stripe.StripeCharge)ViewBag.StripeCharge;
+                    <div id="successMessage">
+                        <h4>
+                            @string.Format("Order Amount: {0:C}", stripeCharge.Amount / 100m)
+                        </h4>
+                        <h4>
+                            @string.Format("Payment Status: {0}", stripeCharge.Status)
+                        </h4>
+                    </div>
+            }
+        }
+    </div>
+</div>

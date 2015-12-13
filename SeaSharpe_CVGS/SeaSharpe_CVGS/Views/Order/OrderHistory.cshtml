@@ -3,57 +3,64 @@
 @{
     ViewBag.Title = "OrderHistory";
 }
-
-<h2>OrderHistory</h2>
+<head>
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Content/order.css" type="text/css">
+</head>
+<h1>@ViewBag.Title</h1>
+<hr />
 @if (TempData["message"] != null)
 {
-<p>@TempData["message"]</p>
-<br />
+    <p>@TempData["message"]</p>
+    <br />
 }
+<div class="row">
+    <div class="col-lg-12">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.gameName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.platform)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.orderPlacementDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.shipDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.pricePaid)
+                </th>
+            </tr>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.orderPlacementDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.shipDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.gameName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.platform)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.pricePaid)
-        </th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.orderPlacementDate)
-        </td>
-            @if (item.shipDate == DateTime.Parse("1900-01-01 00:00:00"))
+            @foreach (var item in Model)
             {
-                <td>Awaiting Shipping</td>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.gameName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.platform)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.orderPlacementDate)
+                    </td>
+                    @if (item.shipDate == DateTime.Parse("1900-01-01 00:00:00"))
+                    {
+                        <td>Awaiting Shipping</td>
+                    }
+                    else
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.shipDate)</td>
+                    }                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.pricePaid)
+                    </td>
+                </tr>
             }
-            else
-            {
-                <td>@Html.DisplayFor(modelItem => item.shipDate)</td>
-            }
-            
-        <td>
-            @Html.DisplayFor(modelItem => item.gameName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.platform)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.pricePaid)
-        </td>
-    </tr>
-}
 
-</table>
+        </table>
+    </div>
+</div>

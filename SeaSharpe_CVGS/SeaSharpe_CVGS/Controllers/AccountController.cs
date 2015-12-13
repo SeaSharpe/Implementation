@@ -9,6 +9,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using SeaSharpe_CVGS.Models;
+using System.Configuration;
+using System.Net.Mail;
+using System.Net;
 
 namespace SeaSharpe_CVGS.Controllers
 {
@@ -197,8 +200,8 @@ namespace SeaSharpe_CVGS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                var user = db.Users.FirstOrDefault(u => String.Compare(u.Email, model.Email, true) == 0);
+                if (user == null)
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
@@ -206,10 +209,32 @@ namespace SeaSharpe_CVGS.Controllers
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+
+                var body = "<p>Please reset your password by clicking <a href=\"{0}\">here</a></p>";
+                var message = new MailMessage();
+                message.To.Add(new MailAddress(model.Email));
+                message.From = new MailAddress(ConfigurationManager.AppSettings["GmailUser"]);
+                message.Subject = "Reset Password";
+                message.Body = string.Format(body, callbackUrl);
+                message.IsBodyHtml = true;
+
+                using (var smtp = new SmtpClient())
+                {
+                    var credential = new NetworkCredential
+                    {
+                        UserName = ConfigurationManager.AppSettings["GmailUser"],
+                        Password = ConfigurationManager.AppSettings["GmailPassword"]
+                    };
+                    smtp.Credentials = credential;
+                    smtp.Host = "smtp.gmail.com";
+                    smtp.Port = 587;
+                    smtp.EnableSsl = true;
+                    await smtp.SendMailAsync(message);
+                    return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                }
             }
 
             // If we got this far, something failed, redisplay form

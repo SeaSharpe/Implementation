@@ -246,7 +246,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             for (int i = 0; i < wishListGames.Count; i++)
             {
-                if (allGames.Contains(wishListGames[i].Game))
+                if (allGames.Contains(wishListGames[i].Game) && wishListGames[i].Game.IsActive)
                 {
                     res.Add(wishListGames[i].Game);
                 }

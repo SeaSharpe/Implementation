@@ -21,14 +21,20 @@ namespace SeaSharpe_CVGS.Models
             this.platform = pn;
             this.pricePaid = pp;
         }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyy}")]
         [Display(Name = "Order Date")]
         public DateTime orderPlacementDate { get; set; }
+
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyy}")]
         [Display(Name = "Ship Date")]
         public DateTime shipDate { get; set; }
+
         [Display(Name = "Name")]
         public string gameName { get; set; }
+
         [Display(Name = "Platform")]
         public string platform { get; set; }
+
         [Display(Name = "Price")]
         [DisplayFormat(DataFormatString = "{0:c}")]
         public decimal pricePaid { get; set; }
@@ -49,8 +55,10 @@ namespace SeaSharpe_CVGS.Models
 
         public OrderItem item { get; set; }
 
+        [Display(Name = "Download")]
         public bool download { get; set; }
 
+        [Display(Name = "Hard Copy")]
         public bool hardCopy { get; set; }
     }
 }

@@ -18,10 +18,13 @@
         @Html.ActionLink("View Reviews & Ratings", "ReviewsRating", "Review", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
     </p>
 
+@if (File.Exists(Server.MapPath("/App_Data/" + Model.Id + ".zip")))
+{
     <!-- Download Game-->
     <p>
-            @Html.ActionLink("Download", "Download", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
+        @Html.ActionLink("Download", "Download", new { id = Model.Id }, new { @class = "btn greenButton btn-details" })
     </p>
+}    
 
 @if (User.Identity.IsAuthenticated) // Hide these buttons for users that are not logged in
 {

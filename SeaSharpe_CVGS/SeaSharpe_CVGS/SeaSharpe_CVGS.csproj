@@ -186,6 +186,10 @@
     <Compile Include="Migrations\201511271956227_CVGS_Classes.Designer.cs">
       <DependentUpon>201511271956227_CVGS_Classes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512121823090_Schema_Additions.cs" />
+    <Compile Include="Migrations\201512121823090_Schema_Additions.Designer.cs">
+      <DependentUpon>201512121823090_Schema_Additions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\UserViewModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -201,11 +205,13 @@
     <Content Include="Content\account.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\event.css" />
     <Content Include="Content\friendship.css" />
     <Content Include="Content\game.css" />
     <Content Include="Content\home.css" />
     <Content Include="Content\main.css" />
     <Content Include="Content\manage.css" />
+    <Content Include="Content\order.css" />
     <Content Include="Content\report.css" />
     <Content Include="Content\review.css" />
     <Content Include="Content\simple-sidebar.css" />
@@ -251,6 +257,7 @@
     <Content Include="Content\loading.gif" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="App_Data\7000015.zip" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\datePickerReady.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -335,16 +342,13 @@
     <Content Include="Views\Order\PartialSelectedOrder.cshtml" />
     <Content Include="Views\Review\PartialSelectedReview.cshtml" />
     <Content Include="Views\Review\PartialCreateReview.cshtml" />
-    <Content Include="Views\Event\PartialSelectedEvent.cshtml" />
     <Content Include="Views\Friendship\PartialFriendsList.cshtml" />
     <Content Include="Views\Friendship\PartialFamilyList.cshtml" />
     <Content Include="Views\Review\PartialReviewDetails.cshtml" />
     <Content Include="Views\Shared\_AddressPartial.cshtml" />
     <Content Include="Views\Order\Shipping.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -358,6 +362,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511271956227_CVGS_Classes.resx">
       <DependentUpon>201511271956227_CVGS_Classes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512121823090_Schema_Additions.resx">
+      <DependentUpon>201512121823090_Schema_Additions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

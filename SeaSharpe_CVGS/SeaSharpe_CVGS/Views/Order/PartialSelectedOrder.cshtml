@@ -1,76 +1,93 @@
 ﻿@model SeaSharpe_CVGS.Models.Order
+@{
+    Layout = null;
+}
+<link rel="stylesheet" href="~/Content/order.css" type="text/css">
 
-<div>
-    <h4>Selected Order</h4>
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Member.Id)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Member.Id)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.OrderPlacementDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.OrderPlacementDate)
-        </dd>
-    </dl>
-    <table class="table">
-        <tr>
-            <th>
-                Title
-            </th>
-            <th>
-                Platform
-            </th>
-            <th>
-                Price
-            </th>
-        </tr>
-        @if (Model.Id == -1)
-        {
-            <tr>
-                
-                    @if (TempData["messageDan1"] == "")
-	                {
-                        <td>
-                            No Order Selected
-                        </td>
+    
+<div class="row">
+    <div class="col-lg-12">
+        <h3><b>Selected Order</b></h3>
+        <div class="col-md-6">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Id)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Id)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.OrderPlacementDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.OrderPlacementDate)
+                </dd>
+            </dl>
+            </div>
+        <div class="col-md-6">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Member.Id)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Member.Id)
+                </dd>
+            </dl>
+        </div>
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.OrderItems.First().Game.Name)
+                        </th>
+                        <th>
+                           @Html.DisplayNameFor(model => model.OrderItems.First().Game.Platform)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.OrderItems.First().Game.SuggestedRetailPrice)
+                        </th>
+                    </tr>
+                    @if (Model.Id == -1)
+                    {
+                        <tr>
+
+                            @if (TempData["messageDan1"] == "")
+                            {
+                                <td>
+                                    No Order Selected
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @TempData["messageDan1"]
+                                </td>
+                            }
+
+
+                            <td></td>
+                            <td></td>
+                        </tr>
                     }
                     else
                     {
-                        <td>
-                            @TempData["messageDan1"]
-                        </td>
+                        foreach (var item in Model.OrderItems)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(model => item.Game.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => item.Game.Platform.Name)
+                                </td>
+                                <td>
+                                    $@Html.DisplayFor(model => item.SalePrice)
+                                </td>
+                            </tr>
+                        }
                     }
 
-                            
-                <td>
-                </td>
-                <td>
-                </td>
-            </tr>
-        }
-        else
-        {
-            foreach (var item in Model.OrderItems)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(model => item.Game.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => item.Game.Platform.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => item.SalePrice)
-                    </td>
-                </tr>
-            }
-        }
-        
-    </table>
-    @Html.ActionLink("Mark as Processed", "MarkAsProcessed", new { id = Model.Id }) | 
-    @Html.ActionLink("Print Shipping Label", "Shipping", new { id = Model.Id })
+                </table>
+            </div>
 </div>
+    @Html.ActionLink("Mark as Processed", "MarkAsProcessed", new { id = Model.Id }, new { @class = "btn greenButton btnOrderManage" })
+    @Html.ActionLink("Print Shipping Label", "Shipping", new { id = Model.Id }, new { @class = "btn greenButton btnOrderManage" })

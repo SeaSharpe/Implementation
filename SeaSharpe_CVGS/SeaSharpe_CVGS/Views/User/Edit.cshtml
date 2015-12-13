@@ -62,7 +62,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-1">
-                                @Html.EditorFor(model => model.Member.User.DateOfBirth, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Member.User.DateOfBirth) } })
+                                @Html.EditorFor(model => model.Member.User.DateOfBirth, new { htmlAttributes = new { @class = "form-control datefield", placeholder = Html.DisplayNameFor(m => m.Member.User.DateOfBirth) } })
                                 @Html.ValidationMessageFor(model => model.Member.User.DateOfBirth, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -83,6 +83,10 @@
                     }
                     <h4><b>Billing Address</b></h4>
                     @Html.Partial("_AddressPartial", Model.BillingAddress)
+                    @if (Model.BillingAddress.Id != 0)
+                    {
+                    <input type="submit" value="Delete Billing Address" class="btn btn-danger" id="deleteBilling" name="deleteAddress" />
+                    }
                 </div>
                 <div class="col-md-4">
                     @{
@@ -90,6 +94,10 @@
                     }
                     <h4><b>Shipping Address</b></h4>
                     @Html.Partial("_AddressPartial", Model.ShippingAddress)
+                    @if (Model.ShippingAddress.Id != 0)
+                    {
+                    <input type="submit" value="Delete Shipping Address" class="btn btn-danger" id="deleteBilling" name="deleteAddress" />
+                    }
                 </div>
                 @{
             ViewData.TemplateInfo.HtmlFieldPrefix = "";
@@ -112,3 +120,6 @@
         }
     </div>
 </div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
