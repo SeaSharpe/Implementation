@@ -122,7 +122,7 @@ namespace SeaSharpe_CVGS.Controllers
             }
             
             PopulateDropdownData();
-            return View(gameList.ToList());
+            return View(gameList.Where(g => g.IsActive).ToList());
         }
 
         /// <summary>
@@ -138,13 +138,13 @@ namespace SeaSharpe_CVGS.Controllers
             //Get the ids for the platform strings
             if(platformString != null)
             {
-                gameList= db.Games.Include(g => g.Platform).Where(g=> platformString.ToLower() == g.Platform.Name.ToLower()).ToList();                
+                gameList= db.Games.Include(g => g.Platform).Where(g=> g.IsActive && platformString.ToLower() == g.Platform.Name.ToLower()).ToList();                
             }
 
             //Populate categories
             if(categoryString != null)
             {
-                gameList = db.Games.Include(g => g.Categories).Where(g => g.Categories.Any(c => c.Name == categoryString.ToLower())).ToList();   
+                gameList = db.Games.Include(g => g.Categories).Where(g => g.IsActive && g.Categories.Any(c => c.Name == categoryString.ToLower())).ToList();   
             }
 
             //Return the search games action with the categories/platforms
@@ -311,7 +311,10 @@ namespace SeaSharpe_CVGS.Controllers
                 {
                     ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
                     game.Categories = gameCategories;
-                }     
+                }
+
+                //Set game as active
+                game.IsActive = true;
 
                 //Update the model state to reflect manual addition of platforms and categories
                 ModelState.Clear();
