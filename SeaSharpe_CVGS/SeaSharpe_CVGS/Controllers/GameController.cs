@@ -166,7 +166,7 @@ namespace SeaSharpe_CVGS.Controllers
             }
 
             Game game = db.Games.Find(id);
-            if (game == null)
+            if (game == null || !game.IsActive)
             {
                 return HttpNotFound();
             }

@@ -120,22 +120,6 @@ namespace SeaSharpe_CVGS.Controllers
             return RedirectToAction("ReviewManagement");
         }        
 
-        /// <summary>
-        /// post back - review rejected by employee, delete review
-        /// **** no view required ****
-        /// </summary>
-        /// <param name="id">review id</param>
-        /// <returns>Review Management view</returns>
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    Review review = db.Reviews.Find(id);
-        //    db.Reviews.Remove(review);
-        //    db.SaveChanges();
-        //    return RedirectToAction("ReviewManagement");
-        //}
-        // NOTE: I don't think we need this as reviews are never technically 'deleted' just created and updated to various states -Peter T
         #endregion
 
         #region Member Side      
