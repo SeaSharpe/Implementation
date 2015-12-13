@@ -82,7 +82,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
 
             // Act
 
-            var result = controller.Edit(postedMember, null, null);
+            var result = controller.Edit(postedMember, null, null,null);
 
             var memberFromDb = db.Members.Find(member.Id); // Get the member back from the db context
             if (gender != null) Assert.AreEqual(gender, memberFromDb.User.Gender, "Gender didn't get set");
