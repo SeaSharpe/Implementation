@@ -14,6 +14,8 @@ using System.Web;
 using System.Security.Principal;
 using Moq;
 using System.Globalization;
+using System.Net;
+using System.IO;
 
 namespace SeaSharpe_CVGS.Tests.Controllers
 {
@@ -200,7 +202,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
             CollectionAssert.AreEqual(games, model);
         }
 
-        [TestCase]
+        [Test]
         public void SearchGamesCategoryInclusive()
         {
             //Get member from db
@@ -225,6 +227,161 @@ namespace SeaSharpe_CVGS.Tests.Controllers
 
             //Compare model to expected collection
             CollectionAssert.AreEqual(games, model);
+        }
+
+        [Test]
+        public void SearchByPlatform()
+        {
+            //Get member from db
+            Member member = db.Members.FirstOrDefault();
+
+            //Set platform search string
+            string platformString = "PS4";
+            List<Game> games = db.Games.Where(g => g.Platform.Name == platformString).ToList();
+
+            //Set controller context
+            controller.ControllerContext = MockHelpers.GetControllerContext(db, member, "Member");
+
+
+            //Call the controller method
+            ActionResult result = controller.SearchBy(platformString, null);
+
+            //Get model from controller action
+            var model = ((ViewResult)result).Model as List<Game>;
+
+            //Compare model to expected collection
+            CollectionAssert.AreEqual(games, model);
+        }
+
+        [Test]
+        public void SearchByCategory()
+        {
+            //Get member from db
+            Member member = db.Members.FirstOrDefault();
+
+            //Set category search string
+            string categoryString = "Action";
+
+            //Get games with matching categories
+            List<Game> games = db.Games.Where(g => g.Categories.Where(c => c.Name == categoryString).Count() > 0).ToList();
+
+            //Set controller context
+            controller.ControllerContext = MockHelpers.GetControllerContext(db, member, "Member");
+
+
+            //Call the controller method
+            ActionResult result = controller.SearchBy(null, categoryString);
+
+            //Get model from controller action
+            var model = ((ViewResult)result).Model as List<Game>;
+
+            //Compare model to expected collection
+            CollectionAssert.AreEqual(games, model);
+        }
+
+        [Test]
+        public void SearchByCategoryNoResults()
+        {
+            //Get member from db
+            Member member = db.Members.FirstOrDefault();
+
+            //Set category search string
+            string categoryString = "not a realy category";
+            string platformString = "not a realy platform";
+
+            //Get games with matching categories
+            List<Game> games = db.Games.Where(g => g.Categories.Where(c => c.Name == categoryString).Count() > 0).ToList();
+
+            //Get games with matching platforms
+            games = games.Where(g => g.Platform.Name == platformString).ToList();
+
+            //Set controller context
+            controller.ControllerContext = MockHelpers.GetControllerContext(db, member, "Member");
+
+
+            //Call the controller method
+            ActionResult result = controller.SearchBy(platformString, categoryString);
+
+            //Get model from controller action
+            var model = ((ViewResult)result).Model as List<Game>;
+
+            //Compare model to expected collection
+            CollectionAssert.AreEqual(games, model);
+        }
+
+        [Test]
+        public void DetailsExists()
+        {
+            //Get member from db
+            Member member = db.Members.FirstOrDefault();
+
+            //Get games with matching categories
+            Game game = db.Games.FirstOrDefault();
+            int id = game.Id;
+
+            //Set controller context
+            controller.ControllerContext = MockHelpers.GetControllerContext(db, member, "Member");
+
+            //Call the controller method
+            ActionResult result = controller.Details(id);
+
+            //Get model from controller action
+            var model = ((ViewResult)result).Model as Game;
+
+            //Compare model to expected collection
+            Assert.AreEqual(game, model);
+        }
+
+        [Test]
+        public void DetailsNotExists()
+        {
+            //Get member from db
+            Member member = db.Members.FirstOrDefault();
+
+            //invalid game id
+            int id = -1;
+
+            //Set controller context
+            controller.ControllerContext = MockHelpers.GetControllerContext(db, member, "Member");
+
+            //Call the controller method
+            ActionResult result = controller.Details(id);
+            
+
+            //Compare model to expected collection
+            Assert.IsInstanceOf(new HttpNotFoundResult().GetType(), result);
+        }
+
+        [Test]
+        public void DetailsNullId()
+        {
+            //Get member from db
+            Member member = db.Members.FirstOrDefault();
+
+            //Set controller context
+            controller.ControllerContext = MockHelpers.GetControllerContext(db, member, "Member");
+
+            //Call the controller method
+            HttpStatusCodeResult result = (HttpStatusCodeResult)controller.Details(null);
+            HttpStatusCodeResult badRequest = new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            //Compare model to expected collection
+            Assert.IsInstanceOf(badRequest.GetType(), result);
+        }
+
+        [Test]
+        public void Download()
+        {
+            //Get member from db
+            Member member = db.Members.FirstOrDefault();
+
+            //Set controller context
+            controller.ControllerContext = MockHelpers.GetControllerContext(db, member, "Member");
+
+            Game game = db.Games.Where(g => g.Name == "Angry Birds: Star Wars").First();
+            //Call the controller method
+            var result = controller.Download(game.Id); 
+
         }
     }
 
