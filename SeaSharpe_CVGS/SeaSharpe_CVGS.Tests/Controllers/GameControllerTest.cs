@@ -20,6 +20,9 @@ using System.Transactions;
 
 namespace SeaSharpe_CVGS.Tests.Controllers
 {
+    /// <summary>
+    /// Class for testing the action methods of the game controller
+    /// </summary>
     class GameControllerTest
     {
         TransactionScope _trans;

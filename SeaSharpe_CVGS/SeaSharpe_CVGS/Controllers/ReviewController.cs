@@ -30,8 +30,8 @@ namespace SeaSharpe_CVGS.Controllers
             
             else
             {
-                //return SearchGames view
-                return RedirectToAction("ReviewsRating");
+                //Not found
+                return HttpNotFound();
             }
             
         }   
