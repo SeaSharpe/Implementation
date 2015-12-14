@@ -2,8 +2,12 @@
 using SeaSharpe_CVGS.Controllers;
 using SeaSharpe_CVGS.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SeaSharpe_CVGS.Tests.Controllers
 {
@@ -28,21 +32,36 @@ namespace SeaSharpe_CVGS.Tests.Controllers
             db = null;
         }
 
-        [TestCase("nana")]
-        [TestCase("lee")]
-        public void Index(string nameSearch)
+        [TestCase(1)]
+        public void Edit(int memberIndex)
+        {
+            // Arrange
+            var controller = new UserController();
+            Console.WriteLine(controller.db.Members.Count());
+            Member member = controller.DbContext.Members.First();
+            Console.WriteLine(member.Id);
+            // Act
+            ViewResult result = controller.Edit(member.Id) as ViewResult;
+
+            //var newContext = new ApplicationDbContext();
+
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void Index()
         {
             FriendshipController controller = new FriendshipController();
 
             // Act
-            ViewResult result = controller.Index(nameSearch) as ViewResult;
+            ViewResult result = controller.Index("") as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
         }
 
         [Test]
-        public void AddFriend(string userName)
+        public void AddFriend()
         {
             FriendshipController controller = new FriendshipController();
 
@@ -54,80 +73,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
-        public void AddFamily(string userName)
-        {
-            FriendshipController controller = new FriendshipController();
-
-            // Act
-            ViewResult result = controller.AddFamily("") as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result);
-        }
-
-        [Test]
-        public void Details(int id)
-        {
-            FriendshipController controller = new FriendshipController();
-
-            // Act
-            ViewResult result = controller.AddFamily("") as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result);
-        }        
-        
-        [Test]
-        public void Delete(int id)
-        {
-            FriendshipController controller = new FriendshipController();
-
-            // Act
-            ViewResult result = controller.AddFamily("") as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result);
-        }     
-        
-        [Test]
-        public void MoveToCart(int gameId, int memberId)
-        {
-            FriendshipController controller = new FriendshipController();
-
-            // Act
-            ViewResult result = controller.AddFamily("") as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result);
-        }
-
-        [Test]
-        public void RemoveFromWishlist(int gameId, int memberId)
-        {
-            FriendshipController controller = new FriendshipController();
-
-            // Act
-            ViewResult result = controller.AddFamily("") as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result);
-        }
-
-        [Test]
-        public void AddToWishList(int id)
-        {
-            FriendshipController controller = new FriendshipController();
-
-            // Act
-            ViewResult result = controller.AddFamily("") as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result);
-        }
-
-        //helper methods
-        [Test]
-        public void DisplayCurrentMemberWishlist()
+        public void AddFamily()
         {
             FriendshipController controller = new FriendshipController();
 
