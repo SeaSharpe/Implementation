@@ -96,7 +96,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         [Test]
         //Test game index for visitor
         public void VisitorIndex()
-        {            
+        {
 
             //Call the controller method
             RedirectToRouteResult result = (RedirectToRouteResult)controller.Index();
@@ -384,25 +384,6 @@ namespace SeaSharpe_CVGS.Tests.Controllers
 
             //Compare model to expected collection
             Assert.IsInstanceOf(badRequest.GetType(), result);
-        }
-
-        [Test]
-        //Test download game
-        public void Download()
-        {
-            //Get member from db
-            Member member = db.Members.FirstOrDefault();
-
-            //Set controller context
-            controller.ControllerContext = MockHelpers.GetControllerContext(db, member, "Member");
-            
-            //Get angry birds game
-            Game game = db.Games.Where(g => g.Name == "Angry Birds: Star Wars").First();
-
-            //Call the controller method
-            FileResult result = controller.Download(game.Id);
-
-            Assert.AreEqual(game.Name.Replace(':','-') + ".zip", result.FileDownloadName);
         }
 
         [Test]
