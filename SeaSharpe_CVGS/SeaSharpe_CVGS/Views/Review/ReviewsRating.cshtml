@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<SeaSharpe_CVGS.Models.Review>
 
 @{
-    ViewBag.Title = "Reviews & Ratings for " + @Html.DisplayFor(model => model.FirstOrDefault().Game.Name);
+    ViewBag.Title = "Reviews & Ratings for " + ViewBag.gameName;
 }
 <link rel="stylesheet" href="~/Content/review.css" type="text/css">
 <h1>@ViewBag.Title</h1>

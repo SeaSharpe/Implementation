@@ -377,7 +377,8 @@ namespace SeaSharpe_CVGS.Tests.Controllers
 
             //Set controller context
             controller.ControllerContext = MockHelpers.GetControllerContext(db, member, "Member");
-
+            
+            //Get angry birds game
             Game game = db.Games.Where(g => g.Name == "Angry Birds: Star Wars").First();
             //Call the controller method
             var result = controller.Download(game.Id); 

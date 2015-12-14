@@ -42,7 +42,20 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>ReviewsRating view</returns>
         //Available for all users
         public ActionResult ReviewsRating(int id)
-        {            
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Game game = db.Games.Find(id);
+            if (game == null || !game.IsActive)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.gameName = game.Name;
+
             //Get list of all reviews/ratings for selected game
             IQueryable<Review> gameReviews = db.Reviews.Where(r => r.Game_Id == id);
             if(gameReviews.Count() > 0)
