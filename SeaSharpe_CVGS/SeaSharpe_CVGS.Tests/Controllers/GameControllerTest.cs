@@ -106,6 +106,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [TestCase]
+        //Test searchGames with a name paramter
         public void SearchGamesName()
         {
             //Get member from db
@@ -132,6 +133,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [TestCase]
+        //Test search games with an esrb parameter
         public void SearchGamesESRB()
         {
             //Get member from db
@@ -157,6 +159,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [TestCase]
+        //Test search games with a platform parameter
         public void SearchGamesPlatform()
         {
             //Get member from db
@@ -182,6 +185,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [TestCase]
+        //Test search games with categories (exlcusive)
         public void SearchGamesCategoryExlusive()
         {
             //Get member from db
@@ -209,6 +213,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
+        //Test search games with categories (inclusive)
         public void SearchGamesCategoryInclusive()
         {
             //Get member from db
@@ -236,6 +241,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
+        //Test search by using platform
         public void SearchByPlatform()
         {
             //Get member from db
@@ -260,6 +266,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
+        //Test search by using category
         public void SearchByCategory()
         {
             //Get member from db
@@ -286,6 +293,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
+        //Test searchby yeilding no results
         public void SearchByCategoryNoResults()
         {
             //Get member from db
@@ -316,6 +324,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
+        //Test game details with existing game
         public void DetailsExists()
         {
             //Get member from db
@@ -339,6 +348,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
+        //Test game details with non existing game
         public void DetailsNotExists()
         {
             //Get member from db
@@ -359,6 +369,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
+        //Test game details with a null id
         public void DetailsNullId()
         {
             //Get member from db
@@ -376,6 +387,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
+        //Test download game
         public void Download()
         {
             //Get member from db
@@ -390,10 +402,11 @@ namespace SeaSharpe_CVGS.Tests.Controllers
             //Call the controller method
             FileResult result = controller.Download(game.Id);
 
-            Assert.AreEqual(game.Name + ".zip", result.FileDownloadName);
+            Assert.AreEqual(game.Name.Replace(':','-') + ".zip", result.FileDownloadName);
         }
 
         [Test]
+        //Test game management page
         public void GameManagementAsEmployee()
         {
             //Get employee from db
@@ -411,6 +424,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
+        //Test creation of valid game
         public void CreateValidGame()
         {            
             //Get employee from db
@@ -433,6 +447,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
+        //Test creation of invalid game
         public void CreateInvalidGame()
         {
             //Get employee from db
@@ -451,6 +466,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
+        //Test editing a game with a valid update
         public void EditGameAsValid()
         {
             //Get employee from db
@@ -477,6 +493,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
+        //Test editing a game with an invalid update
         public void EditGameAsInvalid()
         {
             //Get employee from db
@@ -500,6 +517,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
+        //Test activate/deactivate game
         public void ActivateGame()
         {
             //Get employee from db

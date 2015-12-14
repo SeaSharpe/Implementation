@@ -53,7 +53,7 @@ namespace SeaSharpe_CVGS.Controllers
             ViewBag.gameName = game.Name;
 
             //Get list of all reviews/ratings for selected game
-            IQueryable<Review> gameReviews = db.Reviews.Where(r => r.Game_Id == id);
+            IQueryable<Review> gameReviews = db.Reviews.Where(r => r.Game_Id == id && r.Rating != null);
             if(gameReviews.Count() > 0)
             {
                 //Calculate average based on all reviews and ratings
