@@ -43,12 +43,8 @@ namespace SeaSharpe_CVGS.Controllers
         //Available for all users
         public ActionResult ReviewsRating(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
             Game game = db.Games.Find(id);
+
             if (game == null || !game.IsActive)
             {
                 return HttpNotFound();

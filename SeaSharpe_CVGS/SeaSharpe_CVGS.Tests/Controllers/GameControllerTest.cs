@@ -16,18 +16,20 @@ using Moq;
 using System.Globalization;
 using System.Net;
 using System.IO;
+using System.Transactions;
 
 namespace SeaSharpe_CVGS.Tests.Controllers
 {
     class GameControllerTest
     {
-
+        TransactionScope _trans;
         ApplicationDbContext db = null;
         GameController controller;
 
         [SetUp]
         public void Init()
         {
+            _trans = new TransactionScope();
             // make connection
             db = new ApplicationDbContext();
 
@@ -50,6 +52,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         [TearDown]
         public void Cleanup()
         {
+            _trans.Dispose();
             //db.Database.Delete();
         }
 
@@ -316,7 +319,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
             Member member = db.Members.FirstOrDefault();
 
             //Get games with matching categories
-            Game game = db.Games.FirstOrDefault();
+            Game game = db.Games.Where(g => g.IsActive && g.ESRB == "E").FirstOrDefault();
             int id = game.Id;
 
             //Set controller context
@@ -380,10 +383,140 @@ namespace SeaSharpe_CVGS.Tests.Controllers
             
             //Get angry birds game
             Game game = db.Games.Where(g => g.Name == "Angry Birds: Star Wars").First();
+
             //Call the controller method
-            var result = controller.Download(game.Id); 
+            FileResult result = controller.Download(game.Id);
+
+            Assert.AreEqual(game.Name + ".zip", result.FileDownloadName);
+        }
+
+        [Test]
+        public void GameManagementAsEmployee()
+        {
+            //Get employee from db
+            Employee employee = db.Employees.FirstOrDefault();
+
+            //Set controller context
+            controller.ControllerContext = MockHelpers.GetControllerContext(db, employee, "Employee");
+
+            //Call the controller method
+            ActionResult result = controller.GameManagement();
+            var model = ((ViewResult)result).Model as List<Game>;
+
+            //Check if action being redirected to is GameManagement
+            CollectionAssert.AreEqual(db.Games.ToList(),model);
+        }
+
+        [Test]
+        public void CreateValidGame()
+        {            
+            //Get employee from db
+            Employee employee = db.Employees.FirstOrDefault();
+
+            Game validGame = new Game();
+            validGame.Name = "TestGame12345";
+            validGame.ReleaseDate = System.DateTime.Now;
+            validGame.SuggestedRetailPrice = 20.00m;
+            validGame.Publisher = "EA";           
+
+            //Set controller context
+            controller.ControllerContext = MockHelpers.GetControllerContext(db, employee, "Employee");
+
+            controller.Create(validGame, 801, new int[] { 8001, 8002 });
+
+            Game savedGame = db.Games.Where(g => g.Name == validGame.Name).First();
+
+            Assert.AreEqual(validGame, savedGame);            
+        }
+
+        [Test]
+        public void CreateInvalidGame()
+        {
+            //Get employee from db
+            Employee employee = db.Employees.FirstOrDefault();
+
+            Game invalidGame = new Game();
+            invalidGame.Name = "invalid game";
+
+            //Set controller context
+            controller.ControllerContext = MockHelpers.GetControllerContext(db, employee, "Employee");
+            controller.Create(invalidGame, 801, new int[] { 8001, 8002 });
+
+            Game savedGame = db.Games.Where(g => g.Name == invalidGame.Name).FirstOrDefault();
+
+            Assert.AreEqual(savedGame, null);
+        }
+
+        [Test]
+        public void EditGameAsValid()
+        {
+            //Get employee from db
+            Employee employee = db.Employees.FirstOrDefault();
+
+            Game game = db.Games.First();
+            game.Name = "New Game Name";
+            game.Platform_Id = 802;
+            game.SuggestedRetailPrice = 9000.00m;
+            DateTime date = System.DateTime.Now;
+            game.ReleaseDate = date;
+
+            //Set controller context
+            controller.ControllerContext = MockHelpers.GetControllerContext(db, employee, "Employee");
+
+            controller.Edit(game, new int[] {});
+
+            Game savedGame = db.Games.Where(g => g.Name == game.Name).First();
+
+            Assert.AreEqual(game.Name, savedGame.Name);
+            Assert.AreEqual(game.SuggestedRetailPrice, savedGame.SuggestedRetailPrice);
+            Assert.AreEqual(game.ReleaseDate.Date, savedGame.ReleaseDate.Date);
+            Assert.AreEqual(game.Platform_Id, savedGame.Platform_Id);
+        }
+
+        [Test]
+        public void EditGameAsInvalid()
+        {
+            //Get employee from db
+            Employee employee = db.Employees.FirstOrDefault();
+
+            Game game = db.Games.First();
+            Game original = game;
+            game.Name = "";
+
+            //Set controller context
+            controller.ControllerContext = MockHelpers.GetControllerContext(db, employee, "Employee");
+
+            //Call the controller method
+            controller.Edit(game, new int[] { 8001, 8002 });
+
+            //Retrieve game from the database
+            Game savedGame = db.Games.Find(game.Id);
+
+            //Check that the saved game is the same as the original
+            Assert.AreEqual(original, savedGame);
+        }
+
+        [Test]
+        public void ActivateGame()
+        {
+            //Get employee from db
+            Employee employee = db.Employees.FirstOrDefault();
+
+            Game game = db.Games.First();
+            game.IsActive = !game.IsActive;
+
+            //Set controller context
+            controller.ControllerContext = MockHelpers.GetControllerContext(db, employee, "Employee");
+
+            //Call the controller method
+            controller.Activate(game.Id);
+
+            //Retrieve game from the database
+            Game savedGame = db.Games.Find(game.Id);
+
+            //Check that the saved game is the same as the original
+            Assert.AreEqual(game, savedGame);
 
         }
     }
-
 }
