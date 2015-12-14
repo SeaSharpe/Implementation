@@ -316,7 +316,7 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         public void DetailsExists()
         {
             //Get member from db
-            Member member = db.Members.FirstOrDefault();
+            Member member = db.Members.Where(m => m.User.DateOfBirth < System.DateTime.Now).FirstOrDefault();
 
             //Get games with matching categories
             Game game = db.Games.Where(g => g.IsActive && g.ESRB == "E").FirstOrDefault();
