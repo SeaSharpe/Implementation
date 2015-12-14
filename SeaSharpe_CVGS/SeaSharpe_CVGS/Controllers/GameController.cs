@@ -246,6 +246,19 @@ namespace SeaSharpe_CVGS.Controllers
             return View(game);
         }
 
+        /// <summary>
+        /// Downloads the demo for a game, game details page only provides link if the game exists
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public FileResult Download(int id)
+        {
+            Game game = db.Games.Find(id);
+            byte[] fileBytes = System.IO.File.ReadAllBytes(@Server.MapPath("/App_Data/" + game.Id + ".zip"));
+            string fileName = game.Name + ".zip";
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Zip, fileName);
+        }
+
         #endregion
 
         #region Employee Side
