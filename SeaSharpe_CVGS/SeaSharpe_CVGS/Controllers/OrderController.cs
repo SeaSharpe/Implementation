@@ -514,7 +514,7 @@ namespace SeaSharpe_CVGS.Controllers
             db.SaveChanges();
 
             //if order is now empty
-            if (originalOrder.OrderItems.Count == itemsRemoved)
+            if (originalNumberOfItems == itemsRemoved)
             {
                 //delete the now empty order
                 db.Orders.Remove(originalOrder);
