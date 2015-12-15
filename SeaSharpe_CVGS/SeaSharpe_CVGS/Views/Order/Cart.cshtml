@@ -97,17 +97,24 @@
             </div>
         }
         <div class="col-md-6">
-            @using (@Html.BeginForm())
+            @if (TempData["hasAddress"] == null)
             {
-                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                        data-key="@System.Configuration.ConfigurationManager.AppSettings.Get("StripeApiPublicKey")"
-                        data-amount="@Model.Sum(m => m.item.SalePrice * 100)"
-                        data-name="ConestogaVideoGameStore"
-                        data-description="Games ($@Model.Sum(m => m.item.SalePrice))"
-                        data-image='@Url.Content("~/Content/themes/base/images/logo.png")'
-                        data-locale="auto"
-                        data-bitcoin="true">
-                </script>
+                @(Html.ActionLink("Add Address", "Edit", "User", null, new { @class = "btn defaultButton cartButtons" }))
+            }
+            else
+            {
+                using (@Html.BeginForm())
+                {
+                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            data-key="@System.Configuration.ConfigurationManager.AppSettings.Get("StripeApiPublicKey")"
+                            data-amount="@Model.Sum(m => m.item.SalePrice * 100)"
+                            data-name="ConestogaVideoGameStore"
+                            data-description="Games ($@Model.Sum(m => m.item.SalePrice))"
+                            data-image='@Url.Content("~/Content/themes/base/images/logo.png")'
+                            data-locale="auto"
+                            data-bitcoin="true">
+                    </script>
+                }
             }
         </div>
         @{

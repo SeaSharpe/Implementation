@@ -302,6 +302,8 @@ namespace SeaSharpe_CVGS.Controllers
             //validate that the member has a cart
             var exists = db.Orders.Where(m => m.Member.Id == member.Id).Where(d => d.OrderPlacementDate == null).Any();
 
+            TempData["hasAddress"] = db.Addresses.Where(a => a.Member.Id == member.Id).FirstOrDefault();
+
             if (!exists)
             {
                 //empty cart
