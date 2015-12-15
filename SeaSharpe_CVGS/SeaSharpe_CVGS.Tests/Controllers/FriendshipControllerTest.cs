@@ -15,6 +15,16 @@ namespace SeaSharpe_CVGS.Tests.Controllers
     {
         ApplicationDbContext db = null;
 
+        public FriendshipControllerTest()
+        {
+            
+        }
+
+        public FriendshipControllerTest(ApplicationDbContext db)
+        {
+            this.db = db;
+        }
+
         [SetUp]
         public void Init()
         {
@@ -28,25 +38,11 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         [TearDown]
         public void Cleanup()
         {
-            db.Database.Delete();
-            db = null;
+            db.Database.Connection.Close();
+            //db.Database.Delete();
+            //db = null;
         }
 
-        [TestCase(1)]
-        public void Edit(int memberIndex)
-        {
-            // Arrange
-            var controller = new UserController();
-            Console.WriteLine(controller.db.Members.Count());
-            Member member = controller.DbContext.Members.First();
-            Console.WriteLine(member.Id);
-            // Act
-            ViewResult result = controller.Edit(member.Id) as ViewResult;
-
-            //var newContext = new ApplicationDbContext();
-
-            Assert.IsNotNull(result);
-        }
 
         [Test]
         public void Index()

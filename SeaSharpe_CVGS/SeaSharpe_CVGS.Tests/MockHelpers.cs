@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace SeaSharpe_CVGS.Tests
 {
-    class MockHelpers
+    public class MockHelpers
     {
 
         /// <summary>
