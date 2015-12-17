@@ -60,7 +60,7 @@ namespace SeaSharpe_CVGS.Controllers
         public ActionResult Index()
         {
             //User is employee, go to game management page
-            if (IsEmployee)
+            if (User != null && IsEmployee)
             {
                 return RedirectToAction("GameManagement");
             }
