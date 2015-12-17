@@ -11,7 +11,7 @@ namespace SeaSharpe_CVGS.Controllers
     {
         public ActionResult Index()
         {
-            IQueryable<Game> listOfGames = db.Games.OrderByDescending(x=>x.Id).Take(20);
+            IQueryable<Game> listOfGames = db.Games.Where(g => g.IsActive).OrderByDescending(x => x.Id).Take(16);
             return View(listOfGames.ToList());
         }
 

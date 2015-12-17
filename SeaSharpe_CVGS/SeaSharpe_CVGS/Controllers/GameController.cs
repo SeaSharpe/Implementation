@@ -8,6 +8,7 @@ using SeaSharpe_CVGS.Models;
 using System.Web.Security;
 using System.Collections.Generic;
 using System;
+using System.IO;
 
 namespace SeaSharpe_CVGS.Controllers
 {
@@ -40,14 +41,14 @@ namespace SeaSharpe_CVGS.Controllers
 
         //List containing esrb ratings
         private List<ESRB> esrbList = new List<ESRB>()
-            {
-                new ESRB("EC","Early Childhood",0),
-                new ESRB("E", "Everyone", 0),
-                new ESRB("E10", "Everyone 10+", 0),
-                new ESRB("T", "Teen", 0),
-                new ESRB("M", "Mature", 17),
-                new ESRB("AO", "Adult Only", 18)
-            };
+        {
+            new ESRB("EC","Early Childhood",0),
+            new ESRB("E", "Everyone", 0),
+            new ESRB("E10", "Everyone 10+", 0),
+            new ESRB("T", "Teen", 0),
+            new ESRB("M", "Mature", 17),
+            new ESRB("AO", "Adult Only", 18)
+        };
         
         #region Multiple Roles
 
@@ -121,7 +122,34 @@ namespace SeaSharpe_CVGS.Controllers
             }
             
             PopulateDropdownData();
-            return View(gameList.ToList());
+            return View(gameList.Where(g => g.IsActive).ToList());
+        }
+
+        /// <summary>
+        /// Returns the searchGames action with the specified platform or category
+        /// </summary>
+        /// <param name="platformStrings">Platform names to search for</param>
+        /// <param name="categoryStrings">Category names to search for</param>
+        /// <returns></returns>
+        public ActionResult SearchBy(string platformString, string categoryString)
+        {
+            List<Game> gameList = new List<Game>();
+
+            //Get the ids for the platform strings
+            if(platformString != null)
+            {
+                gameList= db.Games.Include(g => g.Platform).Where(g=> g.IsActive && platformString.ToLower() == g.Platform.Name.ToLower()).ToList();                
+            }
+
+            //Populate categories
+            if(categoryString != null)
+            {
+                gameList = db.Games.Include(g => g.Categories).Where(g => g.IsActive && g.Categories.Any(c => c.Name == categoryString.ToLower())).ToList();   
+            }
+
+            //Return the search games action with the categories/platforms
+            PopulateDropdownData();
+            return View("SearchGames",gameList);
         }
 
         /// <summary>
@@ -138,7 +166,7 @@ namespace SeaSharpe_CVGS.Controllers
             }
 
             Game game = db.Games.Find(id);
-            if (game == null)
+            if (game == null || !game.IsActive)
             {
                 return HttpNotFound();
             }
@@ -218,6 +246,19 @@ namespace SeaSharpe_CVGS.Controllers
             return View(game);
         }
 
+        /// <summary>
+        /// Downloads the demo for a game, game details page only provides link if the game exists
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public FileResult Download(int id)
+        {
+            Game game = db.Games.Find(id);
+            byte[] fileBytes = System.IO.File.ReadAllBytes(@Server.MapPath("/App_Data/" + game.Id + ".zip"));
+            string fileName = game.Name + ".zip";
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Zip, fileName);
+        }
+
         #endregion
 
         #region Employee Side
@@ -267,21 +308,24 @@ namespace SeaSharpe_CVGS.Controllers
                 
                 //Add game categories if value not null
                 if(Categories != null)
-        {
+                {
                     ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
                     game.Categories = gameCategories;
-                }     
+                }
+
+                //Set game as active
+                game.IsActive = true;
 
                 //Update the model state to reflect manual addition of platforms and categories
                 ModelState.Clear();
                 TryValidateModel(game);
 
-            if (ModelState.IsValid)
-            {
-                db.Games.Add(game);
-                db.SaveChanges();
-                return RedirectToAction("GameManagement");
-            }
+                if (ModelState.IsValid)
+                {
+                    db.Games.Add(game);
+                    db.SaveChanges();
+                    return RedirectToAction("GameManagement");
+                }
             }
 
             //Return message to employee if exception
@@ -347,23 +391,26 @@ namespace SeaSharpe_CVGS.Controllers
                 ICollection<Category> gameCategories = (ICollection<Category>)db.Catagories.Where(c => Categories.Contains(c.Id)).ToList();
                 Game originalGame = db.Games.Find(game.Id);
                 originalGame.Categories.Clear();
+
                 foreach (Category c in gameCategories)
-        {
+                {
                     originalGame.Categories.Add(c);
                 }
+
                 db.SaveChanges();
                 db.Entry(originalGame).State = EntityState.Detached;
 
                 //Update the model to include binded changes
                 ModelState.Clear();
                 TryValidateModel(game);
-            if (ModelState.IsValid)
-            {
-                db.Entry(game).State = EntityState.Modified;
-                db.SaveChanges();
+
+                if (ModelState.IsValid)
+                {
+                    db.Entry(game).State = EntityState.Modified;
+                    db.SaveChanges();
                     TempData["message"] = "Game with ID: " + game.Id + " updated.";
-                return RedirectToAction("GameManagement");
-            }
+                    return RedirectToAction("GameManagement");
+                }
             }
 
             catch (Exception e)
@@ -376,45 +423,35 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
-        /// Employee -side post back for delete game.  **no delete view, delete button on list of games view***
+        /// Employee makes the game inactive or active 
         /// ****No view required****
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>list of games view</returns>
         [Authorize(Roles = "Employee")]
-        public ActionResult Delete(int id)
+        public ActionResult Activate(int id)
         {
             Game game = db.Games.Find(id);
             try
             {
-                //Remove the gameCategories associated with the game being deleted
-                game.Categories.Clear();
+                //Change the activity of the game
+                game.IsActive = !game.IsActive;
+
+                TryValidateModel(game);
 
                 //Remove game and save changes
-            db.Games.Remove(game);
-            db.SaveChanges();
-                TempData["message"] = game.Name + " and it's dependencies have been deleted.";
+                db.Entry(game).State = EntityState.Modified;
+                db.SaveChanges();
+                TempData["message"] = game.Name + " has had it's activity state changed.";
             }
 
             catch (Exception e)
             {
-                TempData["message"] = "Error deleting game: " + e.GetBaseException().Message;
+                TempData["message"] = "Error changing activity state of game: " + e.GetBaseException().Message;
             }
             
             return RedirectToAction("GameManagement");
-        }
-        
-        /// <summary>
-        /// Member side - Download a specific game
-        /// ****No view required****
-        /// </summary>
-        /// <param name="id">game id</param>
-        /// <returns>game details view</returns>
-        [Authorize(Roles = "Member")]
-        public ActionResult Download(int? id)
-        {
-            return RedirectToAction("Details");
-        }
+        }       
         
         #endregion
 

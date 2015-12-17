@@ -49,21 +49,21 @@
 | Member search game                                                          | Yes :white_check_mark:    |                                    |               |          |
 | Member see a game detail                                                    | Yes :white_check_mark:    |                                    |               |          |
 | Member change password                                                      | Yes :white_check_mark:    |                                    |               |          |
-| Member forget password and resets                                           | No :red_circle:           |                                    | John          | Friday   |
+| Member forget password and resets                                           | Yes :white_check_mark:    | Implemented in [PR #69](https://github.com/SeaSharpe/Implementation/pull/69) | John          | Friday   |
 | Display overall rating for each game                                        | Yes :white_check_mark:    |                                    |               |          |
 | Member profile contains display name, actual name, gender, birthdate, email | Yes :white_check_mark:    |                                    |               |          |
 | Member can select promotional email                                         | Yes :white_check_mark:    |                                    |               |          |
 | Member indicates favourite platforms and game categories                    | No :red_circle:           |                                    | John          | Saturday |
 | Member enter ship address                                                   | Yes :white_check_mark:    |                                    |               |          |
 | Member modify ship address                                                  | Yes :white_check_mark:    |                                    |               |          |
-| Member delete ship address                                                  | No :red_circle:           |                                    | John          | Friday   |
+| Member delete ship address                                                  | Yes :white_check_mark:    | Implemented in [PR #70](https://github.com/SeaSharpe/Implementation/pull/70) | John          | Friday   |
 | Member register credit cards                                                | Yes :white_check_mark:    | Only one card saved                |               |          |
 | Member fill wishlist                                                        | Yes :white_check_mark:    |                                    |               |          |
 | Friends and relatives see wishlist                                          | Yes :white_check_mark:    |                                    |               |          |
 | Member rate games                                                           | Yes :white_check_mark:    |                                    |               |          |
 | Member review games                                                         | Yes :white_check_mark:    |                                    |               |          |
-| Member download shareware game                                              | No :red_circle:           |                                    | John, Peter   | Saturday |
-| Member register event                                                       | No :large_orange_diamond: | Implemented in [PR #61](https://github.com/SeaSharpe/Implementation/pull/61) | Rob           | Friday   |
+| Member download shareware game                                              | Yes :white_check_mark:    | Implemented in [PR #73](https://github.com/SeaSharpe/Implementation/pull/73) | John, Peter   | Saturday |
+| Member register event                                                       | Yes :white_check_mark:    | Implemented in [PR #61](https://github.com/SeaSharpe/Implementation/pull/61) | Rob           | Friday   |
 | Add items to Cart                                                           | Yes :white_check_mark:    |                                    |               |          |
 | Remove items to Cart                                                        | Yes :white_check_mark:    |                                    |               |          |
 | Checkout                                                                    | Yes :white_check_mark:    |                                    |               |          |
