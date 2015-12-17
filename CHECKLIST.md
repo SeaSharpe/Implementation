@@ -62,7 +62,7 @@
 | Friends and relatives see wishlist                                          | Yes :white_check_mark:    |                                    |               |          |
 | Member rate games                                                           | Yes :white_check_mark:    |                                    |               |          |
 | Member review games                                                         | Yes :white_check_mark:    |                                    |               |          |
-| Member download shareware game                                              | No :red_circle:           |                                    | John, Peter   | Saturday |
+| Member download shareware game                                              | Yes :white_check_mark:    | Implemented in [PR #73](https://github.com/SeaSharpe/Implementation/pull/73) | John, Peter   | Saturday |
 | Member register event                                                       | Yes :white_check_mark:    | Implemented in [PR #61](https://github.com/SeaSharpe/Implementation/pull/61) | Rob           | Friday   |
 | Add items to Cart                                                           | Yes :white_check_mark:    |                                    |               |          |
 | Remove items to Cart                                                        | Yes :white_check_mark:    |                                    |               |          |
