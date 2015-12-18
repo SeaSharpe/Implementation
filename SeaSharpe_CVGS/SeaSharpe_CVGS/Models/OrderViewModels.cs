@@ -46,19 +46,15 @@ namespace SeaSharpe_CVGS.Models
         { 
         
         }
-        public CartViewModel(OrderItem item, bool download, bool hardCopy)
+        public CartViewModel(OrderItem item, bool remove)
         {
             this.item = item;
-            this.download = download;
-            this.hardCopy = hardCopy;
+            this.remove = remove;
         }
 
         public OrderItem item { get; set; }
 
-        [Display(Name = "Download")]
-        public bool download { get; set; }
-
-        [Display(Name = "Hard Copy")]
-        public bool hardCopy { get; set; }
+        [Display(Name = "Remove")]
+        public bool remove { get; set; }
     }
 }

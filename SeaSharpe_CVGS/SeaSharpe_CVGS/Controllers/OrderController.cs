@@ -319,7 +319,7 @@ namespace SeaSharpe_CVGS.Controllers
 
             foreach (var orderItem in orderItems)
             {
-                CartViewModel cvm = new CartViewModel(orderItem, false, false);
+                CartViewModel cvm = new CartViewModel(orderItem, false);
                 cartItems.Add(cvm);
             }
 
@@ -475,10 +475,7 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 Delete(cart);
             }
-            else if (submit == "Checkout Now")
-            {
-                Checkout(cart);
-            }
+            
             return RedirectToAction("Cart");
         }
 
@@ -500,7 +497,7 @@ namespace SeaSharpe_CVGS.Controllers
             foreach (var cvm in cart)
             {
                 //remove selected items
-                if (cvm.download || cvm.hardCopy)
+                if (cvm.remove)
                 {
                     itemsRemoved++;
                     OrderItem orderItem = db.OrderItems.Where(g => g.GameId == cvm.item.GameId && g.OrderId == cvm.item.OrderId).First();
@@ -512,108 +509,9 @@ namespace SeaSharpe_CVGS.Controllers
             db.SaveChanges();
 
             //if order is now empty
-            if (originalOrder.OrderItems.Count == itemsRemoved)
+            if (originalNumberOfItems == itemsRemoved)
             {
                 //delete the now empty order
-                db.Orders.Remove(originalOrder);
-                db.SaveChanges();
-            }
-        }
-
-        /// <summary>
-        /// Checks the checkboxes (represented in the CartViewModel object as download and hardcopy booleans,
-        /// creates a new order object for downloads and a new order object for hardcopies (Since their order
-        /// behaviour is completely different from eachother)
-        /// it then creates new order items and assigns them to the order which matches their type (either 
-        ///download or hardcopy).
-        ///It then deletes the cart if it has no remaining games in it.
-        /// </summary>
-        /// <param name="cart">CartViewModel object</param>
-        public void Checkout(CartViewModel[] cart)
-        {
-            //find if there are any downloads or hardcopies
-            bool hasDownloads = cart.Where(a => a.download).Any();
-            bool hasHardcopies = cart.Where(a => a.hardCopy).Any();
-
-            Order originalOrder = db.Orders.Find(cart.First().item.OrderId);
-
-            int numberOfPurchasedItems = 0;
-
-            //create new order for checked items
-            Order downloads = new Order();
-            Order hardcopies = new Order();
-
-            int numberOfItems = cart.Count();
-
-            if (hasDownloads)
-            {
-                downloads.BillingAddress = originalOrder.BillingAddress;
-                downloads.Member = originalOrder.Member;
-                downloads.ShippingAddress = originalOrder.ShippingAddress;
-
-                //downloads "ship" immediately
-                downloads.OrderPlacementDate = DateTime.Now;
-                downloads.ShipDate = DateTime.Now;
-
-                //add to the db to generate valid id
-                db.Orders.Add(downloads);
-                db.SaveChanges();
-            }
-
-            if (hasHardcopies)
-            {
-                hardcopies.BillingAddress = originalOrder.BillingAddress;
-                hardcopies.Member = originalOrder.Member;
-                hardcopies.ShippingAddress = originalOrder.ShippingAddress;
-                hardcopies.OrderPlacementDate = DateTime.Now;
-
-                //add to the db to generate valid id
-                db.Orders.Add(hardcopies);
-                db.SaveChanges();
-            }
-
-            foreach (var cvm in cart)
-            {
-                if (cvm.download)
-                {
-                    numberOfPurchasedItems++;
-                    //add new order id to orderitem, based on do
-                    cvm.item.Order = downloads;
-                    OrderItem originalDownload = db.OrderItems.Where(oi => oi.OrderId == originalOrder.Id && oi.GameId == cvm.item.GameId).First();
-                    OrderItem newDownload = new OrderItem();
-                    newDownload.Game = originalDownload.Game;
-                    newDownload.GameId = originalDownload.GameId;
-                    newDownload.SalePrice = originalDownload.SalePrice;
-                    newDownload.Order = downloads;
-                    newDownload.OrderId = downloads.Id;
-                    db.OrderItems.Add(newDownload);
-                    db.OrderItems.Remove(originalDownload);
-                    db.SaveChanges();
-                }
-                else if (cvm.hardCopy)
-                {
-                    numberOfPurchasedItems++;
-                    cvm.item.Order = hardcopies;
-                    OrderItem originalHardcopy = db.OrderItems.Where(oi => oi.OrderId == originalOrder.Id && oi.GameId == cvm.item.GameId).First();
-                    OrderItem newHardcopy = new OrderItem();
-                    newHardcopy.Game = originalHardcopy.Game;
-                    newHardcopy.GameId = originalHardcopy.GameId;
-                    newHardcopy.SalePrice = originalHardcopy.SalePrice;
-                    newHardcopy.Order = hardcopies;
-                    newHardcopy.OrderId = hardcopies.Id;
-                    db.OrderItems.Remove(originalHardcopy);
-                    db.OrderItems.Add(newHardcopy);
-                    db.SaveChanges();
-                }
-            }
-
-            db.SaveChanges();
-
-
-            //delete original cart if no orderItems remain
-            if (numberOfPurchasedItems == numberOfItems)
-            {
-                //delete the original order
                 db.Orders.Remove(originalOrder);
                 db.SaveChanges();
             }

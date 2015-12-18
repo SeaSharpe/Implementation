@@ -18,10 +18,7 @@
                 <table class="table">
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.First().download)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.First().hardCopy)
+                            @Html.DisplayNameFor(model => model.First().remove)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.First().item.Game.Name)
@@ -41,26 +38,10 @@
                     @for (int i = 0; i < Model.Count(); i++)
                     {
                         <tr>
-                            @if (Model[i].item.Game.SuggestedRetailPrice > 0.01m)
-                            {
-                                <td>
-                                    N/A
-                                    @Html.HiddenFor(model => model[i].download)
-                                </td>
-                                <td>
-                                    @Html.EditorFor(model => model[i].hardCopy)
-                                </td>
-                            }
-                            else
-                            {
-                                <td>
-                                    @Html.EditorFor(model => model[i].download)
-                                </td>
-                                <td>
-                                    N/A
-                                    @Html.HiddenFor(model => model[i].hardCopy)
-                                </td>
-                            }
+                            <td>
+                                @Html.EditorFor(model => model[i].remove)
+                                @Html.HiddenFor(model => model[i].remove)
+                            </td>
                             <td>
                                 @Html.DisplayFor(model => model[i].item.Game.Name)
                                 @Html.HiddenFor(model => model[i].item.OrderId)
