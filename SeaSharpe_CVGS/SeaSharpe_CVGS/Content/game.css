@@ -57,3 +57,7 @@ a:hover {
 #btnViewReview {
     margin-left: 45px;
 }
+
+textarea {
+    border-radius:10px;
+}
