@@ -164,7 +164,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// Deleting a frienship
         /// </summary>
         /// <param name="id"></param>
-        [TestCase(30000015)]
+        [TestCase(30000019)]
         public void Delete(int id)
         {
             var controller = new FriendshipController();
