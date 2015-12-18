@@ -30,8 +30,8 @@ namespace SeaSharpe_CVGS.Controllers
             
             else
             {
-                //return SearchGames view
-                return RedirectToAction("ReviewsRating");
+                //Not found
+                return HttpNotFound();
             }
             
         }   
@@ -42,9 +42,18 @@ namespace SeaSharpe_CVGS.Controllers
         /// <returns>ReviewsRating view</returns>
         //Available for all users
         public ActionResult ReviewsRating(int id)
-        {            
+        {
+            Game game = db.Games.Find(id);
+
+            if (game == null || !game.IsActive)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.gameName = game.Name;
+
             //Get list of all reviews/ratings for selected game
-            IQueryable<Review> gameReviews = db.Reviews.Where(r => r.Game_Id == id);
+            IQueryable<Review> gameReviews = db.Reviews.Where(r => r.Game_Id == id && r.Rating != null);
             if(gameReviews.Count() > 0)
             {
                 //Calculate average based on all reviews and ratings

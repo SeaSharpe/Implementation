@@ -17,7 +17,7 @@ namespace SeaSharpe_CVGS.Controllers
         ApplicationDbContext _db;
         ApplicationSignInManager _signInManager;
         ApplicationUserManager _userManager;
-
+        
         /// <summary>
         /// For backwards compatibility
         /// </summary>
@@ -41,7 +41,7 @@ namespace SeaSharpe_CVGS.Controllers
                 return _db ?? (_db = new ApplicationDbContext());
             }
 
-            protected set
+            set
             {
                 _db = value;
             }

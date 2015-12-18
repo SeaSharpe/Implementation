@@ -8,7 +8,7 @@ namespace SeaSharpe_CVGS.Migrations
     using System.Data.Entity.Validation;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
+    public sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
     {
         enum PlatformEnum { XBOX, PC, PS4, Wii, Mobile };
 
