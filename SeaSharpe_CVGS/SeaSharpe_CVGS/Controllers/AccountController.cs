@@ -16,7 +16,7 @@ using System.Net;
 namespace SeaSharpe_CVGS.Controllers
 {
     /// <summary>
-    /// This controller handles user registration and logins
+    /// This controller handles user registration and logins (Largely Microsoft's code)
     /// </summary>
     [Authorize]
     public class AccountController : Controller

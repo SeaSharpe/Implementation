@@ -10,6 +10,9 @@ using SeaSharpe_CVGS.Models;
 
 namespace SeaSharpe_CVGS.Controllers
 {
+    /// <summary>
+    /// Controller class for handling addresses
+    /// </summary>
     public class AddressController : Controller
     {
         /// <summary>

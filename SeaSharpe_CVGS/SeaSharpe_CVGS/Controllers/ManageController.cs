@@ -10,6 +10,9 @@ using SeaSharpe_CVGS.Models;
 
 namespace SeaSharpe_CVGS.Controllers
 {
+    /// <summary>
+    /// Controller class for User Management (Microsoft's code)
+    /// </summary>
     [Authorize]
     public class ManageController : Controller
     {
