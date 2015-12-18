@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<SeaSharpe_CVGS.Models.OrderHistoryViewModel>
 
 @{
-    ViewBag.Title = "OrderHistory";
+    ViewBag.Title = "Order History";
 }
 <head>
     <title>@ViewBag.Title</title>
@@ -39,7 +39,7 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.gameName)
+                        @Html.ActionLink(item.gameName, "Details", "Game", new { id = item.id},null)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.platform)

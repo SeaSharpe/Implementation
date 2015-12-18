@@ -13,13 +13,14 @@ namespace SeaSharpe_CVGS.Models
         {
 
         }
-        public OrderHistoryViewModel(DateTime opd, DateTime sd, string gn, string pn, decimal pp)
+        public OrderHistoryViewModel(DateTime opd, DateTime sd, string gn, string pn, decimal pp, int id)
         {
             this.orderPlacementDate = opd;
             this.shipDate = sd;
             this.gameName = gn;
             this.platform = pn;
             this.pricePaid = pp;
+            this.id = id;
         }
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyy}")]
         [Display(Name = "Order Date")]
@@ -38,6 +39,8 @@ namespace SeaSharpe_CVGS.Models
         [Display(Name = "Price")]
         [DisplayFormat(DataFormatString = "{0:c}")]
         public decimal pricePaid { get; set; }
+
+        public int id  { get; set; }
     }
 
     public class CartViewModel

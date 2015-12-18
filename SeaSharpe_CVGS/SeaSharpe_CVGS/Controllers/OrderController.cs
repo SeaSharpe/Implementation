@@ -252,6 +252,7 @@ namespace SeaSharpe_CVGS.Controllers
             string gameName;
             string platformName;
             decimal pricePaid;
+            int gameId;
 
             List<OrderHistoryViewModel> userOrderHistory = new List<OrderHistoryViewModel>();
             OrderHistoryViewModel ohvm;
@@ -276,7 +277,8 @@ namespace SeaSharpe_CVGS.Controllers
                     gameName = db.Games.Where(g => g.Id == orderItem.GameId).Select(ga => ga.Name).First();
                     platformName = db.Games.Include(p => p.Platform).Where(g => g.Id == orderItem.GameId).Select(ga => ga.Platform.Name).First().ToString();
                     pricePaid = orderItem.SalePrice;
-                    ohvm = new OrderHistoryViewModel(orderDate, shipDate, gameName, platformName, pricePaid);
+                    gameId = db.Games.Where(g => g.Id == orderItem.GameId).Select(ga => ga.Id).First();
+                    ohvm = new OrderHistoryViewModel(orderDate, shipDate, gameName, platformName, pricePaid,gameId);
                     userOrderHistory.Add(ohvm);
                 }
             }
