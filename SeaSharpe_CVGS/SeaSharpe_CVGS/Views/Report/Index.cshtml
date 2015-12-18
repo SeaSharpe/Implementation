@@ -10,10 +10,26 @@
         <div class="col-md-8 col-md-offset-2">
             <table class="table largeFont">
                 <tr><th>Report Name</th><th>View Report</th><th>Print Report</th></tr>
-                <tr><td>List Of Games</td><td>@Html.ActionLink("View", "ListGamesReport", new { print = false }, new { @class = "btn greenButton" })</td><td><input type="button" class="btn defaultButton" value="Print" /></td></tr>
-                <tr><td>List Of Members</td><td>@Html.ActionLink("View", "ListMembersReport", new { print = false }, new { @class = "btn greenButton" })</td><td><input type="button" class="btn defaultButton" value="Print" /></td></tr>
-                <tr><td>Wishlist</td><td>@Html.ActionLink("View", "WishListsReport", new { print = false }, new { @class = "btn greenButton" })</td><td><input type="button" class="btn defaultButton" value="Print" /></td></tr>
-                <tr><td>Sales</td><td>@Html.ActionLink("View", "SalesReport", new { print = false }, new { @class = "btn greenButton" })</td><td><input type="button" class="btn defaultButton" value="Print" /></td></tr>
+                <tr>
+                    <td>List Of Games</td>
+                    <td>@Html.ActionLink("View", "ListGamesReport", new { print = false }, new { @class = "btn greenButton" })</td>
+                    <td>@Html.ActionLink("Print", "ListGamesReport", new { print = true }, new { @class = "btn defaultButton" })</td>
+                </tr>
+                <tr>
+                    <td>List Of Members</td>
+                    <td>@Html.ActionLink("View", "ListMembersReport", new { print = false }, new { @class = "btn greenButton" })</td>
+                    <td>@Html.ActionLink("Print", "ListMembersReport", new { print = true }, new { @class = "btn defaultButton" })</td>
+                </tr>
+                <tr>
+                    <td>Wishlist</td>
+                    <td>@Html.ActionLink("View", "WishListsReport", new { print = false }, new { @class = "btn greenButton" })</td>
+                    <td>@Html.ActionLink("Print", "WishListsReport", new { print = true }, new { @class = "btn defaultButton" })</td>
+                </tr>
+                <tr>
+                    <td>Sales</td>
+                    <td>@Html.ActionLink("View", "SalesReport", new { print = false }, new { @class = "btn greenButton" })</td>
+                    <td>@Html.ActionLink("Print", "SalesReport", new { print = true }, new { @class = "btn defaultButton" })</td>
+                </tr>
             </table>
         </div>
     </div>

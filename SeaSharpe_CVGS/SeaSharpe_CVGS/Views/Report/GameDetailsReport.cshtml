@@ -12,7 +12,7 @@
             </div>
                 <div class="col-md-8">
 
-                    <dl class="dl-horizontal">
+                    <dl class="dl-horizontal" id="printDiv">
                         <!-- Game id -->
                         <dt>
                             @Html.DisplayNameFor(model => model.Id)
@@ -73,5 +73,16 @@
         </div>
     </div>
 </div>
+
+@if ((bool)ViewData["print"])
+{
+    <script>
+        var TableToPrint = document.getElementById('printDiv');
+        newWin = window.open("");
+        newWin.document.write(TableToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    </script>
+}
     
 
