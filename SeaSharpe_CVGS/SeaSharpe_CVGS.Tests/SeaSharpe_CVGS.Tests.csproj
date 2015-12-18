@@ -121,6 +121,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\FriendShipControllerTests.cs" />
     <Compile Include="Controllers\GameControllerTest.cs" />
     <Compile Include="Controllers\ReviewControllerTest.cs" />
     <Compile Include="Controllers\UserControllerTests.cs" />
