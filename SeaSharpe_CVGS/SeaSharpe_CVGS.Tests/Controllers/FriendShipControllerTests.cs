@@ -6,7 +6,6 @@
  */
 
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
@@ -20,21 +19,6 @@ namespace SeaSharpe_CVGS.Controllers
 {
     public class FriendShipControllerTests 
     {
-        public FriendShipControllerTests()
-        {
-            //Index("");
-            //AddFriend("MICHAELDOORLEY145275");
-            //THOMASVALASCO422739 //BETHMILLARD721478 //ANNEMANNIX757533 //THOMASWILLIAMS156589
-            //BERNARDXAINTONG4274 //SARWATWINSMAN553131
-
-            //AddFamily("KAYCHERNY183636");
-            //Details(30000015);
-            //Delete(30000015);
-            //AddToWishList(7000001);
-            //RemoveFromWishlist(7000001);
-            //MoveToCart(7000001);
-        }
-
         TransactionScope _trans;
         ApplicationDbContext db = null;
 
@@ -61,7 +45,6 @@ namespace SeaSharpe_CVGS.Controllers
         [TearDown]
         public void Cleanup()
         {
-            //db.Database.Delete();
             _trans.Dispose();
         }
 
@@ -73,10 +56,8 @@ namespace SeaSharpe_CVGS.Controllers
         public void Index(string searchName)
         {
             var controller = new FriendshipController();
-            Debug.Print(controller.db.Members.Count() + "");
             Member member = controller.DbContext.Members.First();
 
-            Debug.Print(member.Id + " . " + member.User.UserName);
             // Act
             controller.ControllerContext = GetControllerContext(db, member, "Member");
             ViewResult result = controller.Index(searchName) as ViewResult;
@@ -92,7 +73,6 @@ namespace SeaSharpe_CVGS.Controllers
         public void AddFriend(string userName)
         {
             var controller = new FriendshipController();
-            Debug.Print(controller.db.Members.Count() + "");
             Member member = controller.DbContext.Members.First();
 
             controller.ControllerContext = GetControllerContext(db, member, "Member");
@@ -100,14 +80,11 @@ namespace SeaSharpe_CVGS.Controllers
             var initCount = controller.DbContext.Friendships.Where(a => a.Friender.User.Id == member.User.Id
                 && !a.IsFamilyMember).ToList().Count;
 
-            Debug.Print(initCount + " before");
-
             // Act
             ViewResult result = controller.AddFriend(userName) as ViewResult;
 
             var finCount = controller.DbContext.Friendships.Where(a => a.Friender.User.Id == member.User.Id
                 && !a.IsFamilyMember).ToList().Count;
-            Debug.Print(finCount + " after");
 
             // Assert
             Assert.AreEqual(initCount + 1, finCount);
@@ -128,14 +105,11 @@ namespace SeaSharpe_CVGS.Controllers
             var initCount = controller.DbContext.Friendships.Where(a => a.Friender.User.Id == member.User.Id
                 && a.IsFamilyMember).ToList().Count;
 
-            Debug.Print(initCount + " before");
-
             // Act
             ViewResult result = controller.AddFamily(userName) as ViewResult;
 
             var finCount = controller.DbContext.Friendships.Where(a => a.Friender.User.Id == member.User.Id
                 && a.IsFamilyMember).ToList().Count;
-            Debug.Print(finCount + " after");
 
             // Assert
             Assert.AreEqual(initCount + 1, finCount);
@@ -174,17 +148,10 @@ namespace SeaSharpe_CVGS.Controllers
             controller.AddFamily("SARWATWINSMAN553131");
             var initCount = controller.DbContext.Friendships.Where(a => a.Friender.User.Id == member.User.Id).ToList().Count;
 
-            var before = controller.DbContext.Friendships.Where(a => a.Friender.User.Id == member.User.Id).ToList();
-            
-            Debug.Print(initCount + " before");
-
-            var after = controller.DbContext.Friendships.Where(a => a.Friender.User.Id == member.User.Id).ToList();
-
             // Act
             ViewResult result = controller.Delete(id) as ViewResult;
 
             var finCount = controller.DbContext.Friendships.Where(a => a.Friender.User.Id == member.User.Id).ToList().Count;
-            Debug.Print(finCount + " after");
 
             // Assert
             Assert.AreEqual(initCount - 1, finCount);
@@ -223,13 +190,11 @@ namespace SeaSharpe_CVGS.Controllers
             //Adding it first 
             controller.AddToWishList(id);
             var initCount = controller.DbContext.WishLists.Where(w => w.MemberId == member.Id && w.GameId == id).ToList().Count;
-            Debug.Print(initCount + " before");
             
             // Act
             ViewResult result = controller.RemoveFromWishlist(id, member.Id) as ViewResult;
 
             var finCount = controller.DbContext.WishLists.Where(w => w.MemberId == member.Id && w.GameId == id).ToList().Count;
-            Debug.Print(finCount + " after");
 
             // Assert
             Assert.AreEqual(initCount - 1, finCount);
@@ -249,13 +214,9 @@ namespace SeaSharpe_CVGS.Controllers
 
             var initCount = controller.DbContext.WishLists.Where(w => w.MemberId == member.Id && w.GameId == id).ToList().Count;
 
-            Debug.Print(initCount + " before");
-
             // Act
             ViewResult result = controller.AddToWishList(id) as ViewResult;
-
             var finCount = controller.DbContext.WishLists.Where(w => w.MemberId == member.Id && w.GameId == id).ToList().Count;
-            Debug.Print(finCount + " after");
 
             // Assert
             Assert.AreEqual(initCount + 1, finCount);
