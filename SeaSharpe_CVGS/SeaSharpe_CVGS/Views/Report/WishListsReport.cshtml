@@ -7,7 +7,7 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="col-md-8 col-md-offset-2 largeFont">
-            <table class="table">
+            <table class="table" id="printTable">
                 <tr>
                     <th colspan="2">Summary</th>
                 </tr>
@@ -34,4 +34,15 @@
         </div>
     </div>
 </div>
+
+@if ((bool)ViewData["print"])
+{
+    <script>
+        var TableToPrint = document.getElementById('printTable');
+        newWin = window.open("");
+        newWin.document.write(TableToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    </script>
+}
 

@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="col-md-10 col-md-offset-1">
-            <table class="table">
+            <table class="table" id="printTable">
                 <tr>
                     <th>
                         @Html.DisplayNameFor(model => model.Id)
@@ -44,7 +44,7 @@
                             @Html.ActionLink("View", "MemberDetailsReport", new { id = item.Id }, new { @class = "btn greenButton" })
                         </td>
                         <td>
-                            <input type="button" class="btn defaultButton" value="Print" />
+                            @Html.ActionLink("Print", "MemberDetailsReport", new { id = item.Id, print = true }, new { @class = "btn defaultButton" })
                         </td>
                     </tr>
                 }
@@ -59,3 +59,14 @@
         </div>
     </div>
 </div>
+
+@if ((bool)ViewData["print"])
+{
+    <script>
+        var TableToPrint = document.getElementById('printTable');
+        newWin = window.open("");
+        newWin.document.write(TableToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    </script>
+}

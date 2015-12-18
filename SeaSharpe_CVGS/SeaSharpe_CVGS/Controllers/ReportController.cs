@@ -29,8 +29,9 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <returns>Game Details view</returns>
         [Authorize(Roles = "Employee")]
-        public ActionResult GameDetailsReport(int id)
+        public ActionResult GameDetailsReport(int id, bool print = false)
         {
+            ViewData["print"] = print;
             Game game = db.Games.Find(id);
             return View(game);
         }
@@ -40,9 +41,10 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <returns>List Games view</returns>
         [Authorize(Roles = "Employee")]
-        public ActionResult ListGamesReport()
+        public ActionResult ListGamesReport(bool print=false)
         {
-            return View(db.Games.ToList());
+            ViewData["print"] = print;
+            return View(db.Games.OrderBy(g => g.Name).ToList());
         }
 
         /// <summary>
@@ -50,9 +52,10 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <returns>List Members view</returns>
         [Authorize(Roles = "Employee")]
-        public ActionResult ListMembersReport()
+        public ActionResult ListMembersReport(bool print=false)
         {
-            return View(db.Members.ToList());
+            ViewData["print"] = print;
+            return View(db.Members.OrderBy(m => m.User.UserName).ToList());
         }
 
         /// <summary>
@@ -61,8 +64,9 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <returns>Member Details view</returns>
         [Authorize(Roles = "Employee")]
-        public ActionResult MemberDetailsReport(int id)
+        public ActionResult MemberDetailsReport(int id, bool print = false)
         {
+            ViewData["print"] = print;
             Member member = db.Members.Find(id);
             return View(member);
         }
@@ -72,7 +76,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <returns>Wish Lists view</returns>
         [Authorize(Roles = "Employee")]
-        public ActionResult WishListsReport()
+        public ActionResult WishListsReport(bool print = false)
         {
             // Get the number of wishlists that exist
             int numberOfWishlists = 0;
@@ -90,6 +94,8 @@ namespace SeaSharpe_CVGS.Controllers
             double avgNumOfItemsPerMember = ((double)itemsInAWishlist / (double)numberOfPlayersWithWL) * 100;
             ViewBag.avgNumOfItemsPerMember = itemsInAWishlist;
 
+            ViewData["print"] = print;
+
             return View();
         }
 
@@ -98,7 +104,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <returns>Sales Report view</returns>
         [Authorize(Roles = "Employee")]
-        public ActionResult SalesReport()
+        public ActionResult SalesReport(bool print = false)
         {
             // Get the number of sales orders made
             int numberOfSales = 0;
@@ -124,6 +130,7 @@ namespace SeaSharpe_CVGS.Controllers
             ViewBag.numberOfMembers = numberOfMembers; // this is only for debugging
 
             // % of sales from Action Games
+            ViewData["print"] = print;
             
             return View();
         }
