@@ -54,7 +54,7 @@ input, textarea {
 }
 
 .reviewReview {
-    width: 230px;
+    width: 230px !important;
     max-width:230px;
 }
 

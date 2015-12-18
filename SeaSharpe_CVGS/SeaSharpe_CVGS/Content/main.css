@@ -241,6 +241,7 @@ select[multiple] option:hover
         opacity:0.85;
     }
 
-.noPadding {
-    padding: 0;
+.noSidePadding {
+    padding-left: 0;
+    padding-right: 0;
 }

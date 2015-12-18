@@ -1,40 +1,39 @@
 ﻿@model SeaSharpe_CVGS.Models.Review
-
+<link rel="stylesheet" href="~/Content/review.css" type="text/css">
 <div class="form-horizontal">
     <div class="row">
         <div id="selectedReview" class="reviewBorder col-lg-11">
-            <div class="">
-                <!-- Subject Label -->
-                <b class="col-md-3 noPadding">
-                    @Html.DisplayNameFor(model => model.Subject)
-                </b>
+            <br/>
+            <!-- Subject Label -->
+            <b class="col-md-3 noSidePadding">
+                @Html.DisplayNameFor(model => model.Subject)
+            </b>
 
-                <!-- Subject text-->
-                <p class="col-md-7 noPadding">
-                    @Html.TextBoxFor(model => model.Subject, new { @class = "reviewReview", disabled = "disabled", @readonly = "readonly" })
-                </p>
+            <!-- Subject text-->
+            <span class="col-md-7 noSidePadding">
+                @Html.TextBoxFor(model => model.Subject, new { @class = "reviewReview", disabled = "disabled", @readonly = "readonly" })
+            </span>
 
-                <!-- Body Label -->
-                <b class="col-md-3 noPadding">
-                    @Html.DisplayNameFor(model => model.Body)
-                </b>
+            <!-- Body Label -->
+            <b class="col-md-3 noSidePadding">
+                @Html.DisplayNameFor(model => model.Body)
+            </b>
 
-                <!-- Body Text -->
-                <p class="col-md-7 noPadding">
-                    @Html.EditorFor(model => model.Body, new { htmlAttributes = new { @class = "reviewReview", disabled = "disabled", @readonly = "readonly"} })
-                </p>
+            <!-- Body Text -->
+            <span class="col-md-7 noSidePadding">
+                @Html.EditorFor(model => model.Body, new { htmlAttributes = new { @class = "reviewReview", disabled = "disabled", @readonly = "readonly" } })
+            </span>
 
-                <!-- Rating Label-->
-                <b class="col-md-3 noPadding">
-                    @Html.DisplayNameFor(model => model.Rating)
-                </b>
+            <!-- Rating Label-->
+            <b class="col-md-3 noSidePadding">
+                @Html.DisplayNameFor(model => model.Rating)
+            </b>
 
-                <!-- Rating -->
-                <p class="col-md-12">
-                    <input value="@Model.Rating" type="number" id="Rating" name="Rating" class="rating reviewReview" data-show-clear="false" data-readonly="true" data-show-caption="false" data-size="xs" />
-                    <script type="text/javascript">$("#Rating").rating()</script><br />
-                </p>
-            </div>
+            <!-- Rating -->
+            <span class="col-md-12">
+                <input value="@Model.Rating" type="number" id="Rating" name="Rating" class="rating reviewReview" data-show-clear="false" data-readonly="true" data-show-caption="false" data-size="xs" />
+                <script type="text/javascript">$("#Rating").rating()</script><br />
+            </span>
         </div>
     </div>
 </div>
