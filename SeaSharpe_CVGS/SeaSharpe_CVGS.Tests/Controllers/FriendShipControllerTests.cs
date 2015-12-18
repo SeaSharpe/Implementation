@@ -1,5 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+ * File Name: FriendshipControllerTests.cs
+ *  
+ * Revision History:
+ *      17-Dec-2015: Manuel Lopez. Wrote code
+ */
+
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
@@ -8,7 +14,6 @@ using System.Web.Mvc;
 using SeaSharpe_CVGS.Models;
 using NUnit.Framework;
 using Moq;
-
 
 namespace SeaSharpe_CVGS.Controllers
 {
@@ -47,7 +52,6 @@ namespace SeaSharpe_CVGS.Controllers
             {
                 Console.WriteLine("DB Already seeded");
             }
-
         }
 
         [TearDown]
@@ -56,6 +60,10 @@ namespace SeaSharpe_CVGS.Controllers
             //db.Database.Delete();
         }
 
+        /// <summary>
+        /// Test case of searc a name
+        /// </summary>
+        /// <param name="searchName"></param>
         [TestCase("")]
         public void Index(string searchName)
         {
@@ -71,6 +79,10 @@ namespace SeaSharpe_CVGS.Controllers
             Assert.IsNotNull(result);
         }
 
+        /// <summary>
+        /// Test case of add a friend
+        /// </summary>
+        /// <param name="userName"></param>
         [TestCase("MICHAELDOORLEY145275")]
         public void AddFriend(string userName)
         {
@@ -96,7 +108,10 @@ namespace SeaSharpe_CVGS.Controllers
             Assert.AreEqual(initCount + 1, finCount);
         }
 
-
+        /// <summary>
+        /// Test case of adding a family
+        /// </summary>
+        /// <param name="userName"></param>
         [TestCase("KAYCHERNY183636")]
         public void AddFamily(string userName)
         {
@@ -121,7 +136,10 @@ namespace SeaSharpe_CVGS.Controllers
             Assert.AreEqual(initCount + 1, finCount);
         }
 
-
+        /// <summary>
+        /// Testcase to get the details of a friend 
+        /// </summary>
+        /// <param name="id"></param>
         [TestCase(30000015)]
         public void Details(int id)
         {
@@ -137,7 +155,10 @@ namespace SeaSharpe_CVGS.Controllers
             Assert.IsNotNull(result);
         }
 
-
+        /// <summary>
+        /// Deleting a frienship
+        /// </summary>
+        /// <param name="id"></param>
         [TestCase(30000015)]
         public void Delete(int id)
         {
@@ -160,6 +181,10 @@ namespace SeaSharpe_CVGS.Controllers
             Assert.AreEqual(initCount - 1, finCount);
         }
 
+        /// <summary>
+        /// Moving a game to cart
+        /// </summary>
+        /// <param name="gameId"></param>
         [TestCase(7000001)]
         void MoveToCart(int gameId)
         {
@@ -181,6 +206,10 @@ namespace SeaSharpe_CVGS.Controllers
             Assert.AreEqual(initCount + 1, finCount);
         }
 
+        /// <summary>
+        /// Remove a game from wishlist
+        /// </summary>
+        /// <param name="id"></param>
         [TestCase(7000001)]
         void RemoveFromWishlist(int id)
         {
@@ -203,6 +232,10 @@ namespace SeaSharpe_CVGS.Controllers
             Assert.AreEqual(initCount - 1, finCount);
         }
 
+        /// <summary>
+        /// Add a game to wishlist
+        /// </summary>
+        /// <param name="id"></param>
         [TestCase(7000001)]
         public void AddToWishList(int id)
         {
@@ -225,9 +258,13 @@ namespace SeaSharpe_CVGS.Controllers
             Assert.AreEqual(initCount + 1, finCount);
         }
 
-
-
-
+        /// <summary>
+        /// Utility
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="member"></param>
+        /// <param name="roles"></param>
+        /// <returns></returns>
         ControllerContext GetControllerContext(ApplicationDbContext db, Member member, params string[] roles)
         {
             var userMock = new Mock<IPrincipal>();
