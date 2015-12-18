@@ -51,7 +51,7 @@ December 11, 2015 | Final Due Date
   - ~~review games: let employees view pending reviews for approval~~
   - ~~review games: let employees approve/disprove reviews~~
   - ~~review games: let members and visitors view reviews for a game~~
-  - download: let members download free and shareware games
+  - ~~download: let members download free and shareware games~~
 - User controller
   - Profile: let members enter their display name, actual name, email, gender and birth date; let the member decide whether to receive promotional emails from CVGS
     - **Started** 
