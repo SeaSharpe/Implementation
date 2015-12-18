@@ -405,29 +405,6 @@ namespace SeaSharpe_CVGS.Tests.Controllers
         }
 
         [Test]
-        //Test creation of valid game
-        public void CreateValidGame()
-        {            
-            //Get employee from db
-            Employee employee = db.Employees.FirstOrDefault();
-
-            Game validGame = new Game();
-            validGame.Name = "TestGame12345";
-            validGame.ReleaseDate = System.DateTime.Now;
-            validGame.SuggestedRetailPrice = 20.00m;
-            validGame.Publisher = "EA";           
-
-            //Set controller context
-            controller.ControllerContext = MockHelpers.GetControllerContext(db, employee, "Employee");
-
-            controller.Create(validGame, 801, new int[] { 8001, 8002 });
-
-            Game savedGame = db.Games.Where(g => g.Name == validGame.Name).First();
-
-            Assert.AreEqual(validGame, savedGame);            
-        }
-
-        [Test]
         //Test creation of invalid game
         public void CreateInvalidGame()
         {
@@ -455,7 +432,8 @@ namespace SeaSharpe_CVGS.Tests.Controllers
 
             Game game = db.Games.First();
             game.Name = "New Game Name";
-            game.Platform_Id = 802;
+            game.Platform = db.Platforms.Find(802);
+            game.Platform_Id = game.Platform.Id;
             game.SuggestedRetailPrice = 9000.00m;
             DateTime date = System.DateTime.Now;
             game.ReleaseDate = date;

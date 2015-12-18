@@ -119,8 +119,8 @@ namespace SeaSharpe_CVGS.Controllers
         /// Testcase to get the details of a friend 
         /// </summary>
         /// <param name="id"></param>
-        [TestCase(30000015)]
-        public void Details(int id)
+        [Test]
+        public void Details()
         {
             var controller = new FriendshipController();
             Member member = controller.DbContext.Members.First();
@@ -128,7 +128,7 @@ namespace SeaSharpe_CVGS.Controllers
             controller.ControllerContext = GetControllerContext(db, member, "Member");
 
             // Act
-            ViewResult result = controller.Details(id) as ViewResult;
+            ViewResult result = controller.Details(member.Id) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -138,14 +138,15 @@ namespace SeaSharpe_CVGS.Controllers
         /// Deleting a frienship
         /// </summary>
         /// <param name="id"></param>
-        [TestCase(30000019)]
-        public void Delete(int id)
+        [Test]
+        public void Delete()
         {
             var controller = new FriendshipController();
             Member member = controller.DbContext.Members.First();
 
             controller.ControllerContext = GetControllerContext(db, member, "Member");
             controller.AddFamily("SARWATWINSMAN553131");
+            int id = db.Friendships.Where(f => f.Friendee.User.UserName == "SARWATWINSMAN553131").FirstOrDefault().FriendeeId;
             var initCount = controller.DbContext.Friendships.Where(a => a.Friender.User.Id == member.User.Id).ToList().Count;
 
             // Act
@@ -158,32 +159,15 @@ namespace SeaSharpe_CVGS.Controllers
         }
 
         /// <summary>
-        /// Moving a game to cart
-        /// </summary>
-        /// <param name="gameId"></param>
-        [TestCase(7000001)]
-        public void MoveToCart(int gameId)
-        {
-            var controller = new FriendshipController();
-            Member member = controller.DbContext.Members.First();
-            controller.ControllerContext = GetControllerContext(db, member, "Member");
-
-            // Act
-            ViewResult result = controller.MoveToCart(gameId, member.Id) as ViewResult;
-
-            //Assert
-            Assert.IsNull(result);
-        }
-
-        /// <summary>
         /// Remove a game from wishlist
         /// </summary>
         /// <param name="id"></param>
-        [TestCase(7000001)]
-        public void RemoveFromWishlist(int id)
+        [Test]
+        public void RemoveFromWishlist()
         {
             var controller = new FriendshipController();
             Member member = controller.DbContext.Members.First();
+            int id = db.Games.FirstOrDefault().Id;
 
             controller.ControllerContext = GetControllerContext(db, member, "Member");
 
@@ -203,10 +187,10 @@ namespace SeaSharpe_CVGS.Controllers
         /// <summary>
         /// Add a game to wishlist
         /// </summary>
-        /// <param name="id"></param>
-        [TestCase(7000001)]
-        public void AddToWishList(int id)
+        [Test]
+        public void AddToWishList()
         {
+            int id = db.Games.First().Id;
             var controller = new FriendshipController();
             Member member = controller.DbContext.Members.First();
 
