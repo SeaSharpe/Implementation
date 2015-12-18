@@ -171,12 +171,14 @@ namespace SeaSharpe_CVGS.Controllers
             Member member = controller.DbContext.Members.First();
 
             controller.ControllerContext = GetControllerContext(db, member, "Member");
-
             var initCount = controller.DbContext.Friendships.Where(a => a.Friender.User.Id == member.User.Id).ToList().Count;
 
-            Debug.Print(initCount + " before");
+            var before = controller.DbContext.Friendships.Where(a => a.Friender.User.Id == member.User.Id).ToList();
 
+            Debug.Print(initCount + " before");
             controller.AddFamily("SARWATWINSMAN553131");
+
+            var after = controller.DbContext.Friendships.Where(a => a.Friender.User.Id == member.User.Id).ToList();
 
             // Act
             ViewResult result = controller.Delete(id) as ViewResult;
