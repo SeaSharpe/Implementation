@@ -14,6 +14,7 @@ using System.Web.Mvc;
 using SeaSharpe_CVGS.Models;
 using NUnit.Framework;
 using Moq;
+using System.Transactions;
 
 namespace SeaSharpe_CVGS.Controllers
 {
@@ -34,11 +35,14 @@ namespace SeaSharpe_CVGS.Controllers
             //MoveToCart(7000001);
         }
 
+        TransactionScope _trans;
         ApplicationDbContext db = null;
 
         [SetUp]
         public void Init()
         {
+            _trans = new TransactionScope();
+
             // make connection
             db = new ApplicationDbContext();
 
@@ -58,6 +62,7 @@ namespace SeaSharpe_CVGS.Controllers
         public void Cleanup()
         {
             //db.Database.Delete();
+            _trans.Dispose();
         }
 
         /// <summary>
@@ -186,7 +191,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <param name="gameId"></param>
         [TestCase(7000001)]
-        void MoveToCart(int gameId)
+        public void MoveToCart(int gameId)
         {
             var controller = new FriendshipController();
             Member member = controller.DbContext.Members.First();
@@ -211,7 +216,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// </summary>
         /// <param name="id"></param>
         [TestCase(7000001)]
-        void RemoveFromWishlist(int id)
+        public void RemoveFromWishlist(int id)
         {
             var controller = new FriendshipController();
             Member member = controller.DbContext.Members.First();
