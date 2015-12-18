@@ -88,7 +88,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// Test case of add a friend
         /// </summary>
         /// <param name="userName"></param>
-        [TestCase("MICHAELDOORLEY145275")]
+        [TestCase("THOMASVALASCO422739")]
         public void AddFriend(string userName)
         {
             var controller = new FriendshipController();
@@ -117,7 +117,7 @@ namespace SeaSharpe_CVGS.Controllers
         /// Test case of adding a family
         /// </summary>
         /// <param name="userName"></param>
-        [TestCase("KAYCHERNY183636")]
+        [TestCase("BETHMILLARD721478")]
         public void AddFamily(string userName)
         {
             var controller = new FriendshipController();
@@ -175,7 +175,7 @@ namespace SeaSharpe_CVGS.Controllers
             var initCount = controller.DbContext.Friendships.Where(a => a.Friender.User.Id == member.User.Id).ToList().Count;
 
             Debug.Print(initCount + " before");
-
+            
             // Act
             ViewResult result = controller.Delete(id) as ViewResult;
 
@@ -201,6 +201,8 @@ namespace SeaSharpe_CVGS.Controllers
             var initCount = controller.DbContext.Orders.Where(a => a.Member.Id == member.Id).ToList().Count;
             Debug.Print(initCount + " before");
 
+            //Adding it first 
+            controller.AddToWishList(gameId);
             // Act
             ViewResult result = controller.MoveToCart(gameId, member.Id) as ViewResult;
 
@@ -224,9 +226,10 @@ namespace SeaSharpe_CVGS.Controllers
             controller.ControllerContext = GetControllerContext(db, member, "Member");
 
             var initCount = controller.DbContext.WishLists.Where(w => w.MemberId == member.Id && w.GameId == id).ToList().Count;
-
             Debug.Print(initCount + " before");
 
+            //Adding it first 
+            controller.AddToWishList(id);
             // Act
             ViewResult result = controller.RemoveFromWishlist(id, member.Id) as ViewResult;
 
