@@ -18,10 +18,7 @@
                 <table class="table">
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.First().download)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.First().hardCopy)
+                            @Html.DisplayNameFor(model => model.First().remove)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.First().item.Game.Name)
@@ -41,27 +38,11 @@
                     @for (int i = 0; i < Model.Count(); i++)
                     {
                         <tr>
-                            @if (Model[i].item.Game.SuggestedRetailPrice > 0.01m)
-                            {
                                 <td>
-                                    N/A
-                                    @Html.HiddenFor(model => model[i].download)
+                                @Html.EditorFor(model => model[i].remove)
+                                @Html.HiddenFor(model => model[i].remove)
                                 </td>
                                 <td>
-                                    @Html.EditorFor(model => model[i].hardCopy)
-                                </td>
-                            }
-                            else
-                            {
-                                <td>
-                                    @Html.EditorFor(model => model[i].download)
-                                </td>
-                                <td>
-                                    N/A
-                                    @Html.HiddenFor(model => model[i].hardCopy)
-                                </td>
-                            }
-                            <td>
                                 @Html.DisplayFor(model => model[i].item.Game.Name)
                                 @Html.HiddenFor(model => model[i].item.OrderId)
                                 @Html.HiddenFor(model => model[i].item.GameId)
@@ -104,17 +85,17 @@
             else
             {
                 using (@Html.BeginForm())
-                {
-                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                            data-key="@System.Configuration.ConfigurationManager.AppSettings.Get("StripeApiPublicKey")"
-                            data-amount="@Model.Sum(m => m.item.SalePrice * 100)"
-                            data-name="ConestogaVideoGameStore"
-                            data-description="Games ($@Model.Sum(m => m.item.SalePrice))"
-                            data-image='@Url.Content("~/Content/themes/base/images/logo.png")'
-                            data-locale="auto"
-                            data-bitcoin="true">
-                    </script>
-                }
+            {
+                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="@System.Configuration.ConfigurationManager.AppSettings.Get("StripeApiPublicKey")"
+                        data-amount="@Model.Sum(m => m.item.SalePrice * 100)"
+                        data-name="ConestogaVideoGameStore"
+                        data-description="Games ($@Model.Sum(m => m.item.SalePrice))"
+                        data-image='@Url.Content("~/Content/themes/base/images/logo.png")'
+                        data-locale="auto"
+                        data-bitcoin="true">
+                </script>
+            }
             }
         </div>
         @{

@@ -76,6 +76,15 @@
             @Html.DisplayFor(model => model.ESRB)
         </dd>
 
+        <!-- Game Price-->
+        <dt>
+            @Html.DisplayNameFor(model => model.SuggestedRetailPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SuggestedRetailPrice)
+        </dd>
+
 
         <!-- display create review form if review is approved, else display review details TODO: replace true with !isApproved-->
             @if (!(Boolean)ViewData["isApproved"]) 

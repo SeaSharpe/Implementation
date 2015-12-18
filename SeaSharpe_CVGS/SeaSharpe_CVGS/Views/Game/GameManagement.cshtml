@@ -51,18 +51,18 @@
 
             <!-- Game Update Link-->
             <td>
-                @Html.ActionLink("Update", "Edit", new { id = item.Id })
+                @Html.ActionLink("Update", "Edit", new { id = item.Id }, new { @class = "btn greenButton" })
             </td>
 
             <!-- Game Delete Link-->
             <td>
                 @if(item.IsActive)
                 {
-                    @Html.ActionLink("De-Activate", "Activate", new { id = item.Id })
+                    @Html.ActionLink("De-Activate", "Activate", new { id = item.Id }, new { @class = "btn greenButton" })
                 }
                 else
                 {
-                    @Html.ActionLink("Activate", "Activate", new { id = item.Id })
+                    @Html.ActionLink("Activate", "Activate", new { id = item.Id }, new { @class = "btn greenButton" })
                 }
                 
             </td>
