@@ -18,35 +18,34 @@ December 11, 2015 | Final Due Date
 - Code First Database *started*
   - [Mock Data](http://www.generatedata.com/) *started*
     -Friendship(mutual) data
-    -Games data
+    -~~Games data~~
     -Reviews data
     -Wishlist data (maybe?)
     -Sales data (for sales report)
-  - Get / Create Game Images and store in db as path
 - ~~Build db from code first classes~~
 - ~~Add controllers as per design class digram~~
   - Unit Tests
-  - Minimal Views (just functional) *started*
+  - ~~Minimal Views (just functional) ~~
 - ~~Add partial classes for validation ~~
-- Doc comments on methods / functions *started*
+- ~~Doc comments on methods / functions ~~
 - GUI Design See Nicole *started*
-- User Auth See John
+- ~~User Auth See John~~
   - ~~Sign up: require a unique display name, require strong passwords~~
   - ~~Log in: limit the number of consecutive login attempts~~
   - ~~Find out how long user is locked out for after 5 consecutive attempts~~
-  - Password: let members change their passwords; if a recognized member forgets their password; reset it and email the new password *started needs testing*
+  - ~~Password: let members change their passwords; if a recognized member forgets their password; reset it and email the new password~~
 - ~~Roles See John~~
  - ~~Add layout views (header, footer) for each role (employee, member, visitor)~~
 - ~~Revisit Events Table (Update ERD?)~~
 - ~~Add String to games table for image path~~
 - ~~ESRB Rating & Publisher add to DB~~
-- Game controller
+- ~~Game controller~~
   - ~~let members search for games~~
   - ~~let members select games from a list~~
   - ~~let employees add, edit and delete games~~
   - ~~display details of the selected games~~
-  - add to wishlist
-  - display library of members ordered/downloaded games
+  - ~~add to wishlist~~
+  - ~~display library of members ordered/downloaded games~~
   - ~~rate game: let 1) members rate games; 2) summarize individual results and display the overall rating for each game~~
   - ~~review games: let members write reviews of games.  Reviews must be approved by a moderator before they are published on the website~~
   - ~~review games: let employees view pending reviews for approval~~
