@@ -195,14 +195,14 @@ namespace SeaSharpe_CVGS.Controllers
         {
             var controller = new FriendshipController();
             Member member = controller.DbContext.Members.First();
-
             controller.ControllerContext = GetControllerContext(db, member, "Member");
+
+            //Adding it first 
+            controller.AddToWishList(gameId);
 
             var initCount = controller.DbContext.Orders.Where(a => a.Member.Id == member.Id).ToList().Count;
             Debug.Print(initCount + " before");
 
-            //Adding it first 
-            controller.AddToWishList(gameId);
             // Act
             ViewResult result = controller.MoveToCart(gameId, member.Id) as ViewResult;
 
@@ -225,11 +225,11 @@ namespace SeaSharpe_CVGS.Controllers
 
             controller.ControllerContext = GetControllerContext(db, member, "Member");
 
-            var initCount = controller.DbContext.WishLists.Where(w => w.MemberId == member.Id && w.GameId == id).ToList().Count;
-            Debug.Print(initCount + " before");
-
             //Adding it first 
             controller.AddToWishList(id);
+            var initCount = controller.DbContext.WishLists.Where(w => w.MemberId == member.Id && w.GameId == id).ToList().Count;
+            Debug.Print(initCount + " before");
+            
             // Act
             ViewResult result = controller.RemoveFromWishlist(id, member.Id) as ViewResult;
 
